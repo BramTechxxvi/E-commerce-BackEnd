@@ -2,12 +2,9 @@ package org.bram.services;
 
 import org.bram.data.models.Seller;
 import org.bram.data.repository.SellerRepository;
-import org.bram.dtos.request.ChangeEmailRequest;
-import org.bram.dtos.request.ChangePasswordRequest;
-import org.bram.dtos.response.ChangeEmailResponse;
-import org.bram.dtos.response.ChangePasswordResponse;
-import org.bram.exceptions.UserNotFoundException;
-import org.bram.exceptions.UserNotLoggedInException;
+import org.bram.dtos.request.*;
+import org.bram.dtos.response.*;
+import org.bram.exceptions.*;
 
 public class SellerServicesImpl implements UserServices{
 
@@ -25,6 +22,9 @@ public class SellerServicesImpl implements UserServices{
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
         if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
+
+        boolean isOldEmail = request.getOldEmail().equals(seller.getEmail());
+        if(!isOldEmail) throw new IncorrectOldEmailException("Old email not correct");
     }
 
     @Override
