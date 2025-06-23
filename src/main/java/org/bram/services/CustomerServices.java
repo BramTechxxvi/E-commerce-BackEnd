@@ -2,9 +2,8 @@ package org.bram.services;
 
 public interface CustomerServices {
 
-    //addToCart(product: Product, quantity: int): void
-//
-//    removeFromCart(productID: String): void
+    AddToCartResponse addItemToCart(AddToCartRequest request);
+    //    removeFromCart(productID: String): void
 //
 //    checkout(): Order
 //
@@ -14,3 +13,12 @@ public interface CustomerServices {
 
 
 }
+
+//    void addBillingInfo(String customerId, BillingInfo billingInfo);
+//    void updateBillingInfo(String customerId, BillingInfo updatedBillingInfo);
+//    void removeBillingInfo(String customerId, String cardNumber);
+//    ShoppingCart getShoppingCart(String customerId);
+//    void addItemToCart(String customerId, Item item);
+//    void removeItemFromCart(String customerId, String productId);
+//    void clearCart(String customerId);
+//}
