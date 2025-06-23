@@ -8,10 +8,8 @@ import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class SellerServicesImpl implements UserServices{
+public class SellerServicesImpl implements UserServices implements SellerServices{
 
     private SellerRepository sellerRepository;
 
@@ -43,12 +41,10 @@ public class SellerServicesImpl implements UserServices{
 
     @Override
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
-        Optional<Seller> optionalSeller = sellerRepository.findById(request.getUserId());
-        if(optionalSeller.isEmpty()) throw new UserNotFoundException("Seller not found");
+        Seller seller = sellerRepository.findById(request.getUserId())
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
-        Seller seller = optionalSeller.get();
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
-
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
 
