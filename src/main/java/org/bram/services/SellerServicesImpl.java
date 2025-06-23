@@ -8,6 +8,8 @@ import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SellerServicesImpl implements UserServices{
 
@@ -41,6 +43,6 @@ public class SellerServicesImpl implements UserServices{
 
     @Override
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
-        return null;
+        Optional<Seller> optionalSeller = sellerRepository.findById(request.)
     }
 }
