@@ -61,5 +61,6 @@ public class SellerServicesImpl implements UserServices{
         ChangePasswordResponse response = new ChangePasswordResponse();
         response.setSuccess(true);
         response.setMessage("Password changed successfully");
+        return response;
     }
 }
