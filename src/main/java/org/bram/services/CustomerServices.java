@@ -1,5 +1,8 @@
 package org.bram.services;
 
+import org.bram.dtos.request.AddToCartRequest;
+import org.bram.dtos.response.AddToCartResponse;
+
 public interface CustomerServices {
 
     AddToCartResponse addItemToCart(AddToCartRequest request);
