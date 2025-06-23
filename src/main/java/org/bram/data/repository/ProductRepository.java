@@ -1,4 +1,4 @@
-package org.bram.data.models;
+package org.bram.data.repository;
 
 public interface ProductRepository {
 }
