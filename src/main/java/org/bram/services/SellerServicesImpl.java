@@ -16,7 +16,8 @@ public class SellerServicesImpl implements UserServices{
 
     @Override
     public ChangeEmailResponse changeEmail(ChangeEmailRequest request) {
-        return null;
+        Seller seller = sellerRepository.findById(request.getUserId())
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
     }
 
     @Override
