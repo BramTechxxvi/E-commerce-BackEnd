@@ -2,9 +2,9 @@ package org.bram.services;
 
 public interface UserServices {
 
+    String getFullName();
 
-
-//    getFullName(): String
+    ChangeEmailResponse changeEmail(ChangeEmailRequest request);
 //
 //    updateEmail(newEmail): void
 //
