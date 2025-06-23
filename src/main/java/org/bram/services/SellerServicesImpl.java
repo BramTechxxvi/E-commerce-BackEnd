@@ -28,6 +28,11 @@ public class SellerServicesImpl implements UserServices{
 
         seller.setEmail(request.getNewEmail());
         sellerRepository.save(seller);
+
+        ChangeEmailResponse response = new ChangeEmailResponse();
+        response.setSuccess(true);
+        response.setMessage("Email changed successfully");
+        return response;
     }
 
     @Override
