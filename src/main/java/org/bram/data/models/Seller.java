@@ -13,7 +13,4 @@ public class Seller {
     private String storeDescription;
     private boolean isVerified;
     private List<Product> productList;
-
-
-
 }
