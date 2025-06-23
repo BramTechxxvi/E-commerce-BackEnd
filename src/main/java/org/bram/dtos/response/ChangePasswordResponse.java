@@ -1,4 +1,4 @@
-package org.bram.dtos.request;
+package org.bram.dtos.response;
 
 public class ChangePasswordResponse {
 }
