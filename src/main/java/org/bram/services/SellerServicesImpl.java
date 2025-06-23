@@ -43,6 +43,16 @@ public class SellerServicesImpl implements UserServices{
 
     @Override
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
-        Optional<Seller> optionalSeller = sellerRepository.findById(request.)
+        Optional<Seller> optionalSeller = sellerRepository.findById(request.getUserId());
+        if(optionalSeller.isEmpty()) throw new UserNotFoundException("Seller not found");
+
+        Seller seller = optionalSeller.get();
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
+
+        boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
+        if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
+
+        boolean isOldEmail = request.getOldPassword().equals(seller.getEmail());
+        if(!isOldEmail) throw new IncorrectOldPasswordException("Old password not correct");
     }
 }
