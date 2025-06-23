@@ -8,7 +8,6 @@ public interface AdminServices {
 //
 //    updateProduct(product: Product): void
 //
-//    banUser(userId: String): void
-//    unbanUser(userId: String): void
+
 
 }
