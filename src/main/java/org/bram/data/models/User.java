@@ -18,4 +18,5 @@ public class User {
     private Address address;
     private String password;
     private boolean isLoggedIn;
+
 }
