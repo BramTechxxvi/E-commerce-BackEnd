@@ -1,13 +1,16 @@
 package org.bram.data.models;
-
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
 public class Customer extends User{
 
+    @Setter
+    @Getter
     private List<BillingInfo> billing;
+    @Getter
+    @Setter
     private ShoppingCart cart;
 
 }
