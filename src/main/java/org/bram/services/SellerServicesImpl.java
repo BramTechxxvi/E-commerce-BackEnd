@@ -5,11 +5,15 @@ import org.bram.data.repository.SellerRepository;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
 import org.bram.exceptions.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SellerServicesImpl implements UserServices{
 
     private SellerRepository sellerRepository;
 
+    @Autowired
     public SellerServicesImpl(SellerRepository sellerRepository) {
         this.sellerRepository = sellerRepository;
     }
