@@ -25,6 +25,9 @@ public class SellerServicesImpl implements UserServices{
 
         boolean isOldEmail = request.getOldEmail().equals(seller.getEmail());
         if(!isOldEmail) throw new IncorrectOldEmailException("Old email not correct");
+
+        seller.setEmail(request.getNewEmail());
+        sellerRepository.save(seller);
     }
 
     @Override
