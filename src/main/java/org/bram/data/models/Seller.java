@@ -6,4 +6,6 @@ import lombok.Data;
 @Data
 @Document(collection="Sellers")
 public class Seller {
+
+    private String StoreName
 }
