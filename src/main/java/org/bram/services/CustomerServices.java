@@ -2,7 +2,9 @@ package org.bram.services;
 
 import org.bram.dtos.request.AddToCartRequest;
 import org.bram.dtos.response.AddToCartResponse;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CustomerServices {
 
     AddToCartResponse addItemToCart(AddToCartRequest request);
