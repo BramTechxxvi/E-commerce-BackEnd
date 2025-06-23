@@ -54,5 +54,12 @@ public class SellerServicesImpl implements UserServices{
 
         boolean isOldEmail = request.getOldPassword().equals(seller.getEmail());
         if(!isOldEmail) throw new IncorrectOldPasswordException("Old password not correct");
+
+        seller.setPassword(request.getNewPassword());
+        sellerRepository.save(seller);
+
+        ChangePasswordResponse response = new ChangePasswordResponse();
+        response.setSuccess(true);
+        response.setMessage("Password changed successfully");
     }
 }
