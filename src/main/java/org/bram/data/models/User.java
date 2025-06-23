@@ -2,6 +2,7 @@ package org.bram.data.models;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -14,6 +15,8 @@ public class User {
     private String lastName;
     private String email;
     private String phone;
+    @DBRef
     private Address address;
     private String password;
+    private boolean isLoggedIn;
 }
