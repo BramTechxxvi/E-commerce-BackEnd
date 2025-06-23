@@ -5,8 +5,6 @@ import org.bram.dtos.response.*;
 
 public interface UserServices {
 
-    String getFullName();
-
     ChangeEmailResponse changeEmail(ChangeEmailRequest request);
 
     ChangePasswordResponse changePassword(ChangePasswordRequest request);
