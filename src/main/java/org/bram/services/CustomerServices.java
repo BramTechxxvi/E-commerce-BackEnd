@@ -1,8 +1,8 @@
 package org.bram.services;
 
-public class CustomerServices {
+public interface CustomerServices {
 
-//    addToCart(product: Product, quantity: int): void
+    //addToCart(product: Product, quantity: int): void
 //
 //    removeFromCart(productID: String): void
 //
