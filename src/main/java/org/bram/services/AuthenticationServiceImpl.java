@@ -8,6 +8,7 @@ import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
+import org.bram.exceptions.DetailsAlreadyInUseException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private void verifyNewEmail(String email) {
-
+        if (userRepository.existsByEmail(email)) throw new DetailsAlreadyInUseException("Email already exists");
     }
 }
