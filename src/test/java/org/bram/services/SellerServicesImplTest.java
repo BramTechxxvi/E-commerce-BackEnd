@@ -43,10 +43,9 @@ public class SellerServicesImplTest {
     @Test
     public void ChangeSellerEmail__changeEmailTest() {
         registerSeller();
-        assertEquals("Registe"
-        ChangeEmailRequest request = new ChangeEmailRequest();
-        request.setOldEmail("old@email.com");
-        request.setNewEmail("new@email.com");
+        assertEquals("Registered succesfully", registerResponse.getMessage());
+        login.setOldEmail("old@email.com");
+        loginRequest.setNewEmail("new@email.com");
         ChangeEmailResponse response = sellerService.changeEmail(request);
         System.out.println(response);
     }
