@@ -53,7 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 sellerRepository.save(seller); break;
         }
 
-        RegisterResponse response = new RegisterResponse();
+        return new RegisterResponse();
         response.setSuccess(true);
         response.setMessage("Registered successfully");
         return response;
