@@ -4,6 +4,8 @@ import org.bram.data.models.*;
 import org.bram.dtos.request.*;
 import org.bram.exceptions.*;
 
+import static org.bram.utils.PasswordUtil.hashPassword;
+
 public class Mapper {
 
     public static User mapToUser(RegisterRequest registerRequest) {
@@ -12,7 +14,7 @@ public class Mapper {
         user.setLastName(registerRequest.getLastName().trim());
         user.setEmail(registerRequest.getEmail().trim().toLowerCase());
         user.setPhone(registerRequest.getPhone().trim());
-        user.setPassword(registerRequest.getPassword().trim());
+        user.setPassword(hashPassword(registerRequest.getPassword().trim()));
 
         Address address = new Address();
         address.setStreet(registerRequest.getStreet());
@@ -46,6 +48,15 @@ public class Mapper {
         customer.setAddress(user.getAddress());
 
         return customer;
+    }
+
+    public static Seller mapToSeller(User user) {
+        Seller seller = new Seller();
+        seller.setId(user.getId());
+        seller.setFirstName(user.getFirstName());
+        seller.setLastName(user.getLastName());
+        seller.setEmail(user.getEmail());
+
     }
 }
 

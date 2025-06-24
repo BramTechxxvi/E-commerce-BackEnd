@@ -34,12 +34,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         verifyNewPhone(registerRequest.getPhone());
 
         var user = mapToUser(registerRequest);
+        var role = user.getUserRole();
 
-        switch(user.getUserRole()) {
+        switch(role) {
             case CUSTOMER:
                 var customer = mapToCustomer(user);
+                customerRepository.save(customer); break;
 
-                customerRepository.save(customer);
+            case SELLER:
+                var seller = mapToSeller(user);
+                sellerRepository.save(seller); break;
+
         }
 
 
