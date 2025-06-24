@@ -1,26 +1,18 @@
 package org.bram.utils;
 
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import org.bram.data.models.Address;
-import org.bram.data.models.Seller;
-import org.bram.data.models.User;
-import org.bram.data.models.UserRole;
-import org.bram.dtos.request.RegisterRequest;
-import org.bram.exceptions.DetailsAlreadyInUseException;
-import org.springframework.data.annotation.Id;
+import org.bram.data.models.*;
+import org.bram.dtos.request.*;
+import org.bram.exceptions.*;
 
 public class Mapper {
 
-    public static Seller mapToSeller(RegisterRequest registerRequest) {
+    public static User mapToUser(RegisterRequest registerRequest) {
         User user = new User();
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setEmail(registerRequest.getEmail());
-        user.setPhone(registerRequest.getPhone());
-        user.setPassword(registerRequest.getPassword());
+        user.setFirstName(registerRequest.getFirstName().trim());
+        user.setLastName(registerRequest.getLastName().trim());
+        user.setEmail(registerRequest.getEmail().trim().toLowerCase());
+        user.setPhone(registerRequest.getPhone().trim());
+        user.setPassword(registerRequest.getPassword().trim());
 
         Address address = new Address();
         address.setStreet(registerRequest.getStreet());
@@ -33,12 +25,27 @@ public class Mapper {
 
         UserRole userRole;
         try {
-            userRole = UserRole.valueOf(registerRequest.getUserRole());
+            userRole = UserRole.valueOf(registerRequest.getUserRole().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new DetailsAlreadyInUseException("");
+            throw new InvalidRoleException("Invalid role specified" + registerRequest.getUserRole());
         }
+        user.setUserRole(userRole);
 
-        return seller;
+        return user;
+    }
+
+    public static Customer mapToCustomer(User user) {
+        Customer customer = new Customer();
+        customer.setId(user.getId());
+        customer.setFirstName(user.getFirstName());
+        customer.setLastName(user.getLastName());
+        customer.setEmail(user.getEmail());
+        customer.setPhone(user.getPhone());
+        customer.setPassword(user.getPassword());
+        customer.setUserRole(user.getUserRole());
+        customer.setAddress(user.getAddress());
+
+        return customer;
     }
 }
 

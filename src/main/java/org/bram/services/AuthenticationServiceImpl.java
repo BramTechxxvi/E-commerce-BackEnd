@@ -1,6 +1,6 @@
 package org.bram.services;
 
-import org.bram.data.models.Seller;
+import org.bram.data.models.*;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
@@ -9,7 +9,10 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.bram.utils.Mapper.*;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -18,6 +21,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private CustomerRepository customerRepository;
     private SellerRepository sellerRepository;
 
+    @Autowired
     public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository) {
        this.userRepository = userRepository;
        this.customerRepository = customerRepository;
@@ -28,6 +32,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public RegisterResponse register(RegisterRequest registerRequest) {
         verifyNewEmail(registerRequest.getEmail());
         verifyNewPhone(registerRequest.getPhone());
+
+        var user = mapToUser(registerRequest);
+
+        switch(user.getUserRole()) {
+            case CUSTOMER:
+                var customer = mapToCustomer(user);
+
+                customerRepository.save(customer);
+        }
 
 
     }
