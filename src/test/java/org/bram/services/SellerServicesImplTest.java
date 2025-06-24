@@ -25,6 +25,7 @@ public class SellerServicesImplTest {
     private AuthenticationService authenticationService;
     private RegisterResponse registerResponse;
     private RegisterRequest registerRequest;
+
     private ChangeEmailResponse changeEmailResponse;
 
 
@@ -34,7 +35,8 @@ public class SellerServicesImplTest {
     }
 
     @Test
-    public void changeEmailWitj__() {
+    public void ChangeSellerEmail__changeEmailTest() {
+        registerSeller();
         ChangeEmailRequest request = new ChangeEmailRequest();
         request.setOldEmail("old@email.com");
         request.setNewEmail("new@email.com");
