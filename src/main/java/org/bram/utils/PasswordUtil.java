@@ -8,5 +8,5 @@ public class PasswordUtil {
         return BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
-
+    public static boolean verifyPassword(String passwordToCheck, String hashedPassword) {}
 }
