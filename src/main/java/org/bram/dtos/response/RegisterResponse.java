@@ -1,9 +1,10 @@
 package org.bram.dtos.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@ALL
+@AllArgsConstructor
 public class RegisterResponse {
     private String message;
     private boolean success;
