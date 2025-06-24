@@ -56,7 +56,12 @@ public class Mapper {
         seller.setFirstName(user.getFirstName());
         seller.setLastName(user.getLastName());
         seller.setEmail(user.getEmail());
+        seller.setPhone(user.getPhone());
+        seller.setPassword(user.getPassword());
+        seller.setUserRole(user.getUserRole());
+        seller.setAddress(user.getAddress());
 
+        return seller;
     }
 }
 
