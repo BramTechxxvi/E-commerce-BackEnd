@@ -5,6 +5,8 @@ import org.bram.data.models.Address;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 
 @Document
 @Data
@@ -15,7 +17,7 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String phone;
-    private Address address;
+    private List<Address> address;
     private String password;
 
 }
