@@ -12,6 +12,8 @@ import org.bram.exceptions.DetailsAlreadyInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static org.bram.utils.Mapper.*;
 
 @Service
@@ -20,12 +22,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final SellerRepository sellerRepository;
+    private final JwtService jwtService;
 
     @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository) {
+    public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository, JwtService jwtService) {
        this.userRepository = userRepository;
        this.customerRepository = customerRepository;
        this.sellerRepository = sellerRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -55,7 +59,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        return null;
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
+
+        Optional<Customer> foundCustomer = customerRepository.findByEmail(email);
+        if (foundCustomer.isPresent()) {
+        String token = jwtService.generateToken(email, UserRole.CUSTOMER);
+            return mapToLoginResponse("Login Successful", true, token);
+
+        }
+
+        Optional<Seller> foundSeller = sellerRepository.find
+
     }
 
     private void verifyNewEmail(String email) {

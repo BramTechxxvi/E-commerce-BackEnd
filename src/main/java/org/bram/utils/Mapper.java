@@ -2,6 +2,7 @@ package org.bram.utils;
 
 import org.bram.data.models.*;
 import org.bram.dtos.request.*;
+import org.bram.dtos.response.LoginResponse;
 import org.bram.exceptions.*;
 
 import static org.bram.utils.PasswordUtil.hashPassword;
@@ -62,6 +63,10 @@ public class Mapper {
         seller.setAddress(user.getAddress());
 
         return seller;
+    }
+
+    public static LoginResponse mapToLoginResponse(String message, boolean success, String token) {
+        return new LoginResponse(message, token, success);
     }
 }
 

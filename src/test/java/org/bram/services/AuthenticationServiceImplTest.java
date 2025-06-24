@@ -1,5 +1,7 @@
 package org.bram.services;
 
+import io.jsonwebtoken.lang.Classes;
+import org.bram.Main;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
@@ -12,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = {Main.class})
 public class AuthenticationServiceImplTest {
 
     @Autowired
@@ -32,7 +34,7 @@ public class AuthenticationServiceImplTest {
         registerResponse = new RegisterResponse();
         customerRepository.deleteAll();
         loginRequest = new LoginRequest();
-        loginResponse = new LoginResponse();
+
 
     }
 
@@ -50,8 +52,8 @@ public class AuthenticationServiceImplTest {
         registerACustomer__registerTest();
         loginRequest.setEmail("John@doe.com");
         loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-        assertEquals("We're happy to have you back", loginResponse.getMessage);
+       LoginResponse loginResponse = authenticationService.login(loginRequest);
+        assertEquals("Login Successful", loginResponse.getMessage());
 
     }
 
