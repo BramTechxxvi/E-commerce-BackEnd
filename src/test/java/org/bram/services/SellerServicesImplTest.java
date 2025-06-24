@@ -2,6 +2,7 @@ package org.bram.services;
 
 import org.bram.data.repository.SellerRepository;
 import org.bram.dtos.request.ChangeEmailRequest;
+import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ChangeEmailResponse;
 import org.bram.dtos.response.RegisterResponse;
@@ -25,18 +26,24 @@ public class SellerServicesImplTest {
     private AuthenticationService authenticationService;
     private RegisterResponse registerResponse;
     private RegisterRequest registerRequest;
+    private LoginRequest loginRequest;
+    private ChangeEmailRequest changeEmailRequest;
 
-    private ChangeEmailResponse changeEmailResponse;
 
 
     @BeforeEach
     public void setUp() {
         sellerRepository.deleteAll();
+        registerResponse = new RegisterResponse();
+        registerRequest = new RegisterRequest();
+        loginRequest = new LoginRequest();
+        changeEmailRequest = new ChangeEmailRequest();
     }
 
     @Test
     public void ChangeSellerEmail__changeEmailTest() {
         registerSeller();
+        assertEquals("Registe"
         ChangeEmailRequest request = new ChangeEmailRequest();
         request.setOldEmail("old@email.com");
         request.setNewEmail("new@email.com");
