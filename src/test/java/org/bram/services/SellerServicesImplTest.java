@@ -31,7 +31,6 @@ public class SellerServicesImplTest {
     private ChangeEmailRequest changeEmailRequest;
 
 
-
     @BeforeEach
     public void setUp() {
         sellerRepository.deleteAll();
@@ -44,16 +43,17 @@ public class SellerServicesImplTest {
     @Test
     public void ChangeSellerEmail__changeEmailTest() {
         registerSeller();
-        assertEquals("Registered succesfully", registerResponse.getMessage());
+        assertEquals("Registered successfully", registerResponse.getMessage());
         loginRequest.setRole("Seller");
-        loginRequest.setEmail("grace@ayoolan.com");
+        loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
         assertEquals("Welcome back John Doe", loginResponse.getMessage());
-        login.setOldEmail("old@email.com");
-        loginRequest.setNewEmail("new@email.com");
-        ChangeEmailResponse response = sellerService.changeEmail(request);
-        System.out.println(response);
+        changeEmailRequest.setOldEmail("grace@ayoola.com");
+        changeEmailRequest.setNewEmail("grace@gmail.com");
+        ChangeEmailResponse response = sellerService.changeEmail(changeEmailRequest);
+        assertEquals("Email changed successfully", response.getMessage());
+        assertTrue(response.isSuccess());
     }
 
     private void registerSeller() {
