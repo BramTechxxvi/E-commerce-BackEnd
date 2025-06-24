@@ -40,6 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         verifyNewPhone(registerRequest.getPhone());
 
         var user = mapToUser(registerRequest);
+        userRepository.save(user);
         var role = user.getUserRole();
 
         switch(role) {
@@ -61,24 +62,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
+        String email = loginRequest.getEmail().trim().toLowerCase();
+        String password = loginRequest.getPassword().trim();
+        String role = loginRequest.getRole().trim().toUpperCase();
 
-        Optional<Customer> foundCustomer = customerRepository.findByEmail(email);
-        boolean isCorrectPassword = verifyPassword(password, foundCustomer.get().getPassword());
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
 
+        String fullName = user.getFirstName() +" " + user.getLastName();
+
+        boolean isCorrectPassword = verifyPassword(password, user.getPassword());
         if (isCorrectPassword) {
-        String token = jwtService.generateToken(email, UserRole.CUSTOMER);
-            return mapToLoginResponse("Login Successful", true, token);
+            String token = jwtService.generateToken(email, UserRole.valueOf(role));
+            user.setLoggedIn(true);
+            return mapToLoginResponse("Welcome back " + fullName, true, token);
         }
-
-        Optional<Seller> foundSeller = sellerRepository.findByEmail(email);
-        if (foundSeller.isPresent() && foundSeller.get().getPassword().equals(password)) {
-            String token = jwtService.generateToken(email, UserRole.SELLER);
-            return mapToLoginResponse("Login Successful", true, token);
-        }
-
-        return mapToLoginResponse("No user found", false, null);
+        return mapToLoginResponse("Unable to login", false, null);
     }
 
     private void verifyNewEmail(String email) {
