@@ -26,6 +26,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
+        verifyNewEmail(registerRequest.getEmail());
+        verifyNewPhone(registerRequest.getPhone());
+
 
     }
 
@@ -36,5 +39,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private void verifyNewEmail(String email) {
         if (userRepository.existsByEmail(email)) throw new DetailsAlreadyInUseException("Email already exists");
+    }
+
+    private void verifyNewPhone(String phone) {
+        if(userRepository.existsByPhone(phone)) throw new DetailsAlreadyInUseException("Phone already exists");
     }
 }
