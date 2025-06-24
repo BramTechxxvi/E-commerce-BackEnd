@@ -20,6 +20,7 @@ public class SellerServicesImplTest {
     @Autowired
     private SellerRepository sellerRepository;
 
+
     @Autowired
     private SellerServicesImpl sellerService;
 
@@ -48,7 +49,7 @@ public class SellerServicesImplTest {
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
-        assertEquals("Welcome back John Doe", loginResponse.getMessage());
+        assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
         ChangeEmailResponse response = sellerService.changeEmail(changeEmailRequest);

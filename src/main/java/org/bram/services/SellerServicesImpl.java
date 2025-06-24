@@ -6,6 +6,7 @@ import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
 import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,8 @@ public class SellerServicesImpl implements UserServices, SellerServices {
 
     @Override
     public ChangeEmailResponse changeEmail(ChangeEmailRequest request) {
-        Seller seller = sellerRepository.findById(request.getUserId())
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
