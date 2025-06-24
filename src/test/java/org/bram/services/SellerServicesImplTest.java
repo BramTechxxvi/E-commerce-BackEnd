@@ -5,6 +5,7 @@ import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ChangeEmailResponse;
+import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,11 @@ public class SellerServicesImplTest {
     public void ChangeSellerEmail__changeEmailTest() {
         registerSeller();
         assertEquals("Registered succesfully", registerResponse.getMessage());
+        loginRequest.setRole("Seller");
+        loginRequest.setEmail("grace@ayoolan.com");
+        loginRequest.setPassword("password111");
+        LoginResponse loginResponse = authenticationService.login(loginRequest);
+        assertEquals("Welcome back John Doe", loginResponse.getMessage());
         login.setOldEmail("old@email.com");
         loginRequest.setNewEmail("new@email.com");
         ChangeEmailResponse response = sellerService.changeEmail(request);
