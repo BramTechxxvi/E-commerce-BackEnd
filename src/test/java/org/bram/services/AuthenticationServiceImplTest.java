@@ -34,6 +34,7 @@ public class AuthenticationServiceImplTest {
     @BeforeEach
     public void setUp(){
         registerRequest = new RegisterRequest();
+        registerResponse = new RegisterResponse();
         customerRepository.deleteAll();
         loginRequest = new LoginRequest();
         userRepository.deleteAll();
