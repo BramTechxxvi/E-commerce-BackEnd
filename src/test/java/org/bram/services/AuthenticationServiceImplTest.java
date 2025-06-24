@@ -21,10 +21,7 @@ public class AuthenticationServiceImplTest {
 
     @Autowired
     private AuthenticationServiceImpl authenticationService;
-    @Autowired
-    private SellerServicesImpl sellerServices;
     private RegisterRequest registerRequest;
-    private RegisterResponse registerResponse;
     private LoginRequest loginRequest;
     @Autowired
     private CustomerRepository customerRepository;
@@ -36,7 +33,6 @@ public class AuthenticationServiceImplTest {
     @BeforeEach
     public void setUp(){
         registerRequest = new RegisterRequest();
-        registerResponse = new RegisterResponse();
         customerRepository.deleteAll();
         loginRequest = new LoginRequest();
         userRepository.deleteAll();
