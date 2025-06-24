@@ -15,5 +15,6 @@ public class Mapper {
         seller.setPhone(registerRequest.getPhone());
         seller.setAddress(registerRequest.getAddress());
 
+        return seller;
     }
 }
