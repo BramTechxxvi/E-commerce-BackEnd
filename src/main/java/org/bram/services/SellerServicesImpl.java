@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SellerServicesImpl implements UserServices implements SellerServices{
+public class SellerServicesImpl implements UserServices, SellerServices {
 
     private SellerRepository sellerRepository;
 
@@ -58,5 +58,10 @@ public class SellerServicesImpl implements UserServices implements SellerService
         response.setSuccess(true);
         response.setMessage("Password changed successfully");
         return response;
+    }
+
+    @Override
+    public CreateProductResponse createProduct(CreateProductRequest request) {
+        return null;
     }
 }
