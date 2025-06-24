@@ -18,6 +18,7 @@ public class RegisterRequest {
     private String email;
     private String phone;
     private List<Address> address;
+    private String userRole;
     private String password;
 
 }

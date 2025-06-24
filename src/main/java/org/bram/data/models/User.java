@@ -18,5 +18,6 @@ public class User {
     private String phone;
     private List<Address> address;
     private String password;
+    private UserRole userRole;
     private boolean isLoggedIn;
 }

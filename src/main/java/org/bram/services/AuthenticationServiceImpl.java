@@ -32,4 +32,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public LoginResponse login(LoginRequest loginRequest) {
         return null;
     }
+
+    private void verifyNewEmail(String email) {
+
+    }
 }
