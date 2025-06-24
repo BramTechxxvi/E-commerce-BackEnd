@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SellerServicesImpl implements UserServices, SellerServices {
 
-    private SellerRepository sellerRepository;
+    private final SellerRepository sellerRepository;
 
     @Autowired
     public SellerServicesImpl(SellerRepository sellerRepository) {
