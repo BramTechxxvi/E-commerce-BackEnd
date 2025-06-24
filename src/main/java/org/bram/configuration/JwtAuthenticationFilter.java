@@ -5,9 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.bram.data.models.User;
 import org.bram.data.repository.UserRepository;
+import org.bram.exceptions.UserNotFoundException;
 import org.bram.services.JwtService;
 import org.springframework.security.config.annotation.rsocket.RSocketSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,25 +36,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwtToken = authorizationHeader.substring(7);
-        String email = jwtService.extract
-
-
-
-            jwtToken = authHeader.substring(7);
+        try {
             String email = jwtService.extractEmail(jwtToken);
+            String role = jwtService.extractRole(jwtToken);
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                User user = userRepository.findByEmail(email)
+                        .orElseThrow(()-> new UserNotFoundException("User not found" + email));
+
+                List<GrantedAuthority> authorities = List
+            }
+
+
+
+
+                User user = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new RuntimeException("User not found: " + email));
+
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
 
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(user, null, authorities);
+
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
 
-            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            // Optionally log or handle token parsing exceptions
+            // For example, you can send an error response or just ignore and continue
         }
+
+        filterChain.doFilter(request, response);
+    }
+}
     }
 
 }
