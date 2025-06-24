@@ -17,9 +17,9 @@ import static org.bram.utils.Mapper.*;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private UserRepository userRepository;
-    private CustomerRepository customerRepository;
-    private SellerRepository sellerRepository;
+    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final SellerRepository sellerRepository;
 
     @Autowired
     public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository) {
@@ -44,9 +44,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             case SELLER:
                 var seller = mapToSeller(user);
                 sellerRepository.save(seller); break;
-
         }
 
+        RegisterResponse response = new RegisterResponse();
+        response.setSuccess(true);
+        response.setMessage("Registered successfully");
+        return response;
 
     }
 
