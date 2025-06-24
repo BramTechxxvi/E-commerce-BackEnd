@@ -47,5 +47,9 @@ public class JwtService {
                 .getBody();
     }
 
-    public
+    public String extractEmail(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+
 }
