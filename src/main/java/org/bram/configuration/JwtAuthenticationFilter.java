@@ -10,11 +10,10 @@ import org.bram.data.repository.UserRepository;
 import org.bram.exceptions.UserNotFoundException;
 import org.bram.services.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.rsocket.RSocketSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -30,7 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
         String jwtToken;
 
@@ -44,36 +44,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String email = jwtService.extractEmail(jwtToken);
             String role = jwtService.extractRole(jwtToken);
 
-            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userRepository.findByEmail(email)
-                        .orElseThrow(()-> new UserNotFoundException("User not found" + email));
+                        .orElseThrow(() -> new UserNotFoundException("User not found" + email));
 
                 List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(email, user.getPassword(), authorities);
-            }
-
-
-
-
-
-                UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(user, null, authorities);
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                authenticationToken.setDetails(new WebAuthenticationDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
         } catch (Exception e) {
-            // Optionally log or handle token parsing exceptions
-            // For example, you can send an error response or just ignore and continue
+            SecurityContextHolder.clearContext();
         }
-
         filterChain.doFilter(request, response);
     }
-}
-    }
-
-}
 }
