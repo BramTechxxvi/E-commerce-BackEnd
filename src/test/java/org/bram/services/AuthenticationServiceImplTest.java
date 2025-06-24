@@ -22,6 +22,7 @@ public class AuthenticationServiceImplTest {
     @Autowired
     private AuthenticationServiceImpl authenticationService;
     private RegisterRequest registerRequest;
+    private RegisterResponse registerResponse;
     private LoginRequest loginRequest;
     @Autowired
     private CustomerRepository customerRepository;
