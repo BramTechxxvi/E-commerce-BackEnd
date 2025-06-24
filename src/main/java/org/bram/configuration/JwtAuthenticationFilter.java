@@ -9,10 +9,12 @@ import org.bram.data.models.User;
 import org.bram.data.repository.UserRepository;
 import org.bram.exceptions.UserNotFoundException;
 import org.bram.services.JwtService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.rsocket.RSocketSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -47,6 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .orElseThrow(()-> new UserNotFoundException("User not found" + email));
 
                 List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(email, user.getPassword(), authorities);
             }
 
 
