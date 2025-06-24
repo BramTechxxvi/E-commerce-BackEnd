@@ -9,12 +9,14 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
+import org.bram.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 import static org.bram.utils.Mapper.*;
+import static org.bram.utils.PasswordUtil.verifyPassword;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -54,8 +56,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.setSuccess(true);
         response.setMessage("Registered successfully");
         return response;
-
     }
+
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -63,14 +65,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String password = loginRequest.getPassword();
 
         Optional<Customer> foundCustomer = customerRepository.findByEmail(email);
-        if (foundCustomer.isPresent()) {
+        boolean isCorrectPassword = verifyPassword(password, foundCustomer.get().getPassword());
+
+        if (isCorrectPassword) {
         String token = jwtService.generateToken(email, UserRole.CUSTOMER);
             return mapToLoginResponse("Login Successful", true, token);
-
         }
 
-        Optional<Seller> foundSeller = sellerRepository.find
+        Optional<Seller> foundSeller = sellerRepository.findByEmail(email);
+        if (foundSeller.isPresent() && foundSeller.get().getPassword().equals(password)) {
+            String token = jwtService.generateToken(email, UserRole.SELLER);
+            return mapToLoginResponse("Login Successful", true, token);
+        }
 
+        return mapToLoginResponse("No user found", false, null);
     }
 
     private void verifyNewEmail(String email) {
