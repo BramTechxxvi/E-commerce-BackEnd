@@ -61,21 +61,23 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void loginCustomer__loginTest() {
-        registerACustomer__registerTest();
+        registerCustomer();
         loginRequest.setEmail("John@doe.com");
         loginRequest.setPassword("password111");
         loginRequest.setRole("CUSTOMER");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
+        assertNotNull(loginResponse.getToken());
         assertEquals("Welcome back John Doe", loginResponse.getMessage());
     }
 
     @Test
     public void loginSeller__loginTest() {
-        registerASeller__registerTest();
+        registerSeller();
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
         loginRequest.setRole("SELLER");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
+        assertNotNull(loginResponse.getToken());
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
         assertTrue(loginResponse.isSuccess());
     }

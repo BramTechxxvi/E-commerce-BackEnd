@@ -12,6 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,17 +51,26 @@ public class SellerServicesImplTest {
     public void ChangeSellerEmail__changeEmailTest() {
         registerSeller();
         assertEquals("Registered successfully", registerResponse.getMessage());
+
         loginRequest.setRole("Seller");
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
+
+        var auth = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(auth);
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
         ChangeEmailResponse response = sellerService.changeEmail(changeEmailRequest);
         assertEquals("Email changed successfully", response.getMessage());
         assertTrue(response.isSuccess());
     }
+
+//    var auth = new UsernamePasswordAuthenticationToken(
+//            loginRequest.getEmail(), null, List.of() // no authorities needed for this test
+//    );
+//    SecurityContextHolder.getContext().setAuthentication(auth)
 
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
