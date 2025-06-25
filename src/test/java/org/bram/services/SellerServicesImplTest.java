@@ -35,6 +35,7 @@ public class SellerServicesImplTest {
     private RegisterRequest registerRequest;
     private LoginRequest loginRequest;
     private ChangeEmailRequest changeEmailRequest;
+    private LoginResponse loginResponse;
 
 
     @BeforeEach
@@ -45,6 +46,7 @@ public class SellerServicesImplTest {
         loginRequest = new LoginRequest();
         changeEmailRequest = new ChangeEmailRequest();
         userRepository.deleteAll();
+        loginResponse = new LoginResponse();
     }
 
     @Test
@@ -53,7 +55,7 @@ public class SellerServicesImplTest {
         assertEquals("Registered successfully", registerResponse.getMessage());
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
-        LoginResponse loginResponse = authenticationService.login(loginRequest);
+        loginResponse = authenticationService.login(loginRequest);
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
 
         var auth = new UsernamePasswordAuthenticationToken(
@@ -67,19 +69,37 @@ public class SellerServicesImplTest {
     }
 
     @Test
-    public void changeSellerEmailWitSameOldEmail__throwsException() {
+    public void changeSellerEmailWithSameOldEmail__throwsException() {
         registerSeller();
-        loginRequest.setEmail("grace@gmail.com");
+        loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
-        LoginResponse loginResponse = authenticationService.login(loginRequest);
+        loginResponse = authenticationService.login(loginRequest);
         var auth = new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), null, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        changeEmailRequest.setOldEmail("grace@gmail.com");
-        changeEmailRequest.setNewEmail("grace@gmail.com");
+        changeEmailRequest.setOldEmail("grace@ayoola.com");
+        changeEmailRequest.setNewEmail("grace@ayoola.com");
         Exception error = assertThrows(SameEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
         assertEquals("New email cannot be same as old email", error.getMessage());
     }
+
+    @Test
+    public void changeSellerEmailWithWrongOldEmail__throwsException() {
+        registerSeller();
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        changeEmailRequest.setOldEmail("grace@ayoola.com");
+        changeEmailRequest.setNewEmail("grace@ayoola.com");
+        Exception error = assertThrows(SameEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
+        assertEquals("Old email not correct", error.getMessage());
+    }
+
+    @Test
+    public void changeSellerPassword__changePassword() {}
 
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
