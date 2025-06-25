@@ -79,13 +79,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String fullName = user.getFirstName() +" " + user.getLastName();
 
         boolean isCorrectPassword = verifyPassword(password, user.getPassword());
-        if (isCorrectPassword) {
-            String token = jwtService.generateToken(email, UserRole.valueOf(role));
-            user.setLoggedIn(true);
-            userRepository.save(user);
-            return mapToLoginResponse("Welcome back " + fullName, true, token);
-        }
-        return mapToLoginResponse("Unable to login", false, null);
+        if (!isCorrectPassword) throw new IncorrectPasswordException("Incorrect password");
+
+        String token = jwtService.generateToken(email, UserRole.valueOf(role));
+        user.setLoggedIn(true);
+        userRepository.save(user);
+        return mapToLoginResponse("Welcome back " + fullName, true, token);
+
     }
 
     private void verifyNewEmail(String email) {
