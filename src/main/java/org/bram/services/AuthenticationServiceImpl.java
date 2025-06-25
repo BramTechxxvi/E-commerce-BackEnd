@@ -47,16 +47,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new InvalidRoleException("Invalid role specified" + registerRequest.getUserRole());
         }
 
-//        User user = mapToUser(registerRequest);
-//        userRepository.save(user);
+        User user = mapToUser(registerRequest);
+        userRepository.save(user);
 
         switch(userRole) {
             case CUSTOMER:
-                Customer customer = mapToCustomer(registerRequest);
+                Customer customer = mapToCustomer(user);
                 customerRepository.save(customer); break;
 
             case SELLER:
-                Seller seller = mapToSeller(registerRequest);
+                Seller seller = mapToSeller(user);
                 sellerRepository.save(seller); break;
         }
 

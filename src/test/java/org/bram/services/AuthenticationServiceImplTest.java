@@ -46,7 +46,7 @@ public class AuthenticationServiceImplTest {
         assertNotNull(registerResponse);
         assertTrue(registerResponse.isSuccess());
         assertEquals(1, customerRepository.count());
-        assertEquals(0, userRepository.count());
+        assertEquals(1, userRepository.count());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class AuthenticationServiceImplTest {
         assertNotNull(registerResponse);
         assertTrue(registerResponse.isSuccess());
         assertEquals(1, sellerRepository.count());
-        assertEquals(0, userRepository.count());
+        assertEquals(1, userRepository.count());
     }
 
     @Test
