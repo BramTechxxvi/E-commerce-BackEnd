@@ -37,8 +37,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
-        verifyNewEmail(registerRequest.getEmail());
-        verifyNewPhone(registerRequest.getPhone());
+        verifyNewEmail(registerRequest.getEmail().trim().toLowerCase());
+        verifyNewPhone(registerRequest.getPhone().trim());
 
         UserRole userRole;
         try {
@@ -82,6 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (isCorrectPassword) {
             String token = jwtService.generateToken(email, UserRole.valueOf(role));
             user.setLoggedIn(true);
+            userRepository.save(user);
             return mapToLoginResponse("Welcome back " + fullName, true, token);
         }
         return mapToLoginResponse("Unable to login", false, null);
