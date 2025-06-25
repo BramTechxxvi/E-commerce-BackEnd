@@ -12,7 +12,7 @@ public class Product {
     private String productId;
     private String description;
     private String productName;
-    private int price;
+    private float price;
     private ProductCategory category;
 
 }
