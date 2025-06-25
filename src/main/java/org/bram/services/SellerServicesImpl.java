@@ -25,7 +25,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
-//        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
         if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
 

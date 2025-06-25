@@ -89,10 +89,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             case SELLER:
                 Seller seller = sellerRepository.findByUser(user)
-                        .orElseThr
-                }
-
+                        .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+                seller.setLoggedIn(true);
+                sellerRepository.save(seller); break;
         }
+
         String fullName = user.getFirstName() +" " + user.getLastName();
 
         LoginResponse response = new LoginResponse();
