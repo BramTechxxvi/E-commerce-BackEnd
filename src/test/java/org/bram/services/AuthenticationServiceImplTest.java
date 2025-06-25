@@ -1,6 +1,5 @@
 package org.bram.services;
 
-import io.jsonwebtoken.lang.Classes;
 import org.bram.Main;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
@@ -47,7 +46,7 @@ public class AuthenticationServiceImplTest {
         assertNotNull(registerResponse);
         assertTrue(registerResponse.isSuccess());
         assertEquals(1, customerRepository.count());
-        assertEquals(1, userRepository.count());
+        assertEquals(0, userRepository.count());
     }
 
     @Test
@@ -56,7 +55,7 @@ public class AuthenticationServiceImplTest {
         assertNotNull(registerResponse);
         assertTrue(registerResponse.isSuccess());
         assertEquals(1, sellerRepository.count());
-        assertEquals(1, userRepository.count());
+        assertEquals(0, userRepository.count());
     }
 
     @Test
