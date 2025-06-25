@@ -52,8 +52,8 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
 
-        boolean isOldEmail = request.getOldPassword().equals(seller.getEmail());
-        if(!isOldEmail) throw new IncorrectOldPasswordException("Old password not correct");
+        boolean isOldPassword = request.getOldPassword().equals(seller.getPassword());
+        if(!isOldPassword) throw new IncorrectOldPasswordException("Old password not correct");
 
         seller.setPassword(request.getNewPassword());
         sellerRepository.save(seller);
