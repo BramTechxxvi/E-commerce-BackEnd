@@ -60,7 +60,7 @@ public class SellerServicesImplTest {
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
 
         var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassword(), List.of(new SimpleGrantedAuthority("SELLER")));
+                loginRequest.getEmail(), null, List.of(new SimpleGrantedAuthority("SELLER")));
         SecurityContextHolder.getContext().setAuthentication(auth);
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
@@ -69,10 +69,6 @@ public class SellerServicesImplTest {
         assertTrue(response.isSuccess());
     }
 
-//    var auth = new UsernamePasswordAuthenticationToken(
-//            loginRequest.getEmail(), null, List.of() // no authorities needed for this test
-//    );
-//    SecurityContextHolder.getContext().setAuthentication(auth)
 
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
