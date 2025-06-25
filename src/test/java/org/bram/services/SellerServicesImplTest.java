@@ -52,16 +52,14 @@ public class SellerServicesImplTest {
     public void ChangeSellerEmail__changeEmailTest() {
         registerSeller();
         assertEquals("Registered successfully", registerResponse.getMessage());
-
-        loginRequest.setRole("Customer");
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
 
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, List.of(new SimpleGrantedAuthority("SELLER")));
-        SecurityContextHolder.getContext().setAuthentication(auth);
+//        var auth = new UsernamePasswordAuthenticationToken(
+//                loginRequest.getEmail(), null, List.of(new SimpleGrantedAuthority("SELLER")));
+//        SecurityContextHolder.getContext().setAuthentication(auth);
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
         ChangeEmailResponse response = sellerService.changeEmail(changeEmailRequest);

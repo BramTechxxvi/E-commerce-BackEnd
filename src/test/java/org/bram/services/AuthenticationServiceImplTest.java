@@ -63,7 +63,6 @@ public class AuthenticationServiceImplTest {
         registerCustomer();
         loginRequest.setEmail("John@doe.com");
         loginRequest.setPassword("password111");
-        loginRequest.setRole("CUSTOMER");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
         assertNotNull(loginResponse.getToken());
         assertEquals("Welcome back John Doe", loginResponse.getMessage());
@@ -74,7 +73,6 @@ public class AuthenticationServiceImplTest {
         registerSeller();
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
-        loginRequest.setRole("SELLER");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
         assertNotNull(loginResponse.getToken());
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());

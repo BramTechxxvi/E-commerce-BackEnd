@@ -82,13 +82,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         switch (userRole) {
             case CUSTOMER:
-                Customer customer= customerRepository.findByUser(user)
+                Customer customer= customerRepository.findByEmail(email)
                         .orElseThrow(()-> new UserNotFoundException("Customer not found"));
                 customer.setLoggedIn(true);
                 customerRepository.save(customer); break;
 
             case SELLER:
-                Seller seller = sellerRepository.findByUser(user)
+                Seller seller = sellerRepository.findByEmail(email)
                         .orElseThrow(()-> new UserNotFoundException("Seller not found"));
                 seller.setLoggedIn(true);
                 sellerRepository.save(seller); break;
