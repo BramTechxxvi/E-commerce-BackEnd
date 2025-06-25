@@ -68,20 +68,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public LoginResponse login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail().trim().toLowerCase();
         String password = loginRequest.getPassword().trim();
-        String role = loginRequest.getRole().trim().toUpperCase();
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
 
-        UserRole userRole = UserRole.valueOf(role);
-        var savedRole = user.getUserRole();
-
-//        if(savedRole != userRole) throw new UnauthorizedRoleException("Role mismatch");
-
-
+        var userRole = user.getUserRole();
         boolean isCorrectPassword = verifyPassword(password, user.getPassword());
         if (!isCorrectPassword) throw new IncorrectPasswordException("Incorrect password");
-
 
         String token = jwtService.generateToken(email, userRole);
         user.setLoggedIn(true);
