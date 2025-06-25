@@ -1,4 +1,40 @@
 package org.bram.controllers;
 
+import jakarta.validation.Valid;
+import org.bram.dtos.request.RegisterRequest;
+import org.bram.dtos.response.RegisterResponse;
+import org.bram.exceptions.DetailsAlreadyInUseException;
+import org.bram.services.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/auth")
+@CrossOrigin("*")
 public class AuthenticationController {
+
+    private final AuthenticationService authenticationService;
+
+    @Autowired
+    public AuthenticationController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
+        try {
+            RegisterResponse response = authenticationService.register(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (DetailsAlreadyInUseException e) {
+            RegisterResponse response = new RegisterResponse();
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
+
+    }
 }
