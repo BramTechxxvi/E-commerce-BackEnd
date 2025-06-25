@@ -6,6 +6,7 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
+import org.bram.exceptions.IncorrectPasswordException;
 import org.bram.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class AuthenticationController {
         try {
             RegisterResponse response = authenticationService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
         } catch (DetailsAlreadyInUseException e) {
             RegisterResponse response = new RegisterResponse();
             response.setSuccess(false);
@@ -43,6 +45,8 @@ public class AuthenticationController {
         try {
             LoginResponse response = authenticationService.login(request);
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch ()
+        } catch (IncorrectPasswordException e) {
+
+        }
     }
 }

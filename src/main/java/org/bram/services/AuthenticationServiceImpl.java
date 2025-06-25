@@ -9,6 +9,7 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
+import org.bram.exceptions.IncorrectPasswordException;
 import org.bram.exceptions.InvalidRoleException;
 import org.bram.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
