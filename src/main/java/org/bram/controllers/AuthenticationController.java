@@ -45,8 +45,12 @@ public class AuthenticationController {
         try {
             LoginResponse response = authenticationService.login(request);
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (IncorrectPasswordException e) {
 
+        } catch (IncorrectPasswordException e) {
+            LoginResponse response = new LoginResponse();
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 }

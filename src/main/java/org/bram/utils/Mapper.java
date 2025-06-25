@@ -65,9 +65,9 @@ public class Mapper {
         return seller;
     }
 
-    public static LoginResponse mapToLoginResponse(String message, boolean success, String token) {
-        return new LoginResponse(message, token, success);
-    }
+//    public static LoginResponse mapToLoginResponse(String message, boolean success, String token) {
+//        return new LoginResponse(message, token, success);
+//    }
 }
 
 

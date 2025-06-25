@@ -15,7 +15,6 @@ import org.bram.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 import static org.bram.utils.Mapper.*;
 import static org.bram.utils.PasswordUtil.verifyPassword;
@@ -85,8 +84,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtService.generateToken(email, UserRole.valueOf(role));
         user.setLoggedIn(true);
         userRepository.save(user);
-        return mapToLoginResponse("Welcome back " + fullName, true, token);
 
+        LoginResponse response = new LoginResponse();
+        response.setSuccess(true);
+        response.setToken(token);
+        response.setMessage("Welcome back " + fullName);
+
+        return response;
     }
 
     private void verifyNewEmail(String email) {
