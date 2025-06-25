@@ -69,7 +69,6 @@ public class SellerServicesImplTest {
         assertTrue(response.isSuccess());
     }
 
-
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");

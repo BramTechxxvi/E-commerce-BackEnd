@@ -14,6 +14,7 @@ import org.bram.exceptions.InvalidRoleException;
 import org.bram.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 
 import static org.bram.utils.Mapper.*;
@@ -76,14 +77,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
 
+        UserRole userRole = UserRole.valueOf(role);
+        var savedRole = user.getUserRole();
+        if(savedRole != userRole) throw new UnauthorizedRoleException("Role mismatch");
+
         String fullName = user.getFirstName() +" " + user.getLastName();
 
         boolean isCorrectPassword = verifyPassword(password, user.getPassword());
         if (!isCorrectPassword) throw new IncorrectPasswordException("Incorrect password");
 
-        String token = jwtService.generateToken(email, UserRole.valueOf(role));
+
+        String token = jwtService.generateToken(email, userRole);
         user.setLoggedIn(true);
         userRepository.save(user);
+        switch (userRole) {
+            case CUSTOMER:
+                if (userRoleInput != userRoleInDb) {
+                    throw new UnauthorizedRoleException("Role mismatch for user");
+                }
+
+        }
 
         LoginResponse response = new LoginResponse();
         response.setSuccess(true);
