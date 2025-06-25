@@ -1,17 +1,16 @@
 package org.bram.controllers;
 
 import jakarta.validation.Valid;
+import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
+import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
 import org.bram.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,6 +24,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
         try {
             RegisterResponse response = authenticationService.register(request);
@@ -33,8 +33,16 @@ public class AuthenticationController {
             RegisterResponse response = new RegisterResponse();
             response.setSuccess(false);
             response.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-        }
 
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
+        try {
+            LoginResponse response = authenticationService.login(request);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 }
