@@ -37,33 +37,49 @@ public class Mapper {
         return user;
     }
 
-    public static Customer mapToCustomer(User user) {
+
+    public static Customer mapToCustomer(RegisterRequest request) {
         Customer customer = new Customer();
-        customer.setId(user.getId());
-        customer.setFirstName(user.getFirstName());
-        customer.setLastName(user.getLastName());
-        customer.setEmail(user.getEmail());
-        customer.setPhone(user.getPhone());
-        customer.setPassword(user.getPassword());
-        customer.setUserRole(user.getUserRole());
-        customer.setAddress(user.getAddress());
+        customer.setFirstName(request.getFirstName().trim());
+        customer.setLastName(request.getLastName().trim());
+        customer.setEmail(request.getEmail().trim().toLowerCase());
+        customer.setPhone(request.getPhone().trim());
+        customer.setPassword(hashPassword(request.getPassword().trim()));
+
+        Address address = new Address();
+        address.setStreet(request.getStreet());
+        address.setCity(request.getCity());
+        address.setState(request.getState());
+        address.setHouseNumber(request.getHouseNumber());
+        address.setCountry(request.getCountry());
+
+        customer.setAddress(address);
+        customer.setUserRole(UserRole.CUSTOMER);
 
         return customer;
     }
 
-    public static Seller mapToSeller(User user) {
+    public static Seller mapToSeller(RegisterRequest request) {
         Seller seller = new Seller();
-        seller.setId(user.getId());
-        seller.setFirstName(user.getFirstName());
-        seller.setLastName(user.getLastName());
-        seller.setEmail(user.getEmail());
-        seller.setPhone(user.getPhone());
-        seller.setPassword(user.getPassword());
-        seller.setUserRole(user.getUserRole());
-        seller.setAddress(user.getAddress());
+        seller.setFirstName(request.getFirstName().trim());
+        seller.setLastName(request.getLastName().trim());
+        seller.setEmail(request.getEmail().trim().toLowerCase());
+        seller.setPhone(request.getPhone().trim());
+        seller.setPassword(hashPassword(request.getPassword().trim()));
+
+        Address address = new Address();
+        address.setStreet(request.getStreet());
+        address.setCity(request.getCity());
+        address.setState(request.getState());
+        address.setHouseNumber(request.getHouseNumber());
+        address.setCountry(request.getCountry());
+
+        seller.setAddress(address);
+        seller.setUserRole(UserRole.SELLER);
 
         return seller;
     }
+
 
     public static LoginResponse mapToLoginResponse(String message, boolean success, String token) {
         return new LoginResponse(message, token, success);

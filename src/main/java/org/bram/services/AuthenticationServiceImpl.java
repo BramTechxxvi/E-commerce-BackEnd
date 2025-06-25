@@ -9,6 +9,7 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
+import org.bram.exceptions.InvalidRoleException;
 import org.bram.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,17 +40,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         verifyNewEmail(registerRequest.getEmail());
         verifyNewPhone(registerRequest.getPhone());
 
-        var user = mapToUser(registerRequest);
-        userRepository.save(user);
-        var role = user.getUserRole();
+        UserRole userRole;
+        try {
+            userRole = UserRole.valueOf(registerRequest.getUserRole().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRoleException("Invalid role specified" + registerRequest.getUserRole());
+        }
 
-        switch(role) {
+        User user = mapToUser(registerRequest);
+        userRepository.save(user);
+
+        switch(userRole) {
             case CUSTOMER:
-                var customer = mapToCustomer(user);
+                Customer customer = mapToCustomer(registerRequest);
                 customerRepository.save(customer); break;
 
             case SELLER:
-                var seller = mapToSeller(user);
+                Seller seller = mapToSeller(registerRequest);
                 sellerRepository.save(seller); break;
         }
 
