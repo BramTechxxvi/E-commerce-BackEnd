@@ -3,9 +3,11 @@ package org.bram.services;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.ChangeEmailRequest;
+import org.bram.dtos.request.ChangePasswordRequest;
 import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ChangeEmailResponse;
+import org.bram.dtos.response.ChangePasswordResponse;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.SameEmailException;
@@ -36,6 +38,8 @@ public class SellerServicesImplTest {
     private LoginRequest loginRequest;
     private ChangeEmailRequest changeEmailRequest;
     private LoginResponse loginResponse;
+    private ChangePasswordRequest changePasswordRequest;
+    private ChangePasswordResponse changePasswordResponse;
 
 
     @BeforeEach
@@ -47,6 +51,8 @@ public class SellerServicesImplTest {
         changeEmailRequest = new ChangeEmailRequest();
         userRepository.deleteAll();
         loginResponse = new LoginResponse();
+        changePasswordResponse = new ChangePasswordResponse();
+        changePasswordRequest = new ChangePasswordRequest();
     }
 
     @Test
@@ -99,7 +105,22 @@ public class SellerServicesImplTest {
     }
 
     @Test
-    public void changeSellerPassword__changePassword() {}
+    public void changeSellerPassword__changePassword() {
+        registerSeller();
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
+        assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        changePasswordRequest.setOldPassword("password111");
+        changePasswordRequest.setNewPassword("grace111");
+        changePasswordResponse = sellerService.changePassword(changePasswordRequest);
+        assertEquals("Password changed successfully", changePasswordResponse.getMessage());
+        assertTrue(changePasswordResponse.isSuccess());
+    }
 
     @Test
     public void changeSellerPasswordWithSameOldPassword__throwsException() {}
