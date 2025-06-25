@@ -39,6 +39,7 @@ public class Mapper {
 
     public static Customer mapToCustomer(User user) {
         Customer customer = new Customer();
+        customer.setId(user.getId());
         customer.setFirstName(user.getFirstName());
         customer.setLastName(user.getLastName());
         customer.setEmail(user.getEmail());
@@ -52,6 +53,7 @@ public class Mapper {
 
     public static Seller mapToSeller(User user) {
         Seller seller = new Seller();
+        seller.setId(user.getId());
         seller.setFirstName(user.getFirstName());
         seller.setLastName(user.getLastName());
         seller.setEmail(user.getEmail());
