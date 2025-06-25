@@ -31,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
        this.userRepository = userRepository;
        this.customerRepository = customerRepository;
        this.sellerRepository = sellerRepository;
-        this.jwtService = jwtService;
+       this.jwtService = jwtService;
     }
 
     @Override

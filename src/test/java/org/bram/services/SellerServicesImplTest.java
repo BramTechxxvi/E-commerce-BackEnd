@@ -1,6 +1,7 @@
 package org.bram.services;
 
 import org.bram.data.repository.SellerRepository;
+import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
@@ -19,8 +20,8 @@ public class SellerServicesImplTest {
 
     @Autowired
     private SellerRepository sellerRepository;
-
-
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private SellerServicesImpl sellerService;
 
@@ -39,6 +40,7 @@ public class SellerServicesImplTest {
         registerRequest = new RegisterRequest();
         loginRequest = new LoginRequest();
         changeEmailRequest = new ChangeEmailRequest();
+        userRepository.deleteAll();
     }
 
     @Test
