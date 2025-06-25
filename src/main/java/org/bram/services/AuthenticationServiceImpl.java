@@ -8,13 +8,9 @@ import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
-import org.bram.exceptions.DetailsAlreadyInUseException;
-import org.bram.exceptions.IncorrectPasswordException;
-import org.bram.exceptions.InvalidRoleException;
-import org.bram.exceptions.UserNotFoundException;
+import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 
 import static org.bram.utils.Mapper.*;
@@ -79,9 +75,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         UserRole userRole = UserRole.valueOf(role);
         var savedRole = user.getUserRole();
-        if(savedRole != userRole) throw new UnauthorizedRoleException("Role mismatch");
 
-        String fullName = user.getFirstName() +" " + user.getLastName();
+//        if(savedRole != userRole) throw new UnauthorizedRoleException("Role mismatch");
+
 
         boolean isCorrectPassword = verifyPassword(password, user.getPassword());
         if (!isCorrectPassword) throw new IncorrectPasswordException("Incorrect password");
@@ -90,13 +86,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtService.generateToken(email, userRole);
         user.setLoggedIn(true);
         userRepository.save(user);
-        switch (userRole) {
-            case CUSTOMER:
-                if (userRoleInput != userRoleInDb) {
-                    throw new UnauthorizedRoleException("Role mismatch for user");
-                }
-
-        }
+//        switch (userRole) {
+//            case CUSTOMER:
+//
+//                }
+//
+//        }
+        String fullName = user.getFirstName() +" " + user.getLastName();
 
         LoginResponse response = new LoginResponse();
         response.setSuccess(true);

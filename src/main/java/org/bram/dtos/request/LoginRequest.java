@@ -14,6 +14,4 @@ public class LoginRequest {
     @NotBlank(message = "Enter your password")
     @Size(min= 8, max=16, message = "Password must be between 8 to 16 characters")
     private String password;
-    @NotBlank(message = "Enter role")
-    private String role;
 }

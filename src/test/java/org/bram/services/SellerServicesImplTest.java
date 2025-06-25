@@ -53,7 +53,7 @@ public class SellerServicesImplTest {
         registerSeller();
         assertEquals("Registered successfully", registerResponse.getMessage());
 
-        loginRequest.setRole("Seller");
+        loginRequest.setRole("Customer");
         loginRequest.setEmail("grace@ayoola.com");
         loginRequest.setPassword("password111");
         LoginResponse loginResponse = authenticationService.login(loginRequest);
