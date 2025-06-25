@@ -101,6 +101,13 @@ public class SellerServicesImplTest {
     @Test
     public void changeSellerPassword__changePassword() {}
 
+    @Test
+    public void changeSellerPasswordWithSameOldPassword__throwsException() {}
+
+    @Test
+    public void changeSellerPasswordWithWrongOldPassword__throwsException() {
+
+    }
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");

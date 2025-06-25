@@ -35,7 +35,11 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         seller.setEmail(request.getNewEmail());
         sellerRepository.save(seller);
 
-        return new ChangeEmailResponse("Email changed successfully", true);
+        ChangeEmailResponse response = new ChangeEmailResponse();
+        response.setMessage("Email changed successfully");
+        response.setSuccess(true);
+
+        return response;
     }
 
     @Override
@@ -53,7 +57,10 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         seller.setPassword(request.getNewPassword());
         sellerRepository.save(seller);
 
-        return new ChangePasswordResponse("Password changed successfully", true);
+        ChangePasswordResponse response = new ChangePasswordResponse();
+        response.setSuccess(true);
+        response.setMessage("Password changed successfully");
+        return response;
     }
 
     @Override
