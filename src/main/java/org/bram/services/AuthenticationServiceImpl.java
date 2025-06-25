@@ -79,12 +79,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtService.generateToken(email, userRole);
         user.setLoggedIn(true);
         userRepository.save(user);
-//        switch (userRole) {
-//            case CUSTOMER:
-//
-//                }
-//
-//        }
+
+        switch (userRole) {
+            case CUSTOMER:
+                Customer customer= customerRepository.findByUser()
+
+                }
+
+        }
         String fullName = user.getFirstName() +" " + user.getLastName();
 
         LoginResponse response = new LoginResponse();
