@@ -44,7 +44,8 @@ public class SellerServicesImpl implements UserServices, SellerServices {
 
     @Override
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
-        Seller seller = sellerRepository.findById(request.getUserId())
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
