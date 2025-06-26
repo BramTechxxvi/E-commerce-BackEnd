@@ -9,9 +9,7 @@ import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import static org.bram.utils.PasswordUtil.verifyPassword;
-import static org.bram.utils.ProfileUpdateMapper.changeEmailMapper;
+import static org.bram.utils.ProfileUpdateMapper.*;
 
 @Service
 public class SellerServicesImpl implements UserServices, SellerServices {
@@ -30,7 +28,6 @@ public class SellerServicesImpl implements UserServices, SellerServices {
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
         Seller updatedSeller = changeEmailMapper(seller, request);
-
         sellerRepository.save(updatedSeller);
 
         ChangeEmailResponse response = new ChangeEmailResponse();
@@ -46,15 +43,8 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
-        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
-        boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
-        if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
-
-        boolean isCorrectOldPassword = verifyPassword(request.getOldPassword(), seller.getPassword());
-        if(!isCorrectOldPassword) throw new IncorrectOldPasswordException("Old password not correct");
-
-        seller.setPassword(request.getNewPassword());
-        sellerRepository.save(seller);
+        Seller updatedSeller = changePasswordMapper(seller, request);
+        sellerRepository.save(updatedSeller);
 
         ChangePasswordResponse response = new ChangePasswordResponse();
         response.setSuccess(true);

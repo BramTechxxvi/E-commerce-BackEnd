@@ -3,9 +3,9 @@ package org.bram.utils;
 import org.bram.data.models.Seller;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
-import org.bram.exceptions.IncorrectOldEmailException;
-import org.bram.exceptions.SameEmailException;
-import org.bram.exceptions.UserNotLoggedInException;
+import org.bram.exceptions.*;
+
+import static org.bram.utils.PasswordUtil.verifyPassword;
 
 public class ProfileUpdateMapper {
 
@@ -22,6 +22,14 @@ public class ProfileUpdateMapper {
     }
 
     public static Seller changePasswordMapper(Seller seller, ChangePasswordRequest request) {
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
+        boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
+        if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
 
+        boolean isCorrectOldPassword = verifyPassword(request.getOldPassword(), seller.getPassword());
+        if(!isCorrectOldPassword) throw new IncorrectOldPasswordException("Old password not correct");
+
+        seller.setPassword(request.getNewPassword());
+        return seller;
     }
 }
