@@ -5,8 +5,8 @@ import org.bram.dtos.response.*;
 
 public interface UserServices {
 
-    ChangeEmailResponse changeEmail(ChangeEmailRequest request);
+    ApiResponse changeEmail(ChangeEmailRequest request);
 
-    ChangePasswordResponse changePassword(ChangePasswordRequest request);
+    ApiResponse changePassword(ChangePasswordRequest request);
 
 }

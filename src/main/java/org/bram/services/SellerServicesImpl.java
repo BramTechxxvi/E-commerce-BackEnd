@@ -22,7 +22,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
     }
 
     @Override
-    public ChangeEmailResponse changeEmail(ChangeEmailRequest request) {
+    public ApiResponse changeEmail(ChangeEmailRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
@@ -38,7 +38,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
     }
 
     @Override
-    public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
+    public ApiResponse changePassword(ChangePasswordRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
@@ -46,14 +46,14 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller updatedSeller = changePasswordMapper(seller, request);
         sellerRepository.save(updatedSeller);
 
-        ChangePasswordResponse response = new ChangePasswordResponse();
+        ApiResponse response = new ApiResponse();
         response.setSuccess(true);
         response.setMessage("Password changed successfully");
         return response;
     }
 
     @Override
-    public UpdateSellerProfileResponse updateProfile(UpdateSellerProfileRequest request) {
+    public ApiResponse updateProfile(UpdateSellerProfileRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
@@ -61,7 +61,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller updatedSeller = updateProfileMapper(seller, request);
         sellerRepository.save(updatedSeller);
 
-        UpdateSellerProfileResponse response = new UpdateSellerProfileResponse();
+        ApiResponse response = new ApiResponse();
         response.setMessage("Profile updated successfully");
         response.setSuccess(true);
         return response;

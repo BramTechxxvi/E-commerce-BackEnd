@@ -1,11 +1,14 @@
 package org.bram.services;
 
 import org.bram.dtos.request.CreateProductRequest;
+import org.bram.dtos.response.ApiResponse;
 import org.bram.dtos.response.CreateProductResponse;
 
 public interface ProductServices {
 
-    CreateProductResponse createProduct(CreateProductRequest request);
+    ApiResponse createProduct(CreateProductRequest request);
 
-    RemoveProduct
+    ApiResponse removeProduct(RemoveProductRequest request);
+
+    ApiResponse updateProduct(UpdateProductRequest request);
 }
