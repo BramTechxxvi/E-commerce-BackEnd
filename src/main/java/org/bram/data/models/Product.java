@@ -11,6 +11,7 @@ public class Product {
 
     @Id
     private String productId;
+    private String imageUrl;
     private String description;
     private String productName;
     private double price;

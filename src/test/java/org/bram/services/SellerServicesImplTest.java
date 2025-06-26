@@ -1,5 +1,6 @@
 package org.bram.services;
 
+import com.cloudinary.Api;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
@@ -38,8 +39,7 @@ public class SellerServicesImplTest {
     private LoginResponse loginResponse;
     private ChangeEmailRequest changeEmailRequest;
     private ChangePasswordRequest changePasswordRequest;
-    private ChangePasswordResponse changePasswordResponse;
-    private UpdateSellerProfileResponse updateResponse;
+    private ApiResponse apiResponse;
     private UpdateSellerProfileRequest updateRequest;
     @Autowired
     private SellerServices sellerServices;
@@ -54,9 +54,9 @@ public class SellerServicesImplTest {
         loginResponse = new LoginResponse();
         changeEmailRequest = new ChangeEmailRequest();
         userRepository.deleteAll();
-        changePasswordResponse = new ChangePasswordResponse();
+        apiResponse = new ApiResponse();
         changePasswordRequest = new ChangePasswordRequest();
-        updateResponse = new UpdateSellerProfileResponse();
+        apiResponse = new ApiResponse();
         updateRequest = new UpdateSellerProfileRequest();
     }
 
@@ -67,9 +67,9 @@ public class SellerServicesImplTest {
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
-        ChangeEmailResponse response = sellerService.changeEmail(changeEmailRequest);
-        assertEquals("Email changed successfully", response.getMessage());
-        assertTrue(response.isSuccess());
+        apiResponse = sellerService.changeEmail(changeEmailRequest);
+        assertEquals("Email changed successfully", apiResponse.getMessage());
+        assertTrue(apiResponse.isSuccess());
     }
 
     @Test
@@ -95,9 +95,9 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("grace111");
-        changePasswordResponse = sellerService.changePassword(changePasswordRequest);
-        assertEquals("Password changed successfully", changePasswordResponse.getMessage());
-        assertTrue(changePasswordResponse.isSuccess());
+        apiResponse = sellerService.changePassword(changePasswordRequest);
+        assertEquals("Password changed successfully", apiResponse.getMessage());
+        assertTrue(apiResponse.isSuccess());
     }
 
     @Test
@@ -123,8 +123,8 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         updateRequest.setStoreName("Grace Kiddies Store");
         updateRequest.setStoreDescription("We sell all kinds of children clothes, shoes, toys and comic books");
-        updateResponse = sellerServices.updateProfile(updateRequest);
-        assertEquals("Profile updated successfully", updateResponse.getMessage());
+        apiResponse = sellerServices.updateProfile(updateRequest);
+        assertEquals("Profile updated successfully", apiResponse.getMessage());
     }
 
     @Test
@@ -135,8 +135,8 @@ public class SellerServicesImplTest {
         updateRequest.setCity("Lagos city");
         updateRequest.setState("Lagos state");
         updateRequest.setCountry("Nigeria");
-        updateResponse = sellerServices.updateProfile(updateRequest);
-        assertEquals("Profile updated successfully", updateResponse.getMessage());
+        apiResponse = sellerServices.updateProfile(updateRequest);
+        assertEquals("Profile updated successfully", apiResponse.getMessage());
     }
 
     private void registerSellerAndLogin() {
