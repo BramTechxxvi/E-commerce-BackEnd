@@ -30,7 +30,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller updatedSeller = changeEmailMapper(seller, request);
         sellerRepository.save(updatedSeller);
 
-        ChangeEmailResponse response = new ChangeEmailResponse();
+        ApiResponse response = new ApiResponse();
         response.setMessage("Email changed successfully");
         response.setSuccess(true);
 
