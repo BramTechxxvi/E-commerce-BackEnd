@@ -33,4 +33,103 @@ class ProductServiceImplTest {
 
     }
 
+//
+//        @BeforeEach
+//        void setUp() {
+//            MockitoAnnotations.openMocks(this);
+//            Authentication authentication = mock(Authentication.class);
+//            SecurityContext securityContext = mock(SecurityContext.class);
+//
+//            when(securityContext.getAuthentication()).thenReturn(authentication);
+//            when(authentication.getName()).thenReturn("test@example.com");
+//            SecurityContextHolder.setContext(securityContext);
+//        }
+//
+//        @Test
+//        void addProduct_successful() throws Exception {
+//            AddProductRequest request = new AddProductRequest();
+//            request.setProductName("Test Product");
+//            request.setDescription("Test Desc");
+//            request.setProductQuantity(5);
+//            request.setPrice(100.0);
+//            request.setProductCategory("ELECTRONICS");
+//            request.setImage(new MockMultipartFile("image", "image.jpg", "image/jpeg", "dummy".getBytes()));
+//
+//            Map<String, String> uploadResult = new HashMap<>();
+//            uploadResult.put("secure_url", "http://image.url");
+//
+//            Seller seller = new Seller();
+//            seller.setEmail("test@example.com");
+//
+//            when(cloudinary.uploader().upload(any(byte[].class), eq(ObjectUtils.emptyMap()))).thenReturn(uploadResult);
+//            when(sellerRepository.findByEmail("test@example.com")).thenReturn(Optional.of(seller));
+//            when(productRepository.save(any(Product.class))).thenAnswer(i -> i.getArguments()[0]);
+//
+//            ApiResponse response = productService.addProduct(request);
+//            assertTrue(response.isSuccess());
+//            assertEquals("Product created successfully", response.getMessage());
+//        }
+//
+//        @Test
+//        void addProduct_nullImage_throwsException() {
+//            AddProductRequest request = new AddProductRequest();
+//            request.setImage(null);
+//
+//            NullImageException thrown = assertThrows(
+//                    NullImageException.class,
+//                    () -> productService.addProduct(request)
+//            );
+//
+//            assertEquals("Product image is required", thrown.getMessage());
+//        }
+//
+//        @Test
+//        void addProduct_userNotFound() throws Exception {
+//            AddProductRequest request = new AddProductRequest();
+//            request.setImage(new MockMultipartFile("image", "img.jpg", "image/jpeg", "hello".getBytes()));
+//            request.setProductCategory("BOOKS");
+//
+//            Map<String, String> uploadResult = new HashMap<>();
+//            uploadResult.put("secure_url", "http://image.url");
+//
+//            when(cloudinary.uploader().upload(any(byte[].class), eq(ObjectUtils.emptyMap()))).thenReturn(uploadResult);
+//            when(sellerRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
+//
+//            assertThrows(UserNotFoundException.class, () -> productService.addProduct(request));
+//@Test
+//void createProduct_success_savesProductAndSeller() throws Exception {
+//    // Setup fake image file
+//    MockMultipartFile imageFile = new MockMultipartFile(
+//            "image", "product.jpg", "image/jpeg", "fake image content".getBytes());
+//
+//    // Create request
+//    CreateProductRequest request = new CreateProductRequest();
+//    request.setProductName("Test Product");
+//    request.setDescription("Test Description");
+//    request.setPrice(100.0f);
+//    request.setProductCategory("ELECTRONICS");
+//    request.setProductQuantity(5);
+//    request.setImage(imageFile);
+//
+//    // Mock Cloudinary upload
+//    Map<String, Object> cloudinaryResult = new HashMap<>();
+//    cloudinaryResult.put("secure_url", "https://cloudinary.com/fake-image.jpg");
+//    Uploader uploader = mock(Uploader.class);
+//    when(cloudinary.uploader()).thenReturn(uploader);
+//    when(uploader.upload(any(byte[].class), anyMap())).thenReturn(cloudinaryResult);
+//
+//    // Mock SecurityContext to simulate logged-in seller
+//    SecurityContext securityContext = mock(SecurityContext.class);
+//    Authentication authentication = mock(Authentication.class);
+//    when(authentication.getName()).thenReturn("seller@example.com");
+//    when(securityContext.getAuthentication()).thenReturn(authentication);
+//    SecurityContextHolder.setContext(securityContext);
+//
+//    // Mock seller lookup
+//    Seller seller = new Seller();
+//    seller.setEmail("seller@example.com");
+//    seller.setProducts(new ArrayList<>());
+//    when(sellerRepository.findByEmail("seller@example.com")).thenReturn(Optional.of(seller));
+
+
 }
