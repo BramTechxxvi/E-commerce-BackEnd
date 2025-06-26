@@ -30,11 +30,11 @@ public class SellerServicesImplTest {
 
     @Autowired
     private AuthenticationService authenticationService;
-    private RegisterResponse registerResponse;
     private RegisterRequest registerRequest;
+    private RegisterResponse registerResponse;
     private LoginRequest loginRequest;
-    private ChangeEmailRequest changeEmailRequest;
     private LoginResponse loginResponse;
+    private ChangeEmailRequest changeEmailRequest;
     private ChangePasswordRequest changePasswordRequest;
     private ChangePasswordResponse changePasswordResponse;
     private UpdateSellerProfileResponse updateResponse;
@@ -46,12 +46,12 @@ public class SellerServicesImplTest {
     @BeforeEach
     public void setUp() {
         sellerRepository.deleteAll();
-        registerResponse = new RegisterResponse();
         registerRequest = new RegisterRequest();
+        registerResponse = new RegisterResponse();
         loginRequest = new LoginRequest();
+        loginResponse = new LoginResponse();
         changeEmailRequest = new ChangeEmailRequest();
         userRepository.deleteAll();
-        loginResponse = new LoginResponse();
         changePasswordResponse = new ChangePasswordResponse();
         changePasswordRequest = new ChangePasswordRequest();
         updateResponse = new UpdateSellerProfileResponse();
@@ -60,16 +60,9 @@ public class SellerServicesImplTest {
 
     @Test
     public void ChangeSellerEmail__changeEmailTest() {
-        registerSeller();
+        registerSellerAndLogin();
         assertEquals("Registered successfully", registerResponse.getMessage());
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
         ChangeEmailResponse response = sellerService.changeEmail(changeEmailRequest);
@@ -79,13 +72,7 @@ public class SellerServicesImplTest {
 
     @Test
     public void changeSellerEmailWithSameOldEmail__throwsException() {
-        registerSeller();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        registerSellerAndLogin();
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@ayoola.com");
         Exception error = assertThrows(SameEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
@@ -94,13 +81,7 @@ public class SellerServicesImplTest {
 
     @Test
     public void changeSellerEmailWithWrongOldEmail__throwsException() {
-        registerSeller();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        registerSellerAndLogin();
         changeEmailRequest.setOldEmail("grace@gmail.com");
         changeEmailRequest.setNewEmail("grace@ayoola.com");
         Exception error = assertThrows(IncorrectOldEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
@@ -109,15 +90,7 @@ public class SellerServicesImplTest {
 
     @Test
     public void changeSellerPassword__changePassword() {
-        registerSeller();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-        assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        registerSellerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("grace111");
         changePasswordResponse = sellerService.changePassword(changePasswordRequest);
@@ -127,14 +100,7 @@ public class SellerServicesImplTest {
 
     @Test
     public void changeSellerPasswordWithSameOldPassword__throwsException() {
-        registerSeller();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        registerSellerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("password111");
         Exception error = assertThrows(SamePasswordException.class, ()-> sellerService.changePassword(changePasswordRequest));
@@ -143,14 +109,7 @@ public class SellerServicesImplTest {
 
     @Test
     public void changeSellerPasswordWithWrongOldPassword__throwsException() {
-        registerSeller();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        registerSellerAndLogin();
         changePasswordRequest.setOldPassword("pass111");
         changePasswordRequest.setNewPassword("grace111");
         Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> sellerService.changePassword(changePasswordRequest));
@@ -159,15 +118,7 @@ public class SellerServicesImplTest {
 
     @Test
     public void updateSellerInformation__updateSellerProfileTest() {
-        registerSeller();
-        assertEquals("Registered successfully", registerResponse.getMessage());
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        registerSellerAndLogin();
         updateRequest.setStoreName("Grace Kiddies Store");
         updateRequest.setStoreDescription("We sell all kinds of children clothes, shoes, toys and comic books");
         updateResponse = sellerServices.updateProfile(updateRequest);
@@ -175,15 +126,8 @@ public class SellerServicesImplTest {
     }
 
     @Test
-    public void updateSellerAddress__updateProfileTest(){
-        registerSeller();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    public void updateSellerAddress__updateProfileTest() {
+        registerSellerAndLogin();
         updateRequest.setHouseNumber("12");
         updateRequest.setStreet("Main Street");
         updateRequest.setCity("Lagos city");
@@ -194,9 +138,18 @@ public class SellerServicesImplTest {
     }
 
     @Test
-    public void u__updateProfileTest2(){}
+    public void sellerCanCreateAProduct__createProductTest() {
+        registerSellerAndLogin();
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
 
-    private void registerSeller() {
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    private void registerSellerAndLogin() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");
         registerRequest.setEmail("grace@ayoola.com");
@@ -209,6 +162,14 @@ public class SellerServicesImplTest {
         registerRequest.setState("Lagos State");
         registerRequest.setCountry("Nigeria");
         registerResponse = authenticationService.register(registerRequest);
+
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
 

@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import static org.bram.utils.PasswordUtil.verifyPassword;
+import static org.bram.utils.ProfileUpdateMapper.changeEmailMapper;
 
 @Service
 public class SellerServicesImpl implements UserServices, SellerServices {
@@ -28,15 +29,9 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
-        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
-        boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
-        if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
+        Seller updatedSeller = changeEmailMapper(seller, request);
 
-        boolean isCorrectOldEmail = request.getOldEmail().equals(seller.getEmail());
-        if(!isCorrectOldEmail) throw new IncorrectOldEmailException("Old email not correct");
-
-        seller.setEmail(request.getNewEmail());
-        sellerRepository.save(seller);
+        sellerRepository.save(updatedSeller);
 
         ChangeEmailResponse response = new ChangeEmailResponse();
         response.setMessage("Email changed successfully");
