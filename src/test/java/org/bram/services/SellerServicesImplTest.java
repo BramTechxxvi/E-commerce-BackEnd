@@ -10,6 +10,7 @@ import org.bram.dtos.response.ChangeEmailResponse;
 import org.bram.dtos.response.ChangePasswordResponse;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
+import org.bram.exceptions.IncorrectOldEmailException;
 import org.bram.exceptions.SameEmailException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,9 +99,9 @@ public class SellerServicesImplTest {
         var auth = new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), null, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        changeEmailRequest.setOldEmail("grace@ayoola.com");
+        changeEmailRequest.setOldEmail("grace@gmail.com");
         changeEmailRequest.setNewEmail("grace@ayoola.com");
-        Exception error = assertThrows(SameEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
+        Exception error = assertThrows(IncorrectOldEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
         assertEquals("Old email not correct", error.getMessage());
     }
 
@@ -122,13 +123,13 @@ public class SellerServicesImplTest {
         assertTrue(changePasswordResponse.isSuccess());
     }
 
-    @Test
-    public void changeSellerPasswordWithSameOldPassword__throwsException() {}
-
-    @Test
-    public void changeSellerPasswordWithWrongOldPassword__throwsException() {
-
-    }
+//    @Test
+//    public void changeSellerPasswordWithSameOldPassword__throwsException() {}
+//
+//    @Test
+//    public void changeSellerPasswordWithWrongOldPassword__throwsException() {
+//
+//    }
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");
