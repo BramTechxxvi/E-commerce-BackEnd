@@ -1,30 +1,34 @@
 package org.bram.services;
 
+import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.bram.data.models.Product;
 import org.bram.data.models.ProductCategory;
 import org.bram.data.repository.ProductRepository;
-import org.bram.dtos.request.CreateProductRequest;
+import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.RemoveProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductServices {
 
     private final ProductRepository productRepository;
+    private final Cloudinary cloudinary;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, Cloudinary cloudinary) {
         this.productRepository = productRepository;
+        this.cloudinary = cloudinary;
     }
 
     @Override
-    public ApiResponse addProduct(CreateProductRequest request) {
+    public ApiResponse addProduct(AddProductRequest request) {
         try {
-            Map uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
+            Map<?,?> uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
             String imageUrl = uploadImage.get("secure_url").toString();
 
             Product product = new Product();
@@ -38,7 +42,7 @@ public class ProductServiceImpl implements ProductServices {
             productRepository.save(product);
             return  new ApiResponse("Product created successfully", true);
 
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException e) {
             return new ApiResponse("Failed to create: " + request.getProductName(), false);
         }
     }

@@ -2,10 +2,12 @@ package org.bram.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.bram.data.models.Seller;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class CreateProductRequest {
+public class AddProductRequest {
 
     @NotBlank(message = "Enter product description")
     private String description;
@@ -18,17 +20,7 @@ public class CreateProductRequest {
     @NotBlank(message = "Enter quantity")
     private int productQuantity;
     private MultipartFile image;
+    @DBRef
+    private Seller seller;
 
 }
-
-
-//private String productId;
-//private String imageUrl;
-//private String description;
-//private String productName;
-//private double price;
-//private int productQuantity;
-//private ProductCategory category;
-//
-//@DBRef
-//private Seller seller;
