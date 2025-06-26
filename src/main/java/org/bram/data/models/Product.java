@@ -1,6 +1,7 @@
 package org.bram.data.models;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
@@ -12,7 +13,10 @@ public class Product {
     private String productId;
     private String description;
     private String productName;
-    private float price;
+    private double price;
+    private int productQuantity;
     private ProductCategory category;
 
+    @DBRef
+    private Seller seller;
 }

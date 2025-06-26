@@ -1,7 +1,6 @@
 package org.bram.configuration;
 
 import org.bram.data.repository.UserRepository;
-import org.bram.services.AuthenticationServiceImpl;
 import org.bram.services.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

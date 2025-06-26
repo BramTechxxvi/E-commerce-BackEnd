@@ -16,5 +16,5 @@ public class Seller extends User{
     private String storeName;
     private String storeDescription;
     private boolean isVerified;
-    private List<Product> productList;
+    private List<Product> products;
 }
