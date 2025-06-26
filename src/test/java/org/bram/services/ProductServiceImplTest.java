@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,20 +31,8 @@ class ProductServiceImplTest {
 
     @Test
     public void addAProduct__addProductTest() {
-
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "hello".getBytes());
     }
-
-//
-//        @BeforeEach
-//        void setUp() {
-//            MockitoAnnotations.openMocks(this);
-//            Authentication authentication = mock(Authentication.class);
-//            SecurityContext securityContext = mock(SecurityContext.class);
-//
-//            when(securityContext.getAuthentication()).thenReturn(authentication);
-//            when(authentication.getName()).thenReturn("test@example.com");
-//            SecurityContextHolder.setContext(securityContext);
-//        }
 //
 //        @Test
 //        void addProduct_successful() throws Exception {
@@ -69,33 +58,6 @@ class ProductServiceImplTest {
 //            assertTrue(response.isSuccess());
 //            assertEquals("Product created successfully", response.getMessage());
 //        }
-//
-//        @Test
-//        void addProduct_nullImage_throwsException() {
-//            AddProductRequest request = new AddProductRequest();
-//            request.setImage(null);
-//
-//            NullImageException thrown = assertThrows(
-//                    NullImageException.class,
-//                    () -> productService.addProduct(request)
-//            );
-//
-//            assertEquals("Product image is required", thrown.getMessage());
-//        }
-//
-//        @Test
-//        void addProduct_userNotFound() throws Exception {
-//            AddProductRequest request = new AddProductRequest();
-//            request.setImage(new MockMultipartFile("image", "img.jpg", "image/jpeg", "hello".getBytes()));
-//            request.setProductCategory("BOOKS");
-//
-//            Map<String, String> uploadResult = new HashMap<>();
-//            uploadResult.put("secure_url", "http://image.url");
-//
-//            when(cloudinary.uploader().upload(any(byte[].class), eq(ObjectUtils.emptyMap()))).thenReturn(uploadResult);
-//            when(sellerRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
-//
-//            assertThrows(UserNotFoundException.class, () -> productService.addProduct(request));
 //@Test
 //void createProduct_success_savesProductAndSeller() throws Exception {
 //    // Setup fake image file
