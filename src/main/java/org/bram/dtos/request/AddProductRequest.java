@@ -1,5 +1,6 @@
 package org.bram.dtos.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.bram.data.models.Seller;
@@ -18,6 +19,7 @@ public class AddProductRequest {
     @NotBlank(message = "Enter category")
     private String productCategory;
     @NotBlank(message = "Enter quantity")
+    @Min(value= 1, message= "Enter valid product quantity")
     private int productQuantity;
     private MultipartFile image;
     @DBRef

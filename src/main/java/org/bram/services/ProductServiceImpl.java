@@ -28,6 +28,7 @@ public class ProductServiceImpl implements ProductServices {
     @Override
     public ApiResponse addProduct(AddProductRequest request) {
         try {
+            if(request.getImage() == null && request.getImage().isEmpty()) throw new NullImageException("Product image is required");
             Map<?,?> uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
             String imageUrl = uploadImage.get("secure_url").toString();
 
