@@ -4,11 +4,15 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.bram.data.models.Product;
 import org.bram.data.models.ProductCategory;
+import org.bram.data.models.Seller;
 import org.bram.data.repository.ProductRepository;
+import org.bram.data.repository.SellerRepository;
 import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.RemoveProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
+import org.bram.exceptions.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,18 +23,24 @@ public class ProductServiceImpl implements ProductServices {
 
     private final ProductRepository productRepository;
     private final Cloudinary cloudinary;
+    private final SellerRepository sellerRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, Cloudinary cloudinary) {
+    public ProductServiceImpl(ProductRepository productRepository, Cloudinary cloudinary, SellerRepository sellerRepository) {
         this.productRepository = productRepository;
         this.cloudinary = cloudinary;
+        this.sellerRepository = sellerRepository;
     }
 
     @Override
     public ApiResponse addProduct(AddProductRequest request) {
         try {
-            if(request.getImage() == null && request.getImage().isEmpty()) throw new NullImageException("Product image is required");
+            if(request.getImage() == null) throw new NullImageException("Product image is required");
             Map<?,?> uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
             String imageUrl = uploadImage.get("secure_url").toString();
+
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            Seller seller = sellerRepository.findByEmail(email)
+                    .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
             Product product = new Product();
             product.setProductName(request.getProductName());
@@ -39,6 +49,7 @@ public class ProductServiceImpl implements ProductServices {
             product.setPrice(request.getPrice());
             product.setCategory(ProductCategory.valueOf(request.getProductCategory().toUpperCase()));
             product.setImageUrl(imageUrl);
+
 
             productRepository.save(product);
             return  new ApiResponse("Product created successfully", true);
