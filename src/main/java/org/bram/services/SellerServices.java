@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SellerServices {
 
+    UpdateSellerProfileResponse updateProfile(UpdateSellerProfileRequest request);
     CreateProductResponse createProduct(CreateProductRequest request);
 }

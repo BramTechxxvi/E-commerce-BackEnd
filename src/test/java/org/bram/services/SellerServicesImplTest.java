@@ -156,6 +156,7 @@ public class SellerServicesImplTest {
         Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> sellerService.changePassword(changePasswordRequest));
         assertEquals("Old password not correct", error.getMessage());
     }
+    
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");
