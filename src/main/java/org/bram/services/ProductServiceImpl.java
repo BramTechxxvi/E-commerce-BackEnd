@@ -1,40 +1,47 @@
 package org.bram.services;
 
+import com.cloudinary.utils.ObjectUtils;
+import org.bram.data.models.Product;
+import org.bram.data.models.ProductCategory;
+import org.bram.data.repository.ProductRepository;
 import org.bram.dtos.request.CreateProductRequest;
 import org.bram.dtos.request.RemoveProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductServices {
 
+    private final ProductRepository productRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     @Override
     public ApiResponse createProduct(CreateProductRequest request) {
         try {
-            Map uploadImage = cloudinary.uploader().upload(request.getImage())
+            Map uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = uploadImage.get("secure_url").toString();
+
+            Product product = new Product();
+            product.setProductName(request.getProductName());
+            product.setDescription(request.getDescription());
+            product.setProductQuantity(request.getProductQuantity());
+            product.setPrice(request.getPrice());
+            product.setCategory(ProductCategory.valueOf(request.getProductCategory().toUpperCase()));
+            product.setImageUrl(imageUrl);
+
+            productRepository.save(product);
+            return  new ApiResponse("Product created successfully", true);
+
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse("Failed to create: " + request.getProductName(), false);
         }
-        return null;
     }
-//    @Override
-//    public ApiResponse createProduct(CreateProductRequest request) {
-//        try {
-//            // Upload image to Cloudinary
-//            Map uploadResult = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
-//            String imageUrl = (String) uploadResult.get("secure_url");
-//
-//            Product product = new Product();
-//            product.setDescription(request.getDescription());
-//            product.setProductName(request.getProductName());
-//            product.setPrice(request.getPrice());
-//            product.setCategory(ProductCategory.valueOf(request.getProductCategory().toUpperCase()));
-//            product.setImageUrl(imageUrl);
-//
-//            // Save to DB (assume productRepository is injected)
-//            productRepository.save(product);
 //
 //            return new ApiResponse(true, "Product created successfully", product);
 //        } catch (Exception e) {
