@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Service
@@ -49,9 +50,13 @@ public class ProductServiceImpl implements ProductServices {
             product.setPrice(request.getPrice());
             product.setCategory(ProductCategory.valueOf(request.getProductCategory().toUpperCase()));
             product.setImageUrl(imageUrl);
-
+            product.setSeller(seller);
 
             productRepository.save(product);
+            if(seller.getProducts() == null) seller.setProducts(new ArrayList<>());
+            seller.getProducts().add(product);
+            sellerRepository.save(seller);
+
             return  new ApiResponse("Product created successfully", true);
 
         } catch (IllegalArgumentException | IOException e) {
