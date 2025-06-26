@@ -7,6 +7,7 @@ public class UpdateSellerProfileRequest {
 
     private String storeName;
     private String storeDescription;
+    private String phoneNumber;
     private String street;
     private String city;
     private String state;

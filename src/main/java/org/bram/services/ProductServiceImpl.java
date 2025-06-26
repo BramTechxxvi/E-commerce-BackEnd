@@ -42,12 +42,7 @@ public class ProductServiceImpl implements ProductServices {
             return new ApiResponse("Failed to create: " + request.getProductName(), false);
         }
     }
-//
-//            return new ApiResponse(true, "Product created successfully", product);
-//        } catch (Exception e) {
-//            return new ApiResponse(false, "Product creation failed: " + e.getMessage());
-//        }
-//    }
+
 
     @Override
     public ApiResponse removeProduct(RemoveProductRequest request) {

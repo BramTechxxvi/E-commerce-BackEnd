@@ -12,4 +12,5 @@ public interface ProductServices {
     ApiResponse removeProduct(RemoveProductRequest request);
 
     ApiResponse updateProduct(UpdateProductRequest request);
+
 }

@@ -43,6 +43,9 @@ public class ProfileUpdateMapper {
         boolean validStoreDescription = request.getStoreDescription() != null && ! request.getStoreDescription().trim().isBlank();
         if (validStoreDescription) seller.setStoreDescription(request.getStoreDescription().trim());
 
+        boolean validPhone = request.getPhoneNumber() != null && ! request.getPhoneNumber().trim().isBlank();
+        if (validPhone) seller.setPhone(request.getPhoneNumber().trim());
+
         Address address = new Address();
         address.setHouseNumber(request.getHouseNumber());
         address.setStreet(request.getStreet());
