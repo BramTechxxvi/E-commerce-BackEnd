@@ -1,8 +1,10 @@
 package org.bram.utils;
 
+import org.bram.data.models.Address;
 import org.bram.data.models.Seller;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
+import org.bram.dtos.request.UpdateSellerProfileRequest;
 import org.bram.exceptions.*;
 
 import static org.bram.utils.PasswordUtil.verifyPassword;
@@ -30,6 +32,31 @@ public class ProfileUpdateMapper {
         if(!isCorrectOldPassword) throw new IncorrectOldPasswordException("Old password not correct");
 
         seller.setPassword(request.getNewPassword());
+        return seller;
+    }
+
+    public static Seller updateProfileMapper(Seller seller, UpdateSellerProfileRequest request) {
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
+        boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
+        if (validStoreName) seller.setStoreName(request.getStoreName().trim());
+
+        boolean validStoreDescription = request.getStoreDescription() != null && ! request.getStoreDescription().trim().isBlank();
+        if (validStoreDescription) seller.setStoreDescription(request.getStoreDescription().trim());
+
+        Address address = new Address();
+        address.setHouseNumber(request.getHouseNumber());
+        address.setStreet(request.getStreet());
+        address.setCity(request.getCity());
+        address.setState(request.getState());
+        address.setCountry(request.getCountry());
+
+        boolean validAddress = ((address.getHouseNumber() != null && address.getHouseNumber().trim().isBlank())
+                && (address.getStreet() != null && address.getStreet().trim().isBlank())
+                && (address.getCity() != null && address.getCity().trim().isBlank())
+                && (address.getState() != null && address.getState().trim().isBlank())
+                && (address.getCountry() != null && address.getCountry().trim().isBlank()));
+
+        if (validAddress) seller.setAddress(address);
         return seller;
     }
 }

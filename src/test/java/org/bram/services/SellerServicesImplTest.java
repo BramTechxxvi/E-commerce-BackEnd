@@ -137,18 +137,6 @@ public class SellerServicesImplTest {
         assertEquals("Profile updated successfully", updateResponse.getMessage());
     }
 
-    @Test
-    public void sellerCanCreateAProduct__createProductTest() {
-        registerSellerAndLogin();
-        loginRequest.setEmail("grace@ayoola.com");
-        loginRequest.setPassword("password111");
-        loginResponse = authenticationService.login(loginRequest);
-
-        var auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
-
     private void registerSellerAndLogin() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");

@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface SellerServices {
 
     UpdateSellerProfileResponse updateProfile(UpdateSellerProfileRequest request);
-    CreateProductResponse createProduct(CreateProductRequest request);
+
 }
