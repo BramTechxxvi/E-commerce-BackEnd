@@ -7,7 +7,7 @@ import org.bram.dtos.response.ApiResponse;
 
 public interface ProductServices {
 
-    ApiResponse createProduct(CreateProductRequest request);
+    ApiResponse addProduct(CreateProductRequest request);
 
     ApiResponse removeProduct(RemoveProductRequest request);
 

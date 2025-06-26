@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductServices {
     }
 
     @Override
-    public ApiResponse createProduct(CreateProductRequest request) {
+    public ApiResponse addProduct(CreateProductRequest request) {
         try {
             Map uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
             String imageUrl = uploadImage.get("secure_url").toString();
