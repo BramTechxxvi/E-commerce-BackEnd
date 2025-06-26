@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import static org.bram.utils.PasswordUtil.verifyPassword;
+
 @Service
 public class SellerServicesImpl implements UserServices, SellerServices {
 
@@ -29,8 +31,8 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
         if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
 
-        boolean isOldEmail = request.getOldEmail().equals(seller.getEmail());
-        if(!isOldEmail) throw new IncorrectOldEmailException("Old email not correct");
+        boolean isCorrectOldEmail = request.getOldEmail().equals(seller.getEmail());
+        if(!isCorrectOldEmail) throw new IncorrectOldEmailException("Old email not correct");
 
         seller.setEmail(request.getNewEmail());
         sellerRepository.save(seller);
@@ -52,8 +54,8 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
 
-        boolean isOldPassword = request.getOldPassword().equals(seller.getPassword());
-        if(!isOldPassword) throw new IncorrectOldPasswordException("Old password not correct");
+        boolean isCorrectOldPassword = verifyPassword(request.getOldPassword(), seller.getPassword());
+        if(!isCorrectOldPassword) throw new IncorrectOldPasswordException("Old password not correct");
 
         seller.setPassword(request.getNewPassword());
         sellerRepository.save(seller);
