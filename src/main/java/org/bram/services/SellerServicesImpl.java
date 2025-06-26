@@ -1,5 +1,6 @@
 package org.bram.services;
 
+import org.bram.data.models.Address;
 import org.bram.data.models.Seller;
 import org.bram.data.repository.SellerRepository;
 import org.bram.dtos.request.*;
@@ -68,11 +69,41 @@ public class SellerServicesImpl implements UserServices, SellerServices {
 
     @Override
     public UpdateSellerProfileResponse updateProfile(UpdateSellerProfileRequest request) {
-        return null;
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
+        boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
+        if (validStoreName) seller.setStoreName(request.getStoreName().trim());
+
+        boolean validStoreDescription = request.getStoreDescription() != null && ! request.getStoreDescription().trim().isBlank();
+        if (validStoreDescription) seller.setStoreDescription(request.getStoreDescription().trim());
+
+        Address address = new Address();
+        address.setHouseNumber(request.getHouseNumber());
+        address.setStreet(request.getStreet());
+        address.setCity(request.getCity());
+        address.setState(request.getState());
+        address.setCountry(request.getCountry());
+
+        boolean validAddress = ((address.getHouseNumber() != null && address.getHouseNumber().trim().isBlank())
+                && (address.getStreet() != null && address.getStreet().trim().isBlank())
+                && (address.getCity() != null && address.getCity().trim().isBlank())
+                && (address.getState() != null && address.getState().trim().isBlank())
+                && (address.getCountry() != null && address.getCountry().trim().isBlank()));
+        if (validAddress) seller.setAddress(address);
+        sellerRepository.save(seller);
+
+        UpdateSellerProfileResponse response = new UpdateSellerProfileResponse();
+        response.setMessage("Profile updated successfully");
+        response.setSuccess(true);
+        return response;
     }
 
     @Override
     public CreateProductResponse createProduct(CreateProductRequest request) {
+
         return null;
     }
 }

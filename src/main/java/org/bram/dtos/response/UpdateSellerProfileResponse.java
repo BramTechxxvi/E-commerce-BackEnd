@@ -1,7 +1,10 @@
 package org.bram.dtos.response;
 
+import lombok.Data;
+
+@Data
 public class UpdateSellerProfileResponse {
 
-    private String success;
+    private boolean success;
     private String message;
 }

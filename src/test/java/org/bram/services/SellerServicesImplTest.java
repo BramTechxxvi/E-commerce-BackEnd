@@ -39,6 +39,8 @@ public class SellerServicesImplTest {
     private ChangePasswordResponse changePasswordResponse;
     private UpdateSellerProfileResponse updateResponse;
     private UpdateSellerProfileRequest updateRequest;
+    @Autowired
+    private SellerServices sellerServices;
 
 
     @BeforeEach
@@ -166,9 +168,33 @@ public class SellerServicesImplTest {
         var auth = new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), null, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        updateRequest
-
+        updateRequest.setStoreName("Grace Kiddies Store");
+        updateRequest.setStoreDescription("We sell all kinds of children clothes, shoes, toys and comic books");
+        updateResponse = sellerServices.updateProfile(updateRequest);
+        assertEquals("Profile updated successfully", updateResponse.getMessage());
     }
+
+    @Test
+    public void updateSellerAddress__updateProfileTest(){
+        registerSeller();
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        updateRequest.setHouseNumber("12");
+        updateRequest.setStreet("Main Street");
+        updateRequest.setCity("Lagos city");
+        updateRequest.setState("Lagos state");
+        updateRequest.setCountry("Nigeria");
+        updateResponse = sellerServices.updateProfile(updateRequest);
+        assertEquals("Profile updated successfully", updateResponse.getMessage());
+    }
+
+    @Test
+    public void u__updateProfileTest2(){}
 
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
