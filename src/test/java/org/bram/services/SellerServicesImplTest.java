@@ -2,14 +2,8 @@ package org.bram.services;
 
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
-import org.bram.dtos.request.ChangeEmailRequest;
-import org.bram.dtos.request.ChangePasswordRequest;
-import org.bram.dtos.request.LoginRequest;
-import org.bram.dtos.request.RegisterRequest;
-import org.bram.dtos.response.ChangeEmailResponse;
-import org.bram.dtos.response.ChangePasswordResponse;
-import org.bram.dtos.response.LoginResponse;
-import org.bram.dtos.response.RegisterResponse;
+import org.bram.dtos.request.*;
+import org.bram.dtos.response.*;
 import org.bram.exceptions.IncorrectOldEmailException;
 import org.bram.exceptions.IncorrectOldPasswordException;
 import org.bram.exceptions.SameEmailException;
@@ -43,6 +37,8 @@ public class SellerServicesImplTest {
     private LoginResponse loginResponse;
     private ChangePasswordRequest changePasswordRequest;
     private ChangePasswordResponse changePasswordResponse;
+    private UpdateSellerProfileResponse updateResponse;
+    private UpdateSellerProfileRequest updateRequest;
 
 
     @BeforeEach
@@ -56,6 +52,8 @@ public class SellerServicesImplTest {
         loginResponse = new LoginResponse();
         changePasswordResponse = new ChangePasswordResponse();
         changePasswordRequest = new ChangePasswordRequest();
+        updateResponse = new UpdateSellerProfileResponse();
+        updateRequest = new UpdateSellerProfileRequest();
     }
 
     @Test
@@ -156,7 +154,22 @@ public class SellerServicesImplTest {
         Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> sellerService.changePassword(changePasswordRequest));
         assertEquals("Old password not correct", error.getMessage());
     }
-    
+
+    @Test
+    public void updateSellerInformation__updateSellerProfileTest() {
+        registerSeller();
+        assertEquals("Registered successfully", registerResponse.getMessage());
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        updateRequest
+
+    }
+
     private void registerSeller() {
         registerRequest.setFirstName("Grace");
         registerRequest.setLastName("Ayoola");

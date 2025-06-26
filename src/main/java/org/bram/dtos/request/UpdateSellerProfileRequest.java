@@ -1,4 +1,15 @@
 package org.bram.dtos.request;
 
+import lombok.Data;
+
+@Data
 public class UpdateSellerProfileRequest {
+
+    private String storeName;
+    private String storeDescription;
+    private String street;
+    private String city;
+    private String state;
+    private String houseNumber;
+    private String country;
 }

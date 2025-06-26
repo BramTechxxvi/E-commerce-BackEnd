@@ -67,6 +67,11 @@ public class SellerServicesImpl implements UserServices, SellerServices {
     }
 
     @Override
+    public UpdateSellerProfileResponse updateProfile(UpdateSellerProfileRequest request) {
+        return null;
+    }
+
+    @Override
     public CreateProductResponse createProduct(CreateProductRequest request) {
         return null;
     }
