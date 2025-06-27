@@ -27,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final TokenBlacklist tokenBlacklist;
 
 
     @Override
@@ -36,14 +37,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
-        String jwtToken;
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
+        String jwtToken = authorizationHeader.substring(7);
 
-        jwtToken = authorizationHeader.substring(7);
+        if(tokenBlacklist.isTokenBlacklisted(jwtToken)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token has been blacklisted. Please login again.");
+            return;
+        }
+
         try {
             String email = jwtService.extractEmail(jwtToken);
             String role = jwtService.extractRole(jwtToken);
@@ -64,3 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+
+
+
