@@ -1,5 +1,6 @@
 package org.bram.services;
 
+import TestConfig.CloudinaryTestConfig;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Uploader;
 import org.bram.data.repository.ProductRepository;
@@ -9,6 +10,7 @@ import org.bram.dtos.response.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
@@ -19,8 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {CloudinaryTestConfig.class})
 @ActiveProfiles("test")
 class ProductServiceImplTest {
 
@@ -30,10 +34,9 @@ class ProductServiceImplTest {
     private ProductRepository productRepository;
     @Autowired
     private SellerRepository sellerRepository;
-    @MockBean
+    @Autowired
     private Cloudinary cloudinary;
-    @MockBean
-    private Uploader uploader
+
     private AddProductRequest addProductRequest;
     private ApiResponse apiResponse;
 
@@ -43,6 +46,30 @@ class ProductServiceImplTest {
         sellerRepository.deleteAll();
         addProductRequest = new AddProductRequest();
         apiResponse = new ApiResponse();
+
+        Uploader uploader = mock(Uploader.class);
+        when(cloudinary.uploader()).thenReturn(uploader);
+        Map<String,?> uploadResult = new HashMap<>();
+        uploadResult.put("secure_url", "http://fake-imageUrl.com");
+
+
+    }
+
+//        Uploader uploader = mock(Uploader.class);
+//        when(cloudinary.uploader()).thenReturn(uploader);
+//
+//        Map<String, Object> uploadResult = new HashMap<>();
+//        uploadResult.put("secure_url", "http://mocked.image.url");
+//        when(uploader.upload(any(byte[].class), anyMap())).thenReturn(uploadResult);
+
+
+            var uploader = mock(com.cloudinary.Uploader.class);
+            when(cloudinary.uploader()).thenReturn(uploader);
+            when(uploader.upload(any(byte[].class), anyMap()))
+                    .thenReturn(Map.of("secure_url", "http://fake-url.com/image.jpg"));
+        }
+
+        // Your test methods
     }
 
     @Test
