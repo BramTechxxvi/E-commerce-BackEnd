@@ -4,14 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.bram.data.models.Address;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 public class RegisterRequest {
-    @Id
-    private String id;
+
     @NotBlank(message="Enter your first name")
     private String firstName;
     @NotBlank(message = "Enter your last name")
