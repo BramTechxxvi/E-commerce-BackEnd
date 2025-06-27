@@ -18,15 +18,17 @@ public class SecurityConfiguration {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final TokenBlacklist tokenBlacklist;
 
-    public SecurityConfiguration(JwtService jwtService, UserRepository userRepository) {
+    public SecurityConfiguration(JwtService jwtService, UserRepository userRepository, TokenBlacklist tokenBlacklist) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtService, userRepository);
+        return new JwtAuthenticationFilter(jwtService, userRepository, tokenBlacklist);
     }
 
     @Bean

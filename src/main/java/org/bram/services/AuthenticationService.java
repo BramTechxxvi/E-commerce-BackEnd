@@ -8,6 +8,7 @@ import org.bram.dtos.response.RegisterResponse;
 public interface AuthenticationService {
     RegisterResponse register(RegisterRequest registerRequest);
     LoginResponse login(LoginRequest loginRequest);
+    LogoutResponse logout(String token);
 
 
 }
