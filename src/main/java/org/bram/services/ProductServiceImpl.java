@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static org.bram.utils.ProductMapper.mapToProduct;
+
 //import static org.bram.utils.ProductMapper.mapProductToSeller;
 
 @Service
@@ -44,17 +46,7 @@ public class ProductServiceImpl implements ProductServices {
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             Seller seller = sellerRepository.findByEmail(email)
                     .orElseThrow(()-> new UserNotFoundException("Seller not found"));
-
-//            Seller updatedSeller = mapProductToSeller(seller, request);
-
-            Product product = new Product();
-            product.setProductName(request.getProductName().trim());
-            product.setDescription(request.getDescription());
-            product.setProductQuantity(request.getProductQuantity());
-            product.setPrice(request.getPrice());
-            product.setCategory(ProductCategory.valueOf(request.getProductCategory().toUpperCase()));
-            product.setImageUrl(imageUrl);
-            product.setSeller(seller);
+            Product product = mapToProduct(request, seller, imageUrl);
 
             productRepository.save(product);
             if(seller.getProducts() == null) seller.setProducts(new ArrayList<>());

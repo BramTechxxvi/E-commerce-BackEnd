@@ -8,7 +8,6 @@ import org.bram.dtos.response.LogoutResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
 import org.bram.exceptions.IncorrectPasswordException;
-import org.bram.exceptions.InvalidRoleException;
 import org.bram.exceptions.InvalidTokenException;
 import org.bram.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +64,6 @@ public class AuthenticationController {
         String token = authHeader.substring(7);
         LogoutResponse response = authenticationService.logout(token);
         return ResponseEntity.status(HttpStatus.OK).body(response);
-
-
     }
 
 }
