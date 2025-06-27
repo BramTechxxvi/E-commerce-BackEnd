@@ -10,17 +10,17 @@ import org.bram.dtos.response.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +41,7 @@ class ProductServiceImplTest {
     private ApiResponse apiResponse;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         productRepository.deleteAll();
         sellerRepository.deleteAll();
         addProductRequest = new AddProductRequest();
@@ -49,41 +49,21 @@ class ProductServiceImplTest {
 
         Uploader uploader = mock(Uploader.class);
         when(cloudinary.uploader()).thenReturn(uploader);
-        Map<String,?> uploadResult = new HashMap<>();
+
+        Map<String,Object> uploadResult = new HashMap<>();
         uploadResult.put("secure_url", "http://fake-imageUrl.com");
+        when(uploader.upload(any(byte[].class), anyMap())).thenReturn(uploadResult);
 
 
-    }
-
-//        Uploader uploader = mock(Uploader.class);
-//        when(cloudinary.uploader()).thenReturn(uploader);
-//
-//        Map<String, Object> uploadResult = new HashMap<>();
-//        uploadResult.put("secure_url", "http://mocked.image.url");
-//        when(uploader.upload(any(byte[].class), anyMap())).thenReturn(uploadResult);
-
-
-            var uploader = mock(com.cloudinary.Uploader.class);
-            when(cloudinary.uploader()).thenReturn(uploader);
-            when(uploader.upload(any(byte[].class), anyMap()))
-                    .thenReturn(Map.of("secure_url", "http://fake-url.com/image.jpg"));
-        }
-
-        // Your test methods
     }
 
     @Test
     public void addAProduct__addProductTest() {
+        apiResponse = productServices.addProduct(addProductRequest);
+        assertNotNull(apiResponse);
+        assertTrue(apiResponse.isSuccess());
+    }
 
-
-//        Map<?,?> uploadResult = new HashMap<>();
-//        uploadResult.put("secure_url", "http://image.url");
-//        when(uploader().upload)
-//        apiResponse = productServices.addProduct(addProductRequest);
-//        assertNotNull(apiResponse);
-//        assertTrue(apiResponse.isSuccess());
-//        assertEquals("Product added successfully", apiResponse.getMessage());
-  }
 
     private void addAProduct() {
         MockMultipartFile imageFile = new MockMultipartFile(
