@@ -3,7 +3,6 @@ package org.bram.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.bram.data.models.Product;
-import org.bram.data.models.ProductCategory;
 import org.bram.data.models.Seller;
 import org.bram.data.repository.ProductRepository;
 import org.bram.data.repository.SellerRepository;
@@ -20,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static org.bram.utils.ProductMapper.mapToProduct;
-
-//import static org.bram.utils.ProductMapper.mapProductToSeller;
 
 @Service
 public class ProductServiceImpl implements ProductServices {
