@@ -43,8 +43,10 @@ public class ProductServiceImpl implements ProductServices {
             Seller seller = sellerRepository.findByEmail(email)
                     .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
+            Seller updatedSeller = mapProductToSeller()
+
             Product product = new Product();
-            product.setProductName(request.getProductName());
+            product.setProductName(request.getProductName().trim());
             product.setDescription(request.getDescription());
             product.setProductQuantity(request.getProductQuantity());
             product.setPrice(request.getPrice());
@@ -57,7 +59,7 @@ public class ProductServiceImpl implements ProductServices {
             seller.getProducts().add(product);
             sellerRepository.save(seller);
 
-            return  new ApiResponse("Product created successfully", true);
+            return  new ApiResponse("Product added successfully", true);
 
         } catch (IllegalArgumentException | IOException e) {
             return new ApiResponse("Failed to create: " + request.getProductName(), false);
