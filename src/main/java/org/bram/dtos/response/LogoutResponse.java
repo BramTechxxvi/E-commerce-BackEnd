@@ -11,5 +11,5 @@ public class LogoutResponse {
 
     private String message;
     private String token;
-    private String success;
+    private boolean success;
 }

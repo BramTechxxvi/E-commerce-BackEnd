@@ -1,5 +1,6 @@
 package org.bram.services;
 
+import org.bram.configuration.TokenBlacklist;
 import org.bram.data.models.*;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
@@ -7,6 +8,7 @@ import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
+import org.bram.dtos.response.LogoutResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final CustomerRepository customerRepository;
     private final SellerRepository sellerRepository;
     private final JwtService jwtService;
+    private final TokenBlacklist tokenBlacklist;
 
     @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository, JwtService jwtService) {
+    public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository, JwtService jwtService, TokenBlacklist tokenBlacklist) {
        this.userRepository = userRepository;
        this.customerRepository = customerRepository;
        this.sellerRepository = sellerRepository;
        this.jwtService = jwtService;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     @Override
@@ -102,6 +106,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.setMessage("Welcome back " + fullName);
 
         return response;
+    }
+
+    @Override
+    public LogoutResponse logout(String token) {
+        String email = jwtService.extractEmail(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setLoggedIn(false);
+        userRepository.save(user);
+        switch (user.getUserRole()) {
+            case CUSTOMER: customerRepository.findByEmail(email).ifPresent(customer -> {
+                customer.setLoggedIn(false);
+                customerRepository.save(customer);
+            });
+            case SELLER: sellerRepository.findByEmail(email).ifPresent(seller -> {
+                seller.setLoggedIn(false);
+                sellerRepository.save(seller);
+            });
+        }
+        tokenBlacklist.blackListToken(token);
+        return new LogoutResponse("Successfully logged out", null, true);
     }
 
     private void verifyNewEmail(String email) {
