@@ -9,6 +9,7 @@ import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.DetailsAlreadyInUseException;
 import org.bram.exceptions.IncorrectPasswordException;
 import org.bram.exceptions.InvalidRoleException;
+import org.bram.exceptions.InvalidTokenException;
 import org.bram.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     public ResponseEntity<LogoutResponse> logout(@RequestHeader("Authorization") String authHeader) {
-        if(authHeader != null || authHeader.startsWith("Bearer ")) {
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new InvalidTokenException("Authorization header is missing or invalid");
         }
         String token = authHeader.substring(7);
@@ -67,16 +68,5 @@ public class AuthenticationController {
 
 
     }
-
-//    @PostMapping("/auth/logout")
-//    public ResponseEntity<LoginResponse> logout(@RequestHeader("Authorization") String authHeader) {
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-//            throw new InvalidTokenException("Authorization header is missing or invalid");
-//        }
-//
-//        String token = authHeader.substring(7); // Remove "Bearer "
-//        LoginResponse response = authService.logout(token);
-//        return ResponseEntity.ok(response);
-//    }
 
 }
