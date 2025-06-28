@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductServices {
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             boolean isSeller = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_SELLER"));
-            if (isSeller) throw new AccessDeniedException("You are not allowed to add products");
+            if (!isSeller) throw new AccessDeniedException("You are not allowed to add products");
 
             Seller seller = sellerRepository.findByEmail(email)
                     .orElseThrow(()-> new UserNotFoundException("Seller not found"));

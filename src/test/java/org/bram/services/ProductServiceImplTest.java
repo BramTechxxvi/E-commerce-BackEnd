@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Uploader;
 import org.bram.data.repository.ProductRepository;
 import org.bram.data.repository.SellerRepository;
+import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ApiResponse;
@@ -42,6 +43,8 @@ class ProductServiceImplTest {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private SellerRepository sellerRepository;
     @Mock
     private Cloudinary cloudinary;
@@ -55,6 +58,7 @@ class ProductServiceImplTest {
     void setUp() throws IOException {
         productRepository.deleteAll();
         sellerRepository.deleteAll();
+        userRepository.deleteAll();
         addProductRequest = new AddProductRequest();
         registerRequest = new RegisterRequest();
         registerResponse = new RegisterResponse();
@@ -63,8 +67,8 @@ class ProductServiceImplTest {
         Uploader uploader = mock(Uploader.class);
         when(cloudinary.uploader()).thenReturn(uploader);
 
-        Map<String,String> uploadResult = new HashMap<>();
-        uploadResult.put("secure_url", "http://fake-imageUrl.com");
+        Map<String,Object> uploadResult = new HashMap<>();
+        uploadResult.put("secure_url", "https://fake-imageUrl.com");
         when(uploader.upload(any(byte[].class), anyMap())).thenReturn(uploadResult);
     }
 
@@ -103,11 +107,11 @@ class ProductServiceImplTest {
 //    assertEquals("You do not have permission to add products", apiResponse.getMessage(
 
     private void registerASeller() {
-        registerRequest.setFirstName("Grace");
-        registerRequest.setLastName("Ayoola");
-        registerRequest.setEmail("grace@ayoola.com");
+        registerRequest.setFirstName("Seyi");
+        registerRequest.setLastName("Adams");
+        registerRequest.setEmail("seyi@adams.com");
         registerRequest.setPassword("password111");
-        registerRequest.setPhone("090373542529");
+        registerRequest.setPhone("081373542529");
         registerRequest.setUserRole("SELLER");
 
         registerResponse = authenticationService.register(registerRequest);
