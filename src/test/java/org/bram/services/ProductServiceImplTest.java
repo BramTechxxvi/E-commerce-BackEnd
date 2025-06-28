@@ -85,19 +85,17 @@ class ProductServiceImplTest {
     }
 
 
-//@Test
-//public void addAProduct__addProductTest_UnauthorizedUser () {
-//    // Set up the security context without the ROLE_SELLER authority
-//    var authorities = Collections.emptyList(); // No authorities
-//    var auth = new UsernamePasswordAuthenticationToken("grace@ayoola.com", null, authorities);
-//    SecurityContextHolder.getContext().setAuthentication(auth);
-//    // Attempt to add a product
-//    ApiResponse apiResponse = productServices.addProduct(addProductRequest);
-//    // Clear the security context after the test
-//    SecurityContextHolder.clearContext();
-//    assertNotNull(apiResponse);
-//    assertFalse(apiResponse.isSuccess());
-//    assertEquals("You do not have permission to add products", apiResponse.getMessage(
+@Test
+public void addAProduct__addProductTest_UnauthorizedUser () {
+    var authorities = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
+    var auth = new UsernamePasswordAuthenticationToken("grace@ayoola.com", null, authorities);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+
+    addAProduct();
+    assertNotNull(apiResponse);
+    assertFalse(apiResponse.isSuccess());
+    assertEquals("Failed to add", apiResponse.getMessage());
+}
 
     private void registerASellerAndLogin() {
         registerRequest.setFirstName("Seyi");
