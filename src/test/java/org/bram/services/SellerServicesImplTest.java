@@ -146,11 +146,6 @@ public class SellerServicesImplTest {
         registerRequest.setPassword("password111");
         registerRequest.setPhone("090373542529");
         registerRequest.setUserRole("SELLER");
-        registerRequest.setHouseNumber("321");
-        registerRequest.setStreet("Bornu Way");
-        registerRequest.setCity("Lagos");
-        registerRequest.setState("Lagos State");
-        registerRequest.setCountry("Nigeria");
         registerResponse = authenticationService.register(registerRequest);
 
         loginRequest.setEmail("grace@ayoola.com");

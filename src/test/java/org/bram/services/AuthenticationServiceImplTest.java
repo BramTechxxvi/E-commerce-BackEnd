@@ -88,11 +88,7 @@ public class AuthenticationServiceImplTest {
         registerRequest.setPassword("password111");
         registerRequest.setPhone("090373542523");
         registerRequest.setUserRole("CUSTOMER");
-        registerRequest.setHouseNumber("125");
-        registerRequest.setStreet("Bornu Way");
-        registerRequest.setCity("Lagos");
-        registerRequest.setState("Lagos State");
-        registerRequest.setCountry("Nigeria");
+
         registerResponse = authenticationService.register(registerRequest);
     }
 
@@ -103,11 +99,7 @@ public class AuthenticationServiceImplTest {
         registerRequest.setPassword("password111");
         registerRequest.setPhone("090373542529");
         registerRequest.setUserRole("SELLER");
-        registerRequest.setHouseNumber("321");
-        registerRequest.setStreet("Bornu Way");
-        registerRequest.setCity("Lagos");
-        registerRequest.setState("Lagos State");
-        registerRequest.setCountry("Nigeria");
+
         registerResponse = authenticationService.register(registerRequest);
     }
 

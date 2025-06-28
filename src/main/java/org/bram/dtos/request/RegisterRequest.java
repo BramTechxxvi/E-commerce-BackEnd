@@ -23,15 +23,5 @@ public class RegisterRequest {
     @NotBlank(message = "Enter your password")
     @Size(min = 8, max = 16, message = "Password must be between 8 to 16 characters")
     private String password;
-    @NotBlank(message = "Enter street name")
-    private String street;
-    @NotBlank(message = "Enter your city")
-    private String city;
-    @NotBlank(message = "Enter your state")
-    private String state;
-    @NotBlank(message = "Enter house number")
-    private String houseNumber;
-    @NotBlank(message = "Enter your country")
-    private String country;
 
 }

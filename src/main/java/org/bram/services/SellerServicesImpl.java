@@ -1,6 +1,5 @@
 package org.bram.services;
 
-import org.bram.data.models.Address;
 import org.bram.data.models.Seller;
 import org.bram.data.repository.SellerRepository;
 import org.bram.dtos.request.*;

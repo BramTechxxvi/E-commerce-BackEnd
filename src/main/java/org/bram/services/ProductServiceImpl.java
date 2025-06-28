@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ public class ProductServiceImpl implements ProductServices {
             String imageUrl = uploadImage.get("secure_url").toString();
 
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            boolean isSeller = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_SELLER"));
+            if (isSeller) throw new AccessDeniedException("You are not allowed to add products");
+
             Seller seller = sellerRepository.findByEmail(email)
                     .orElseThrow(()-> new UserNotFoundException("Seller not found"));
             Product product = mapToProduct(request, seller, imageUrl);
@@ -51,7 +56,6 @@ public class ProductServiceImpl implements ProductServices {
             sellerRepository.save(seller);
 
             return  new ApiResponse("Product added successfully", true);
-
         } catch (IllegalArgumentException | IOException e) {
             return new ApiResponse("Failed to create: " + request.getProductName(), false);
         }

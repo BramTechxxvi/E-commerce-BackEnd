@@ -16,15 +16,6 @@ public class Mapper {
         user.setPhone(registerRequest.getPhone().trim());
         user.setPassword(hashPassword(registerRequest.getPassword().trim()));
 
-        Address address = new Address();
-        address.setStreet(registerRequest.getStreet());
-        address.setCity(registerRequest.getCity());
-        address.setState(registerRequest.getState());
-        address.setHouseNumber(registerRequest.getHouseNumber());
-        address.setCountry(registerRequest.getCountry());
-
-        user.setAddress(address);
-
         UserRole userRole;
         try {
             userRole = UserRole.valueOf(registerRequest.getUserRole().toUpperCase());
@@ -45,8 +36,6 @@ public class Mapper {
         customer.setPhone(user.getPhone());
         customer.setPassword(user.getPassword());
         customer.setUserRole(user.getUserRole());
-        customer.setAddress(user.getAddress());
-
         return customer;
     }
 
@@ -59,7 +48,6 @@ public class Mapper {
         seller.setPhone(user.getPhone());
         seller.setPassword(user.getPassword());
         seller.setUserRole(user.getUserRole());
-        seller.setAddress(user.getAddress());
 
         return seller;
     }
