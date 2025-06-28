@@ -94,7 +94,8 @@ public void addAProduct__addProductTest_UnauthorizedUser () {
     addAProduct();
     assertNotNull(apiResponse);
     assertFalse(apiResponse.isSuccess());
-    assertEquals("Failed to add", apiResponse.getMessage());
+    String productName = addProductRequest.getProductName();
+    assertEquals("Failed to add " + productName, apiResponse.getMessage());
 }
 
     private void registerASellerAndLogin() {

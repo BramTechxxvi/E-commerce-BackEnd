@@ -59,7 +59,7 @@ public class ProductServicesImpl implements ProductServices {
 
             return  new ApiResponse("Product added successfully", true);
         } catch (IllegalArgumentException | IOException e) {
-            return new ApiResponse("Failed to add: " + request.getProductName(), false);
+            return new ApiResponse("Failed to add " + request.getProductName(), false);
         }
     }
 
