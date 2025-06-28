@@ -127,7 +127,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             });
         }
         tokenBlacklist.blackListToken(token);
-        return new LogoutResponse("Successfully logged out", null, true);
+        return new LogoutResponse("We hope to see you soon...", null, true);
     }
 
     private void verifyNewEmail(String email) {

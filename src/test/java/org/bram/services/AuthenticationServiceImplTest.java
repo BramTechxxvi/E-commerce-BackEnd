@@ -7,6 +7,7 @@ import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.LoginRequest;
 import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
+import org.bram.dtos.response.LogoutResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,6 +80,19 @@ public class AuthenticationServiceImplTest {
         assertNotNull(loginResponse.getToken());
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
         assertTrue(loginResponse.isSuccess());
+    }
+
+    @Test
+    public void logoutSeller__logoutTest() {
+        registerSeller();
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        LoginResponse loginResponse = authenticationService.login(loginRequest);
+        assertTrue(loginResponse.isSuccess());
+        String token = loginResponse.getToken();
+        LogoutResponse logoutResponse = authenticationService.logout(token);
+        assertTrue(logoutResponse.isSuccess());
+        assertEquals("We hope to see you soon...", logoutResponse.getMessage());
     }
 
     private void registerCustomer() {

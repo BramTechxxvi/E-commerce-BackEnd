@@ -9,14 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class TokenBlacklist {
 
-    private final Set<String> blackistedTokens = ConcurrentHashMap.newKeySet();
+    private final Set<String> blacklistedTokens = ConcurrentHashMap.newKeySet();
 
     public void blackListToken(String token) {
-        blackistedTokens.add(token);
+        blacklistedTokens.add(token);
     }
 
     public boolean isTokenBlacklisted(String token) {
-        return blackistedTokens.contains(token);
+        return blacklistedTokens.contains(token);
     }
 
 }

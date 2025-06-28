@@ -1,15 +1,9 @@
 package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
-import org.bram.data.repository.ProductRepository;
-import org.bram.data.repository.SellerRepository;
-import org.bram.data.repository.UserRepository;
-import org.bram.dtos.request.AddProductRequest;
-import org.bram.dtos.request.LoginRequest;
-import org.bram.dtos.request.RegisterRequest;
-import org.bram.dtos.response.ApiResponse;
-import org.bram.dtos.response.LoginResponse;
-import org.bram.dtos.response.RegisterResponse;
+import org.bram.data.repository.*;
+import org.bram.dtos.request.*;
+import org.bram.dtos.response.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +20,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest()
 @ActiveProfiles("test")
@@ -70,7 +63,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    public void addAProduct__addProductTest() {
+    public void sellerCanAddAProduct__addProductTest() {
         registerASellerAndLogin();
         assertTrue(registerResponse.isSuccess());
         assertTrue(loginResponse.isSuccess());
@@ -78,24 +71,21 @@ class ProductServiceImplTest {
         var authorities = Collections.singletonList(new SimpleGrantedAuthority("SELLER"));
         var auth = new UsernamePasswordAuthenticationToken("seyi@adams.com", null, authorities);
         SecurityContextHolder.getContext().setAuthentication(auth);
-
         addAProduct();
         assertEquals("Product added successfully", apiResponse.getMessage());
         assertTrue(apiResponse.isSuccess());
     }
 
-
-@Test
-public void addAProduct__addProductTest_UnauthorizedUser () {
-    var authorities = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
-    var auth = new UsernamePasswordAuthenticationToken("grace@ayoola.com", null, authorities);
-    SecurityContextHolder.getContext().setAuthentication(auth);
-
-    addAProduct();
-    assertNotNull(apiResponse);
-    assertFalse(apiResponse.isSuccess());
-    String productName = addProductRequest.getProductName();
-    assertEquals("Failed to add " + productName, apiResponse.getMessage());
+    @Test
+    public void testIfUnAuthorizedUserCanAddProduct__throwException() {
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
+        var auth = new UsernamePasswordAuthenticationToken("grace@ayoola.com", null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        addAProduct();
+        assertNotNull(apiResponse);
+        assertFalse(apiResponse.isSuccess());
+        String productName = addProductRequest.getProductName();
+        assertEquals("Failed to add " + productName, apiResponse.getMessage());
 }
 
     private void registerASellerAndLogin() {
@@ -111,6 +101,7 @@ public void addAProduct__addProductTest_UnauthorizedUser () {
         loginRequest.setPassword("password111");
         loginResponse = authenticationService.login(loginRequest);
     }
+
     private void addAProduct() {
         byte[] imageBytes;
         try(var inputStream = getClass().getClassLoader().getResourceAsStream("image.jpg")) {
