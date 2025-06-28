@@ -22,13 +22,13 @@ import java.util.Map;
 import static org.bram.utils.ProductMapper.mapToProduct;
 
 @Service
-public class ProductServiceImpl implements ProductServices {
+public class ProductServicesImpl implements ProductServices {
 
     private final ProductRepository productRepository;
     private final Cloudinary cloudinary;
     private final SellerRepository sellerRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, Cloudinary cloudinary, SellerRepository sellerRepository) {
+    public ProductServicesImpl(ProductRepository productRepository, Cloudinary cloudinary, SellerRepository sellerRepository) {
         this.productRepository = productRepository;
         this.cloudinary = cloudinary;
         this.sellerRepository = sellerRepository;
@@ -43,11 +43,13 @@ public class ProductServiceImpl implements ProductServices {
 
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             boolean isSeller = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_SELLER"));
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
+                            .equals("SELLER"));
             if (!isSeller) throw new AccessDeniedException("You are not allowed to add products");
 
             Seller seller = sellerRepository.findByEmail(email)
                     .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+            if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
             Product product = mapToProduct(request, seller, imageUrl);
 
             productRepository.save(product);
@@ -64,6 +66,33 @@ public class ProductServiceImpl implements ProductServices {
 
     @Override
     public ApiResponse removeProduct(RemoveProductRequest request) {
+//        @Override
+//        public ApiResponse removeProduct(RemoveProductRequest request) {
+//            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//
+//            boolean isSeller = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+//                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_SELLER"));
+//
+//            if (!isSeller) {
+//                return new ApiResponse("You do not have permission to remove products", false);
+//            }
+//
+//            Seller seller = sellerRepository.findByEmail(email)
+//                    .orElseThrow(() -> new UserNotFoundException("Seller not found"));
+//
+//            Product product = productRepository.findById(request.getProductId())
+//                    .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+//
+//            // Ensure the seller owns the product
+//            if (!product.getSeller().getId().equals(seller.getId())) {
+//                return new ApiResponse("You cannot delete another seller's product", false);
+//            }
+//
+//            productRepository.delete(product);
+//
+//            return new ApiResponse("Product removed successfully", true);
+//        }
+
         return null;
     }
 
