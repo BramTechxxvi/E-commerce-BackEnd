@@ -1,6 +1,7 @@
 package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
+import org.bram.data.repository.AdminRepository;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
@@ -34,6 +35,8 @@ public class AuthenticationServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private SellerRepository sellerRepository;
+    @Autowired
+    private AdminRepository adminRepository;
 
     @BeforeEach
     public void setUp(){
@@ -43,6 +46,7 @@ public class AuthenticationServiceImplTest {
         loginRequest = new LoginRequest();
         userRepository.deleteAll();
         sellerRepository.deleteAll();
+        adminRepository.deleteAll();
     }
 
     @Test
@@ -65,7 +69,11 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void registerAnAdmin__registerTest() {
-
+        registerAdmin();
+        assertNotNull(registerResponse);
+        assertTrue(registerResponse.isSuccess());
+        assertEquals(1, adminRepository.count());
+        assertEquals(1, userRepository.count());
     }
 
     @Test
