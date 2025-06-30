@@ -1,11 +1,15 @@
 package org.bram.data.models;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
 @Data
+@ToString()
+@EqualsAndHashCode()
 @Document(collection="Products")
 public class Product {
 
@@ -19,5 +23,7 @@ public class Product {
     private ProductCategory category;
 
     @DBRef
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Seller seller;
 }

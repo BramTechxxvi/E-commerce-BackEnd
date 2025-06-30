@@ -16,5 +16,7 @@ public class Seller extends User{
     private String storeName;
     private String storeDescription;
     private boolean isVerified;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Product> products;
 }

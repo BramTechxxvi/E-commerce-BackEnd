@@ -34,31 +34,32 @@ public class ProductServicesImpl implements ProductServices {
 
     @Override
     public ApiResponse addProduct(AddProductRequest request) {
+        if(request.getImage() == null) throw new NullImageException("Product image is required");
+        Map<?,?> uploadImage;
         try {
-            if(request.getImage() == null) throw new NullImageException("Product image is required");
-            Map<?,?> uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
-            String imageUrl = uploadImage.get("secure_url").toString();
-
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
-                            .equals("SELLER"));
-            if (!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to add products");
-
-            Seller seller = sellerRepository.findByEmail(email)
-                    .orElseThrow(()-> new UserNotFoundException("Seller not found"));
-            if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
-            Product product = mapToProduct(request, seller, imageUrl);
-
-            productRepository.save(product);
-            if(seller.getProducts() == null) seller.setProducts(new ArrayList<>());
-            seller.getProducts().add(product);
-            sellerRepository.save(seller);
-
-            return  new ApiResponse("Product added successfully", true);
-        } catch (IllegalArgumentException | IOException e) {
-            return new ApiResponse("Failed to add " + request.getProductName(), false);
+            uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            throw new ImageUploadException("Failed to upload image");
         }
+        String imageUrl = uploadImage.get("secure_url").toString();
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
+                        .equals("SELLER"));
+        if (!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to add products");
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
+        Product product = mapToProduct(request, seller, imageUrl);
+
+        productRepository.save(product);
+        if(seller.getProducts() == null) seller.setProducts(new ArrayList<>());
+        seller.getProducts().add(product);
+        sellerRepository.save(seller);
+
+        return  new ApiResponse("Product added successfully", true);
     }
 
     @Override
@@ -75,8 +76,7 @@ public class ProductServicesImpl implements ProductServices {
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new ProductNotFoundException("Product not found"));
-
-        if(product.getSeller().getId().equals(seller.getId())) return new ApiResponse("You are not allowed to remove this product", false);
+        if(!product.getSeller().getId().equals(seller.getId())) throw new AccessDeniedException("You are not allowed to remove this product");
 
         productRepository.delete(product);
         seller.getProducts().remove(product);

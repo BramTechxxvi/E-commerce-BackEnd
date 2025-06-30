@@ -6,6 +6,7 @@ import org.bram.data.models.Seller;
 import org.bram.data.repository.*;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
+import org.bram.exceptions.AccessDeniedException;
 import org.bram.exceptions.ProductNotFoundException;
 import org.bram.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -85,11 +86,10 @@ class ProductServiceImplTest {
         var authorities = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
         var auth = new UsernamePasswordAuthenticationToken("grace@ayoola.com", null, authorities);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        addAProduct();
-        assertNotNull(apiResponse);
+
+        Exception error  = assertThrows(AccessDeniedException.class, this::addAProduct);
         assertFalse(apiResponse.isSuccess());
-        String productName = addProductRequest.getProductName();
-        assertEquals("Failed to add " + productName, apiResponse.getMessage());
+        assertEquals("You are not allowed to add products", error.getMessage());
     }
 
     @Test
@@ -99,6 +99,7 @@ class ProductServiceImplTest {
         var auth = new UsernamePasswordAuthenticationToken("seyi@adams.com", null, authorities);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
+        addAProduct();
         Seller seller = sellerRepository.findByEmail("seyi@adams.com")
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
         Product savedProduct = productRepository.findByProductNameAndSeller("Headphones", seller)
