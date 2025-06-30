@@ -107,7 +107,6 @@ class ProductServiceImplTest {
 
         apiResponse = productServices.removeProduct(savedProduct.getProductId());
         assertTrue(apiResponse.isSuccess());
-
     }
 
     private void registerASellerAndLogin() {
