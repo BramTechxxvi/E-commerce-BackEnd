@@ -69,19 +69,14 @@ public class ProductServicesImpl implements ProductServices {
                         .equals("SELLER"));
 
         if(!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to remove products");
-
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new ProductNotFoundException("Product not found"));
-//
-//            Product product = productRepository.findById(request.getProductId())
-//                    .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-//
-//            // Ensure the seller owns the product
-//            if (!product.getSeller().getId().equals(seller.getId())) {
-//                return new ApiResponse("You cannot delete another seller's product", false);
+
+        if(!seller.getProducts().contains(product)) throw new ProductNotFoundException("Product not found");
 //            }
 //
 //            productRepository.delete(product);
