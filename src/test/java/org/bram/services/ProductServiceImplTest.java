@@ -1,9 +1,13 @@
 package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
+import org.bram.data.models.Product;
+import org.bram.data.models.Seller;
 import org.bram.data.repository.*;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
+import org.bram.exceptions.ProductNotFoundException;
+import org.bram.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -94,7 +98,13 @@ class ProductServiceImplTest {
         var authorities = Collections.singletonList(new SimpleGrantedAuthority("SELLER"));
         var auth = new UsernamePasswordAuthenticationToken("seyi@adams.com", null, authorities);
         SecurityContextHolder.getContext().setAuthentication(auth);
-        addAProduct();
+
+        Seller seller = sellerRepository.findByEmail("seyi@adams.com")
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+        Product savedProduct = productRepository.findByProductNameAndSeller("Headphones", seller)
+                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+
+        apiResponse = productServices.removeProduct(savedProduct.getProductId());
         assertTrue(apiResponse.isSuccess());
 
     }

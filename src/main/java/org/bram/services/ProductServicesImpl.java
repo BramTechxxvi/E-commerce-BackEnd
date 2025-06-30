@@ -76,15 +76,13 @@ public class ProductServicesImpl implements ProductServices {
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new ProductNotFoundException("Product not found"));
 
-        if(!seller.getProducts().contains(product)) throw new ProductNotFoundException("Product not found");
-//            }
-//
-//            productRepository.delete(product);
-//
-//            return new ApiResponse("Product removed successfully", true);
-//        }
+        if(product.getSeller().getId().equals(seller.getId())) return new ApiResponse("You are not allowed to remove this product", false);
 
-        return null;
+        productRepository.delete(product);
+        seller.getProducts().remove(product);
+        sellerRepository.save(seller);
+
+        return new ApiResponse("Product removed successfully", true);
     }
 
     @Override
