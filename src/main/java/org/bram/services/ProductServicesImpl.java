@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -70,7 +69,7 @@ public class ProductServicesImpl implements ProductServices {
                 .stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
                         .equals("SELLER"));
 
-        if(!isAuthorizedUser) throw new AccessDeniedException()
+        if(!isAuthorizedUser) throw new AccessDeniedException("")
 //
 //            Seller seller = sellerRepository.findByEmail(email)
 //                    .orElseThrow(() -> new UserNotFoundException("Seller not found"));
