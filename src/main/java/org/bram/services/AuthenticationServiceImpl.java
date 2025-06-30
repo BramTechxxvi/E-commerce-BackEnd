@@ -2,6 +2,7 @@ package org.bram.services;
 
 import org.bram.configuration.TokenBlacklist;
 import org.bram.data.models.*;
+import org.bram.data.repository.AdminRepository;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
@@ -26,14 +27,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final SellerRepository sellerRepository;
     private final JwtService jwtService;
     private final TokenBlacklist tokenBlacklist;
+    private final AdminRepository adminRepository;
 
     @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository, JwtService jwtService, TokenBlacklist tokenBlacklist) {
+    public AuthenticationServiceImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository, JwtService jwtService, TokenBlacklist tokenBlacklist, AdminRepository adminRepository) {
        this.userRepository = userRepository;
        this.customerRepository = customerRepository;
        this.sellerRepository = sellerRepository;
        this.jwtService = jwtService;
         this.tokenBlacklist = tokenBlacklist;
+        this.adminRepository = adminRepository;
     }
 
     @Override
@@ -59,6 +62,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             case SELLER:
                 Seller seller = mapToSeller(user);
                 sellerRepository.save(seller); break;
+
+            case ADMIN:
+                Admin admin = mapToAdmin(user);
+                adminRepository.save(admin); break;
         }
 
         RegisterResponse response = new RegisterResponse();
@@ -66,7 +73,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.setMessage("Registered successfully");
         return response;
     }
-
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {

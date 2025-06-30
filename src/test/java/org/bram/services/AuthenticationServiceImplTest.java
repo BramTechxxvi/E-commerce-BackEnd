@@ -64,6 +64,11 @@ public class AuthenticationServiceImplTest {
     }
 
     @Test
+    public void registerAnAdmin__registerTest() {
+
+    }
+
+    @Test
     public void loginCustomer__loginTest() {
         registerCustomer();
         loginRequest.setEmail("John@doe.com");
@@ -115,6 +120,17 @@ public class AuthenticationServiceImplTest {
         registerRequest.setPassword("password111");
         registerRequest.setPhone("090373542529");
         registerRequest.setUserRole("SELLER");
+
+        registerResponse = authenticationService.register(registerRequest);
+    }
+
+    private void registerAdmin() {
+        registerRequest.setFirstName("Wisdom");
+        registerRequest.setLastName("Babalola");
+        registerRequest.setEmail("wisdom@gmail.com");
+        registerRequest.setPassword("password111");
+        registerRequest.setPhone("09037354211");
+        registerRequest.setUserRole("ADMIN");
 
         registerResponse = authenticationService.register(registerRequest);
     }
