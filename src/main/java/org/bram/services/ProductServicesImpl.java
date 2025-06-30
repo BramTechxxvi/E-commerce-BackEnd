@@ -7,7 +7,6 @@ import org.bram.data.models.Seller;
 import org.bram.data.repository.ProductRepository;
 import org.bram.data.repository.SellerRepository;
 import org.bram.dtos.request.AddProductRequest;
-import org.bram.dtos.request.RemoveProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.exceptions.*;
@@ -63,16 +62,19 @@ public class ProductServicesImpl implements ProductServices {
     }
 
     @Override
-    public ApiResponse removeProduct(RemoveProductRequest request) {
+    public ApiResponse removeProduct(String productId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
                         .equals("SELLER"));
 
-        if(!isAuthorizedUser) throw new AccessDeniedException("")
-//
-//            Seller seller = sellerRepository.findByEmail(email)
-//                    .orElseThrow(() -> new UserNotFoundException("Seller not found"));
+        if(!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to remove products");
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
 //
 //            Product product = productRepository.findById(request.getProductId())
 //                    .orElseThrow(() -> new ProductNotFoundException("Product not found"));
