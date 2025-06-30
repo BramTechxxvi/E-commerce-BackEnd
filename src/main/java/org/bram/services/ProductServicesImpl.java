@@ -42,10 +42,10 @@ public class ProductServicesImpl implements ProductServices {
             String imageUrl = uploadImage.get("secure_url").toString();
 
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            boolean isSeller = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
                             .equals("SELLER"));
-            if (!isSeller) throw new AccessDeniedException("You are not allowed to add products");
+            if (!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to add products");
 
             Seller seller = sellerRepository.findByEmail(email)
                     .orElseThrow(()-> new UserNotFoundException("Seller not found"));
@@ -63,19 +63,14 @@ public class ProductServicesImpl implements ProductServices {
         }
     }
 
-
     @Override
     public ApiResponse removeProduct(RemoveProductRequest request) {
-//        @Override
-//        public ApiResponse removeProduct(RemoveProductRequest request) {
-//            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//
-//            boolean isSeller = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-//                    .anyMatch(authority -> authority.getAuthority().equals("ROLE_SELLER"));
-//
-//            if (!isSeller) {
-//                return new ApiResponse("You do not have permission to remove products", false);
-//            }
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                .stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
+                        .equals("SELLER"));
+
+        if(!isAuthorizedUser) throw new AccessDeniedException()
 //
 //            Seller seller = sellerRepository.findByEmail(email)
 //                    .orElseThrow(() -> new UserNotFoundException("Seller not found"));

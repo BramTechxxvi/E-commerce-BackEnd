@@ -1,6 +1,6 @@
 package org.bram.services;
 
-import com.cloudinary.Api;
+import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,14 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(CloudinaryTestConfig.class)
 public class SellerServicesImplTest {
 
     @Autowired
     private SellerRepository sellerRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private SellerServicesImpl sellerService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -42,7 +42,7 @@ public class SellerServicesImplTest {
     private ApiResponse apiResponse;
     private UpdateSellerProfileRequest updateRequest;
     @Autowired
-    private SellerServices sellerServices;
+    private SellerServicesImpl sellerServices;
 
 
     @BeforeEach
@@ -67,7 +67,7 @@ public class SellerServicesImplTest {
         assertEquals("Welcome back Grace Ayoola", loginResponse.getMessage());
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@gmail.com");
-        apiResponse = sellerService.changeEmail(changeEmailRequest);
+        apiResponse = sellerServices.changeEmail(changeEmailRequest);
         assertEquals("Email changed successfully", apiResponse.getMessage());
         assertTrue(apiResponse.isSuccess());
     }
@@ -77,7 +77,7 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         changeEmailRequest.setOldEmail("grace@ayoola.com");
         changeEmailRequest.setNewEmail("grace@ayoola.com");
-        Exception error = assertThrows(SameEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
+        Exception error = assertThrows(SameEmailException.class,()-> sellerServices.changeEmail(changeEmailRequest));
         assertEquals("New email cannot be same as old email", error.getMessage());
     }
 
@@ -86,7 +86,7 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         changeEmailRequest.setOldEmail("grace@gmail.com");
         changeEmailRequest.setNewEmail("grace@ayoola.com");
-        Exception error = assertThrows(IncorrectOldEmailException.class,()-> sellerService.changeEmail(changeEmailRequest));
+        Exception error = assertThrows(IncorrectOldEmailException.class,()-> sellerServices.changeEmail(changeEmailRequest));
         assertEquals("Old email not correct", error.getMessage());
     }
 
@@ -95,7 +95,7 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("grace111");
-        apiResponse = sellerService.changePassword(changePasswordRequest);
+        apiResponse = sellerServices.changePassword(changePasswordRequest);
         assertEquals("Password changed successfully", apiResponse.getMessage());
         assertTrue(apiResponse.isSuccess());
     }
@@ -105,7 +105,7 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("password111");
-        Exception error = assertThrows(SamePasswordException.class, ()-> sellerService.changePassword(changePasswordRequest));
+        Exception error = assertThrows(SamePasswordException.class, ()-> sellerServices.changePassword(changePasswordRequest));
         assertEquals("New password cannot be the same as old password", error.getMessage());
     }
 
@@ -114,7 +114,7 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         changePasswordRequest.setOldPassword("pass111");
         changePasswordRequest.setNewPassword("grace111");
-        Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> sellerService.changePassword(changePasswordRequest));
+        Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> sellerServices.changePassword(changePasswordRequest));
         assertEquals("Old password not correct", error.getMessage());
     }
 

@@ -86,7 +86,18 @@ class ProductServiceImplTest {
         assertFalse(apiResponse.isSuccess());
         String productName = addProductRequest.getProductName();
         assertEquals("Failed to add " + productName, apiResponse.getMessage());
-}
+    }
+
+    @Test
+    public void sellerCanDeleteProduct__removeProductTest() {
+        registerASellerAndLogin();
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority("SELLER"));
+        var auth = new UsernamePasswordAuthenticationToken("seyi@adams.com", null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        addAProduct();
+        assertTrue(apiResponse.isSuccess());
+
+    }
 
     private void registerASellerAndLogin() {
         registerRequest.setFirstName("Seyi");

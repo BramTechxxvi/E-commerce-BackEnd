@@ -1,6 +1,6 @@
 package org.bram.services;
 
-import org.bram.Main;
+import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
@@ -13,16 +13,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(CloudinaryTestConfig.class)
 public class AuthenticationServiceImplTest {
 
     @Autowired
-    private AuthenticationServiceImpl authenticationService;
+    private AuthenticationService authenticationService;
     private RegisterRequest registerRequest;
     private RegisterResponse registerResponse;
     private LoginRequest loginRequest;
