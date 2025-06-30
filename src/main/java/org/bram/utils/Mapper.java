@@ -48,8 +48,19 @@ public class Mapper {
         seller.setPhone(user.getPhone());
         seller.setPassword(user.getPassword());
         seller.setUserRole(user.getUserRole());
-
         return seller;
+    }
+
+    public static Admin mapToAdmin(User user) {
+        Admin admin = new Admin();
+        admin.setId(user.getId());
+        admin.setFirstName(user.getFirstName());
+        admin.setLastName(user.getLastName());
+        admin.setEmail(user.getEmail());
+        admin.setPhone(user.getPhone());
+        admin.setPassword(user.getPassword());
+        admin.setUserRole(user.getUserRole());
+        return admin;
     }
 
 }
