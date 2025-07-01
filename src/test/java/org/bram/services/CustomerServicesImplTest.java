@@ -9,6 +9,7 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
+import org.bram.exceptions.SameEmailException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,15 @@ class CustomerServicesImplTest {
         apiResponse = customerServices.changeEmail(changeEmailRequest);
         assertTrue(apiResponse.isSuccess());
         assertEquals("Email changed successfully", apiResponse.getMessage());
+    }
+
+    @Test
+    public void changeCustomerEmailWithSameOldEmail__throwsException() {
+        registerACustomerAndLogin();
+        changeEmailRequest.setOldEmail("amanda@gmail.com");
+        changeEmailRequest.setNewEmail("amanda@gmail.com");
+        Exception error = assertThrows(SameEmailException.class,()-> customerServices.changeEmail(changeEmailRequest));
+        assertEquals("New email cannot be same as old email", error.getMessage());
     }
 
     private void registerACustomerAndLogin() {
