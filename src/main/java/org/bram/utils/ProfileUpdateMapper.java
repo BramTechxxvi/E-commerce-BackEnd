@@ -90,15 +90,9 @@ public class ProfileUpdateMapper {
     }
 
     public static Customer updateProfileMapper(Customer customer, UpdateCustomerProfileRequest request) {
-        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
-        boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
-        if (validStoreName) seller.setStoreName(request.getStoreName().trim());
-
-        boolean validStoreDescription = request.getStoreDescription() != null && ! request.getStoreDescription().trim().isBlank();
-        if (validStoreDescription) seller.setStoreDescription(request.getStoreDescription().trim());
-
+        if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
         boolean validPhone = request.getPhoneNumber() != null && ! request.getPhoneNumber().trim().isBlank();
-        if (validPhone) seller.setPhone(request.getPhoneNumber().trim());
+        if (validPhone) customer.setPhone(request.getPhoneNumber().trim());
 
         Address address = new Address();
         address.setHouseNumber(request.getHouseNumber());
@@ -113,7 +107,7 @@ public class ProfileUpdateMapper {
                 && (address.getState() != null && address.getState().trim().isBlank())
                 && (address.getCountry() != null && address.getCountry().trim().isBlank()));
 
-        if (validAddress) seller.setAddress(address);
-        return seller;
+        if (validAddress) customer.setAddress(address);
+        return customer;
     }
 }

@@ -1,8 +1,6 @@
 package org.bram.services;
 
-import lombok.AllArgsConstructor;
 import org.bram.data.models.Customer;
-import org.bram.data.models.Seller;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
@@ -51,7 +49,7 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
     }
 
     @Override
-    public ApiResponse updateProfile(UpdateCustomerProfileRequest request) {
+    public ApiResponse updateProfile(Customer customer, UpdateCustomerProfileRequest request) {
         return null;
     }
 }
