@@ -5,6 +5,7 @@ import org.bram.data.models.Customer;
 import org.bram.data.models.Seller;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
+import org.bram.dtos.request.UpdateCustomerProfileRequest;
 import org.bram.dtos.request.UpdateSellerProfileRequest;
 import org.bram.exceptions.*;
 
@@ -88,7 +89,7 @@ public class ProfileUpdateMapper {
         return customer;
     }
 
-    public static Customer updateProfileMapper(Customer customer, ) {
+    public static Customer updateProfileMapper(Customer customer, UpdateCustomerProfileRequest request) {
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
         if (validStoreName) seller.setStoreName(request.getStoreName().trim());
