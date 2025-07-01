@@ -12,6 +12,7 @@ import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.IncorrectOldEmailException;
 import org.bram.exceptions.SameEmailException;
+import org.bram.exceptions.SamePasswordException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,15 @@ class CustomerServicesImplTest {
         changePasswordRequest.setNewPassword("password222");
         assertTrue(apiResponse.isSuccess());
         assertEquals("Password changed successfully", apiResponse.getMessage());
+    }
+
+    @Test
+    public void changedPasswordWithSameOldPassword__throwsException() {
+        registerACustomerAndLogin();
+        changePasswordRequest.setOldPassword("password111");
+        changePasswordRequest.setNewPassword("password111");
+        Exception error = assertThrows(SamePasswordException.class, ()-> customerServices.changePassword(changePasswordRequest));
+        assertEquals("New password cannot be the same as old password", error.getMessage());
     }
 
     private void registerACustomerAndLogin() {
