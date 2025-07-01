@@ -93,6 +93,8 @@ class CustomerServicesImplTest {
         registerACustomerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("password222");
+        assertTrue(apiResponse.isSuccess());
+        assertEquals("Password changed successfully", apiResponse.getMessage());
     }
 
     private void registerACustomerAndLogin() {
