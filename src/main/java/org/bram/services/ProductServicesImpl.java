@@ -10,11 +10,13 @@ import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.exceptions.*;
+import org.bram.utils.ProductMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.bram.utils.ProductMapper.mapToProduct;
@@ -92,22 +94,29 @@ public class ProductServicesImpl implements ProductServices {
         boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .stream().anyMatch(authority -> authority.getAuthority().equals("SELLER"));
 
-        if(!isAuthorizedUser) throw new AccessDeniedException("You're not allowed to make any changes");
+        if (!isAuthorizedUser) throw new AccessDeniedException("You're not allowed to make any changes");
         Seller seller = sellerRepository.findByEmail(email)
-                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+                .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
-        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
+        if (!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
         Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
-        if(!product.getSeller().getId().equals(seller.getId())) throw new AccessDeniedException("You're not allowed to make any changes");
+        if (!product.getSeller().getId().equals(seller.getId()))
+            throw new AccessDeniedException("You're not allowed to make any changes");
+        if (request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
+            try {
+                Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getImageUrl().getBytes(), ObjectUtils.emptyMap());
+                product.setImageUrl(uploadResult.get("secure_url").toString());
+            } catch (IOException E) {
+                throw new ImageUploadException("Failed to upload image");
+            }
+        }
         Product updatedProduct = updateProductMapper(product, request);
+        productRepository.save(updatedProduct);
+        seller.getProducts().replaceAll(productt -> productt.getProductId()
+                .equals(productId) ? updatedProduct : productt);
 
+        return new ApiResponse("Product updated successfully", true);
     }
-
-////
-
-//    productRepository.save(product);
-//
-//    return new ApiResponse("Product updated successfully", true);
 }

@@ -38,13 +38,6 @@ public class ProductMapper {
     }
 
     public static Product updateProductMapper(Product product, UpdateProductRequest request) {
-        if(request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
-            try {
-                Map<?,?> uploadResult = cloudinary.uploader().upload(request.getImageUrl(), ObjectUtils.emptyMap());
-                product.setImageUrl(uploadResult.get("secure_url").toString());
-            } catch (IOException E) {
-                throw new ImageUploadException("Failed to upload image");
-            }}
         if(request.getProductName() != null) product.setProductName(request.getProductName());
         if(request.getDescription() != null) product.setDescription(request.getDescription());
         if(request.getPrice() > 0) product.setPrice(request.getPrice());
@@ -54,15 +47,8 @@ public class ProductMapper {
                 product.setCategory(ProductCategory.valueOf(request.getCategory().toUpperCase()));
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Invalid product category" + request.getCategory());
-            }
-        }
-//
-//    // Update other fields if provided
-//    if (request.getProductName() != null) product.setProductName(request.getProductName());
-//    if (request.getDescription() != null) product.setDescription(request.getDescription());
-//    if (request.getPrice() > 0) product.setPrice(request.getPrice());
-//    if (request.getProductQuantity() >= 0) product.setProductQuantity(request.getProductQuantity());
-//    if (request.getCategory() != null) product.setCategory(request.getCategory());
+            }}
+        return product;
     }
 }
 

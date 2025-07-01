@@ -124,7 +124,7 @@ class ProductServiceImplTest {
         addAProduct();
         Seller seller = sellerRepository.findByEmail("seyi@adams.com")
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
-        Product savedProduct = productRepository.findByProductNameAndSeller("HeadPhones", seller)
+        Product savedProduct = productRepository.findByProductNameAndSeller("Headphones", seller)
                 .orElseThrow(()-> new ProductNotFoundException("Product not found"));
 
         updateRequest.setProductName("Headset");

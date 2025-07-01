@@ -1,11 +1,11 @@
 package org.bram.dtos.request;
 
 import lombok.Data;
-import org.bram.data.models.ProductCategory;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UpdateProductRequest {
-    private String imageUrl;
+    private MultipartFile imageUrl;
     private String description;
     private String productName;
     private double price;
