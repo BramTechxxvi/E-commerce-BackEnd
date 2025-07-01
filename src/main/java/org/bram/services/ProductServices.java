@@ -10,6 +10,6 @@ public interface ProductServices {
 
     ApiResponse removeProduct(String productId);
 
-    ApiResponse updateProduct(UpdateProductRequest request);
+    ApiResponse updateProduct(String productId, UpdateProductRequest request);
 
 }

@@ -47,6 +47,7 @@ class ProductServiceImplTest {
     private RegisterResponse registerResponse;
     private LoginRequest loginRequest;
     private LoginResponse loginResponse;
+    private UpdateProductRequest updateRequest;
     private ApiResponse apiResponse;
 
     @BeforeEach
@@ -59,6 +60,7 @@ class ProductServiceImplTest {
         registerResponse = new RegisterResponse();
         loginRequest = new LoginRequest();
         loginResponse = new LoginResponse();
+        updateRequest = new UpdateProductRequest();
         apiResponse = new ApiResponse();
     }
 
@@ -115,8 +117,37 @@ class ProductServiceImplTest {
     @Test
     public void sellerCanUpdateProduct__updateProductTest() {
         registerASellerAndLogin();
-        updateP
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority("SELLER"));
+        var auth = new UsernamePasswordAuthenticationToken("seyi@adams.com", null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        addAProduct();
+        Seller seller = sellerRepository.findByEmail("seyi@adams.com")
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+        Product savedProduct = productRepository.findByProductNameAndSeller("HeadPhones", seller)
+                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+
+        updateRequest.setProductName("Headset");
+        updateRequest.setDescription("ANC");
+        updateRequest.setPrice(30_000);
+        updateRequest.setProductQuantity(50);
+        updateRequest.setCategory("Electronics");
+
+        byte[] imageBytes;
+        try(var inputStream = getClass().getClassLoader().getResourceAsStream("image.jpg")) {
+            if (inputStream == null) throw new NullPointerException("Image not found");
+            imageBytes = inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read image file");
+        }
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "image", "image.jpg", "image/jpeg", imageBytes);
+        updateRequest.setImageUrl(imageFile);
+        apiResponse = productServices.updateProduct(savedProduct.getProductId(), updateRequest);
+        assertTrue(apiResponse.isSuccess());
+        assertEquals("Updated successfully", apiResponse.getMessage());
     }
+
 
     private void registerASellerAndLogin() {
         registerRequest.setFirstName("Seyi");

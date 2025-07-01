@@ -23,5 +23,7 @@ public class ProductMapper {
         product.setSeller(seller);
         return product;
     }
+
+    public static Product updateProductMapper() {}
 }
 

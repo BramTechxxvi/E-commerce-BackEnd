@@ -10,5 +10,5 @@ public class UpdateProductRequest {
     private String productName;
     private double price;
     private int productQuantity;
-    private ProductCategory category;
+    private String category;
 }

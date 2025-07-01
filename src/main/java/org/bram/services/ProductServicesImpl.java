@@ -86,7 +86,16 @@ public class ProductServicesImpl implements ProductServices {
     }
 
     @Override
-    public ApiResponse updateProduct(UpdateProductRequest request) {
-        return null;
+    public ApiResponse updateProduct(String productId, UpdateProductRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                .stream().anyMatch(authority -> authority.getAuthority().equals("SELLER"));
+
+        if(!isAuthorizedUser) throw new AccessDeniedException("You re not allowed to make any changed");
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+
+        if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
+
     }
 }
