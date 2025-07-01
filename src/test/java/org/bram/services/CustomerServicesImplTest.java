@@ -11,6 +11,7 @@ import org.bram.dtos.response.ApiResponse;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
 import org.bram.exceptions.IncorrectOldEmailException;
+import org.bram.exceptions.IncorrectOldPasswordException;
 import org.bram.exceptions.SameEmailException;
 import org.bram.exceptions.SamePasswordException;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,6 +106,15 @@ class CustomerServicesImplTest {
         changePasswordRequest.setNewPassword("password111");
         Exception error = assertThrows(SamePasswordException.class, ()-> customerServices.changePassword(changePasswordRequest));
         assertEquals("New password cannot be the same as old password", error.getMessage());
+    }
+
+    @Test
+    public void changePasswordWithWrongOldPassword() {
+        registerACustomerAndLogin();
+        changePasswordRequest.setOldPassword("password555");
+        changePasswordRequest.setNewPassword("password222");
+        Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> customerServices.changePassword(changePasswordRequest));
+        assertEquals("Old password not correct", error.getMessage());
     }
 
     private void registerACustomerAndLogin() {
