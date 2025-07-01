@@ -123,6 +123,7 @@ public class SellerServicesImplTest {
         registerSellerAndLogin();
         updateRequest.setStoreName("Grace Kiddies Store");
         updateRequest.setStoreDescription("We sell all kinds of children clothes, shoes, toys and comic books");
+        updateRequest.setPhoneNumber("0902-564-7571");
         apiResponse = sellerServices.updateProfile(updateRequest);
         assertEquals("Profile updated successfully", apiResponse.getMessage());
     }

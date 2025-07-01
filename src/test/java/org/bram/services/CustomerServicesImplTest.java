@@ -3,10 +3,7 @@ package org.bram.services;
 import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.UserRepository;
-import org.bram.dtos.request.ChangeEmailRequest;
-import org.bram.dtos.request.ChangePasswordRequest;
-import org.bram.dtos.request.LoginRequest;
-import org.bram.dtos.request.RegisterRequest;
+import org.bram.dtos.request.*;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
@@ -44,6 +41,7 @@ class CustomerServicesImplTest {
     private LoginResponse loginResponse;
     private ChangeEmailRequest changeEmailRequest;
     private ChangePasswordRequest changePasswordRequest;
+    private UpdateCustomerProfileRequest updateRequest;
     private ApiResponse apiResponse;
 
     @BeforeEach
@@ -56,6 +54,7 @@ class CustomerServicesImplTest {
         loginRequest = new LoginRequest();
         changeEmailRequest = new ChangeEmailRequest();
         changePasswordRequest = new ChangePasswordRequest();
+        updateRequest = new UpdateCustomerProfileRequest();
         apiResponse = new ApiResponse();
     }
 
@@ -116,6 +115,22 @@ class CustomerServicesImplTest {
         changePasswordRequest.setNewPassword("password222");
         Exception error = assertThrows(IncorrectOldPasswordException.class, ()-> customerServices.changePassword(changePasswordRequest));
         assertEquals("Old password not correct", error.getMessage());
+    }
+
+    @Test
+    public void updateCustomerProfileTest() {
+        registerACustomerAndLogin();
+        updateRequest.setPhoneNumber("0904-272-3719");
+        updateRequest.setHouseNumber("10");
+        updateRequest.setStreet("Main street");
+        updateRequest.setCity("Lagos city");
+        updateRequest.setState("Lagos state");
+        updateRequest.setCountry("Nigeria");
+
+        apiResponse = customerServices.updateProfile(updateRequest);
+        assertTrue(apiResponse.isSuccess());
+        assertEquals("Profile updated successfully", apiResponse.getMessage());
+
     }
 
     private void registerACustomerAndLogin() {

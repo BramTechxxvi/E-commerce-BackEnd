@@ -6,6 +6,6 @@ import org.bram.dtos.response.ApiResponse;
 
 public interface CustomerServices {
 
-    ApiResponse updateProfile(Customer customer, UpdateCustomerProfileRequest request);
+    ApiResponse updateProfile(UpdateCustomerProfileRequest request);
 
 }
