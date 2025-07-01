@@ -10,13 +10,11 @@ import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.exceptions.*;
-import org.bram.utils.ProductMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static org.bram.utils.ProductMapper.mapToProduct;

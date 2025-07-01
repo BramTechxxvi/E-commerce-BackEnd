@@ -6,9 +6,7 @@ import org.bram.data.models.Seller;
 import org.bram.data.repository.*;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
-import org.bram.exceptions.AccessDeniedException;
-import org.bram.exceptions.ProductNotFoundException;
-import org.bram.exceptions.UserNotFoundException;
+import org.bram.exceptions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -145,9 +143,8 @@ class ProductServiceImplTest {
         updateRequest.setImageUrl(imageFile);
         apiResponse = productServices.updateProduct(savedProduct.getProductId(), updateRequest);
         assertTrue(apiResponse.isSuccess());
-        assertEquals("Updated successfully", apiResponse.getMessage());
+        assertEquals("Product updated successfully", apiResponse.getMessage());
     }
-
 
     private void registerASellerAndLogin() {
         registerRequest.setFirstName("Seyi");

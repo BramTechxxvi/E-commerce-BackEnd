@@ -1,24 +1,12 @@
 package org.bram.utils;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import org.bram.data.models.Product;
 import org.bram.data.models.ProductCategory;
 import org.bram.data.models.Seller;
 import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
-import org.bram.exceptions.ImageUploadException;
-
-import java.io.IOException;
-import java.util.Map;
 
 public class ProductMapper {
-
-    private final Cloudinary cloudinary;
-
-    public ProductMapper(Cloudinary cloudinary) {
-        this.cloudinary = cloudinary;
-    }
 
     public static Product mapToProduct(AddProductRequest request, Seller seller, String imageUrl) {
         Product product = new Product();

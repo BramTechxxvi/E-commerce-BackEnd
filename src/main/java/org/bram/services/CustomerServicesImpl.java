@@ -1,7 +1,6 @@
 package org.bram.services;
 
 import org.bram.data.models.Customer;
-import org.bram.data.models.Seller;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;

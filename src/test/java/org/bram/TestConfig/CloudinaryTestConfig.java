@@ -30,6 +30,5 @@ public class CloudinaryTestConfig {
         when(uploader.upload(any(byte[].class), anyMap())).thenReturn(uploadResult);
 
         return cloudinary;
-
     }
 }
