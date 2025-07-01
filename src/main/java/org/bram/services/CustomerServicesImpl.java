@@ -53,7 +53,7 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
-        Seller updatedCustomer = updateProfileMapper(customer, request);
+        Customer updatedCustomer = updateProfileMapper(customer, request);
         customerRepository.save(updatedCustomer);
         return new ApiResponse("Profile updated successfully", true);
     }

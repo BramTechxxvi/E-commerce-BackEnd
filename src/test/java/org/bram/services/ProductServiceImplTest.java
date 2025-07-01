@@ -79,6 +79,7 @@ class ProductServiceImplTest {
         addAProduct();
         assertEquals("Product added successfully", apiResponse.getMessage());
         assertTrue(apiResponse.isSuccess());
+        assertEquals(1, productRepository.count());
     }
 
     @Test
@@ -107,6 +108,13 @@ class ProductServiceImplTest {
 
         apiResponse = productServices.removeProduct(savedProduct.getProductId());
         assertTrue(apiResponse.isSuccess());
+        assertEquals("Product removed successfully", apiResponse.getMessage());
+        assertEquals(0, productRepository.count());
+    }
+
+    @Test
+    public void sellerCanUpdateProduct__updateProductTest() {
+
     }
 
     private void registerASellerAndLogin() {
