@@ -90,7 +90,9 @@ class CustomerServicesImplTest {
 
     @Test
     public void changeCustomerPassword__changePasswordTest() {
-
+        registerACustomerAndLogin();
+        changePasswordRequest.setOldPassword("password111");
+        changePasswordRequest.setNewPassword("password222");
     }
 
     private void registerACustomerAndLogin() {
@@ -102,10 +104,9 @@ class CustomerServicesImplTest {
         registerRequest.setUserRole("Customer");
         registerResponse = authenticationService.register(registerRequest);
 
-        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setEmail("amanda@gmail.com");
         loginRequest.setPassword("password111");
         loginResponse = authenticationService.login(loginRequest);
-
         var auth = new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), null, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
