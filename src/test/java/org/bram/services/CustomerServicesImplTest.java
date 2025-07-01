@@ -1,6 +1,20 @@
 package org.bram.services;
 
+import org.bram.data.repository.CustomerRepository;
+import org.bram.data.repository.UserRepository;
+import org.bram.dtos.request.ChangeEmailRequest;
+import org.bram.dtos.request.ChangePasswordRequest;
+import org.bram.dtos.request.LoginRequest;
+import org.bram.dtos.request.RegisterRequest;
+import org.bram.dtos.response.ApiResponse;
+import org.bram.dtos.response.LoginResponse;
+import org.bram.dtos.response.RegisterResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,4 +23,60 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 class CustomerServicesImplTest {
 
+    @Autowired
+    private AuthenticationService authenticationService;
+    @Autowired
+    private CustomerServices customerServices;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
+    private RegisterRequest registerRequest;
+    private RegisterResponse registerResponse;
+    private LoginRequest loginRequest;
+    private LoginResponse loginResponse;
+    private ChangeEmailRequest changeEmailRequest;
+    private ChangePasswordRequest changePasswordRequest;
+    private ApiResponse apiResponse;
+
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+        customerRepository.deleteAll();
+        registerRequest = new RegisterRequest();
+        registerResponse = new RegisterResponse();
+        loginResponse = new LoginResponse();
+        loginRequest = new LoginRequest();
+        changeEmailRequest = new ChangeEmailRequest();
+        changePasswordRequest = new ChangePasswordRequest();
+        apiResponse = new ApiResponse();
+    }
+
+    @Test
+    public void changeCustomerEmail__changeEmailTest() {
+        registerACustomerAndLogin();
+        assertEquals("Registered successfully", registerResponse.getMessage());
+        assertEquals("Welcome back Amanda Onyekachi", loginResponse.getMessage());
+
+        ChangeEmailRequest
+
+    }
+
+    private void registerACustomerAndLogin() {
+        registerRequest.setFirstName("Amanda");
+        registerRequest.setLastName("Onyekachi");
+        registerRequest.setEmail("amanda@gmail.com");
+        registerRequest.setPassword("password111");
+        registerRequest.setPhone("09018754229");
+        registerRequest.setUserRole("Customer");
+        registerResponse = authenticationService.register(registerRequest);
+
+        loginRequest.setEmail("grace@ayoola.com");
+        loginRequest.setPassword("password111");
+        loginResponse = authenticationService.login(loginRequest);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
 }
