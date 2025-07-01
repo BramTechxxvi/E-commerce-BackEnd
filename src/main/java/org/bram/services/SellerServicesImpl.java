@@ -29,11 +29,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller updatedSeller = changeEmailMapper(seller, request);
         sellerRepository.save(updatedSeller);
 
-        ApiResponse response = new ApiResponse();
-        response.setMessage("Email changed successfully");
-        response.setSuccess(true);
-
-        return response;
+        return new ApiResponse("Email changed successfully", true);
     }
 
     @Override
@@ -45,25 +41,19 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller updatedSeller = changePasswordMapper(seller, request);
         sellerRepository.save(updatedSeller);
 
-        ApiResponse response = new ApiResponse();
-        response.setSuccess(true);
-        response.setMessage("Password changed successfully");
-        return response;
+        return new ApiResponse("Password changed successfully", true);
     }
 
     @Override
     public ApiResponse updateProfile(UpdateSellerProfileRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Seller seller = sellerRepository.findByEmail(email)
-                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+                .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
         Seller updatedSeller = updateProfileMapper(seller, request);
         sellerRepository.save(updatedSeller);
 
-        ApiResponse response = new ApiResponse();
-        response.setMessage("Profile updated successfully");
-        response.setSuccess(true);
-        return response;
+        return new ApiResponse("Profile updated successfully", true);
     }
 
 }

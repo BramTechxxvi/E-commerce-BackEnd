@@ -87,7 +87,7 @@ class ProductServiceImplTest {
         var auth = new UsernamePasswordAuthenticationToken("grace@ayoola.com", null, authorities);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Exception error  = assertThrows(AccessDeniedException.class, this::addAProduct);
+        Exception error  = assertThrows(AccessDeniedException.class, ()-> addAProduct());
         assertFalse(apiResponse.isSuccess());
         assertEquals("You are not allowed to add products", error.getMessage());
     }

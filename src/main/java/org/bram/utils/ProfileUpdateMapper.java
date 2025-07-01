@@ -1,6 +1,7 @@
 package org.bram.utils;
 
 import org.bram.data.models.Address;
+import org.bram.data.models.Customer;
 import org.bram.data.models.Seller;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
@@ -61,5 +62,9 @@ public class ProfileUpdateMapper {
 
         if (validAddress) seller.setAddress(address);
         return seller;
+    }
+
+    public static Customer changeEmailMapper(Customer customer, ChangeEmailRequest request) {
+
     }
 }
