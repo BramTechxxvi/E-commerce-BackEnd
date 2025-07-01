@@ -1,5 +1,6 @@
 package org.bram.services;
 
+import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.ChangeEmailRequest;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(CloudinaryTestConfig.class)
 class CustomerServicesImplTest {
 
     @Autowired
