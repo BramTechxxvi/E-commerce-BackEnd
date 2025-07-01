@@ -95,6 +95,7 @@ class CustomerServicesImplTest {
         registerACustomerAndLogin();
         changePasswordRequest.setOldPassword("password111");
         changePasswordRequest.setNewPassword("password222");
+        apiResponse = customerServices.changeEmail(changeEmailRequest);
         assertTrue(apiResponse.isSuccess());
         assertEquals("Password changed successfully", apiResponse.getMessage());
     }
