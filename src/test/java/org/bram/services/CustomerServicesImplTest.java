@@ -26,7 +26,7 @@ class CustomerServicesImplTest {
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
-    private CustomerServices customerServices;
+    private CustomerServicesImpl customerServices;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -58,8 +58,11 @@ class CustomerServicesImplTest {
         assertEquals("Registered successfully", registerResponse.getMessage());
         assertEquals("Welcome back Amanda Onyekachi", loginResponse.getMessage());
 
-        ChangeEmailRequest
-
+        changeEmailRequest.setOldEmail("amanda@gmail.com");
+        changeEmailRequest.setNewEmail("onyekachi@gmail.com");
+        apiResponse = customerServices.changeEmail(changeEmailRequest);
+        assertTrue(apiResponse.isSuccess());
+        assertEquals("Email changed successfully", apiResponse.getMessage());
     }
 
     private void registerACustomerAndLogin() {
