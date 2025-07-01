@@ -30,7 +30,7 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
     public ApiResponse changeEmail(ChangeEmailRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+                .orElseThrow(()-> new UserNotFoundException("Customer not found"));
 
         Customer updatedCustomer = changeEmailMapper(customer, request);
         customerRepository.save(updatedCustomer);
@@ -41,16 +41,13 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
     @Override
     public ApiResponse changePassword(ChangePasswordRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Seller seller = sellerRepository.findByEmail(email)
-                .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Customer not found"));
 
-        Seller updatedSeller = changePasswordMapper(seller, request);
-        sellerRepository.save(updatedSeller);
+        Customer updatedCustomer = changePasswordMapper(customer, request);
+        customerRepository.save(updatedCustomer);
 
-        ApiResponse response = new ApiResponse();
-        response.setSuccess(true);
-        response.setMessage("Password changed successfully");
-        return response;
+        return new ApiResponse("Password changed successfully", true);
     }
 
     @Override
