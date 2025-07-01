@@ -88,6 +88,11 @@ class CustomerServicesImplTest {
         assertEquals("Old email not correct", error.getMessage());
     }
 
+    @Test
+    public void changeCustomerPassword__changePasswordTest() {
+
+    }
+
     private void registerACustomerAndLogin() {
         registerRequest.setFirstName("Amanda");
         registerRequest.setLastName("Onyekachi");
