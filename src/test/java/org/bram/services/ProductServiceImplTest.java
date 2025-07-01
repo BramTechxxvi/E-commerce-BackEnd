@@ -114,7 +114,8 @@ class ProductServiceImplTest {
 
     @Test
     public void sellerCanUpdateProduct__updateProductTest() {
-
+        registerASellerAndLogin();
+        updateP
     }
 
     private void registerASellerAndLogin() {
