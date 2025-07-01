@@ -10,6 +10,7 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.RegisterResponse;
+import org.bram.exceptions.IncorrectOldEmailException;
 import org.bram.exceptions.SameEmailException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,6 +77,15 @@ class CustomerServicesImplTest {
         changeEmailRequest.setNewEmail("amanda@gmail.com");
         Exception error = assertThrows(SameEmailException.class,()-> customerServices.changeEmail(changeEmailRequest));
         assertEquals("New email cannot be same as old email", error.getMessage());
+    }
+
+    @Test
+    public void changeCustomerEmailWithWrongOldEmail__throwsException() {
+        registerACustomerAndLogin();
+        changeEmailRequest.setOldEmail("amanda@yahoo.com");
+        changeEmailRequest.setNewEmail("amanda@fake.com");
+        Exception error = assertThrows(IncorrectOldEmailException.class, () -> customerServices.changeEmail(changeEmailRequest));
+        assertEquals("Old email not correct", error.getMessage());
     }
 
     private void registerACustomerAndLogin() {
