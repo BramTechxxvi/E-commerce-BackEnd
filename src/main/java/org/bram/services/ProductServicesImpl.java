@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static org.bram.utils.ProductMapper.mapToProduct;
+import static org.bram.utils.ProductMapper.updateProductMapper;
 
 @Service
 public class ProductServicesImpl implements ProductServices {
@@ -35,13 +36,13 @@ public class ProductServicesImpl implements ProductServices {
     @Override
     public ApiResponse addProduct(AddProductRequest request) {
         if(request.getImage() == null) throw new NullImageException("Product image is required");
-        Map<?,?> uploadImage;
+        String imageUrl;
         try {
-            uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
+            Map<?,?> uploadImage = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
+            imageUrl = uploadImage.get("secure_url").toString();
         } catch (IOException e) {
             throw new ImageUploadException("Failed to upload image");
         }
-        String imageUrl = uploadImage.get("secure_url").toString();
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
@@ -91,11 +92,22 @@ public class ProductServicesImpl implements ProductServices {
         boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .stream().anyMatch(authority -> authority.getAuthority().equals("SELLER"));
 
-        if(!isAuthorizedUser) throw new AccessDeniedException("You re not allowed to make any changed");
+        if(!isAuthorizedUser) throw new AccessDeniedException("You're not allowed to make any changes");
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+
+        if(!product.getSeller().getId().equals(seller.getId())) throw new AccessDeniedException("You're not allowed to make any changes");
+        Product updatedProduct = updateProductMapper(product, request);
 
     }
+
+////
+
+//    productRepository.save(product);
+//
+//    return new ApiResponse("Product updated successfully", true);
 }
