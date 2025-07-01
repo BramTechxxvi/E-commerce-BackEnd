@@ -32,6 +32,7 @@ public class SellerController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new )
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
         }
+    }
 }
