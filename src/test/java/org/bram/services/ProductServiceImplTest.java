@@ -140,7 +140,7 @@ class ProductServiceImplTest {
         }
         MockMultipartFile imageFile = new MockMultipartFile(
                 "image", "image.jpg", "image/jpeg", imageBytes);
-        updateRequest.setImageUrl(imageFile);
+        updateRequest.setImage(imageFile);
         apiResponse = productServices.updateProduct(savedProduct.getProductId(), updateRequest);
         assertTrue(apiResponse.isSuccess());
         assertEquals("Product updated successfully", apiResponse.getMessage());

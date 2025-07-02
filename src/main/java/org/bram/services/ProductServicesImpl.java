@@ -102,9 +102,9 @@ public class ProductServicesImpl implements ProductServices {
 
         if (!product.getSeller().getId().equals(seller.getId()))
             throw new AccessDeniedException("You're not allowed to make any changes");
-        if (request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
+        if (request.getImage() != null && !request.getImage().isEmpty()) {
             try {
-                Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getImageUrl().getBytes(), ObjectUtils.emptyMap());
+                Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
                 product.setImageUrl(uploadResult.get("secure_url").toString());
             } catch (IOException E) {
                 throw new ImageUploadException("Failed to upload image");

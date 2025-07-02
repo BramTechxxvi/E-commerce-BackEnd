@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UpdateProductRequest {
-    private MultipartFile imageUrl;
+    private MultipartFile image;
     private String description;
     private String productName;
     private double price;

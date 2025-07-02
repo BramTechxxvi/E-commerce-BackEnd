@@ -5,6 +5,7 @@ import org.bram.data.models.ProductCategory;
 import org.bram.data.models.Seller;
 import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
+import org.bram.exceptions.InvalidProductCategory;
 
 public class ProductMapper {
 
@@ -17,8 +18,8 @@ public class ProductMapper {
 
         try {
             product.setCategory(ProductCategory.valueOf(request.getProductCategory().toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid product category" + request.getProductCategory());
+        } catch (InvalidProductCategory e) {
+            throw new InvalidProductCategory("Invalid product category" + request.getProductCategory());
         }
         product.setImageUrl(imageUrl);
         product.setSeller(seller);
@@ -33,8 +34,8 @@ public class ProductMapper {
         if(request.getCategory() != null) {
             try {
                 product.setCategory(ProductCategory.valueOf(request.getCategory().toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Invalid product category" + request.getCategory());
+            } catch (InvalidProductCategory e) {
+                throw new InvalidProductCategory("Invalid product category" + request.getCategory());
             }}
         return product;
     }
