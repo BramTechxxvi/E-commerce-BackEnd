@@ -5,7 +5,6 @@ import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
 import org.bram.dtos.request.UpdateSellerProfileRequest;
 import org.bram.dtos.response.ApiResponse;
-import org.bram.exceptions.*;
 import org.bram.services.SellerServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,34 +24,19 @@ public class SellerController {
 
     @PutMapping("/changeEmail")
     public ResponseEntity<ApiResponse> changeEmail(@RequestBody @Valid ChangeEmailRequest request) {
-        try {
-            ApiResponse response = sellerServices.changeEmail(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch (UserNotFoundException | UserNotLoggedInException | SameEmailException | IncorrectOldEmailException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
-        }
+        ApiResponse response = sellerServices.changeEmail(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody @Valid ChangePasswordRequest request) {
-        try {
-            ApiResponse response = sellerServices.changePassword(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch (UserNotFoundException | UserNotLoggedInException | SamePasswordException | IncorrectOldPasswordException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
-        }
+        ApiResponse response = sellerServices.changePassword(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/updateProfile")
     public ResponseEntity<ApiResponse> updateProfile(@RequestBody UpdateSellerProfileRequest request) {
-        try {
-            ApiResponse response = sellerServices.updateProfile(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch (UserNotFoundException | UserNotLoggedInException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
-        }
+        ApiResponse response = sellerServices.updateProfile(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
  }
