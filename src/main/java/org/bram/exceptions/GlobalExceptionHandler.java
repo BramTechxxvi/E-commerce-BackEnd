@@ -54,6 +54,15 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NullImageException.class)
+    public ResponseEntity<ApiResponse> handleNullImage(NullImageException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleProductNotFound(ProductNotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(new ApiResponse(message, false));
