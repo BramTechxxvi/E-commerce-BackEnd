@@ -6,8 +6,6 @@ import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.LoginResponse;
 import org.bram.dtos.response.LogoutResponse;
 import org.bram.dtos.response.RegisterResponse;
-import org.bram.exceptions.DetailsAlreadyInUseException;
-import org.bram.exceptions.IncorrectPasswordException;
 import org.bram.exceptions.InvalidTokenException;
 import org.bram.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +32,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-        try {
-            LoginResponse response = authenticationService.login(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch (IncorrectPasswordException e) {
-            LoginResponse response = new LoginResponse();
-            response.setSuccess(false);
-            response.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        LoginResponse response = authenticationService.login(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/logout")

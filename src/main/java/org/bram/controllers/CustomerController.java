@@ -5,7 +5,6 @@ import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
 import org.bram.dtos.request.UpdateCustomerProfileRequest;
 import org.bram.dtos.response.ApiResponse;
-import org.bram.exceptions.*;
 import org.bram.services.CustomerServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,34 +27,19 @@ public class CustomerController {
 
     @PutMapping("/changeEmail")
     public ResponseEntity<ApiResponse> changeEmail(@RequestBody @Valid ChangeEmailRequest request) {
-        try {
-            ApiResponse response = customerServices.changeEmail(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch(UserNotFoundException | UserNotLoggedInException | SameEmailException | IncorrectOldEmailException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
-        }
+        ApiResponse response = customerServices.changeEmail(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody @Valid ChangePasswordRequest request) {
-        try {
-            ApiResponse response = customerServices.changePassword(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch (UserNotFoundException |UserNotLoggedInException | SamePasswordException | IncorrectPasswordException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
-        }
+        ApiResponse response = customerServices.changePassword(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/updateProfile")
     public ResponseEntity<ApiResponse> updateProfile(@RequestBody UpdateCustomerProfileRequest request) {
-        try {
-            ApiResponse response = customerServices.updateProfile(request);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-
-        } catch (UserNotFoundException |UserNotLoggedInException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
-        }
+        ApiResponse response = customerServices.updateProfile(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

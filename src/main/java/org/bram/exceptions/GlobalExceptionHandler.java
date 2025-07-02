@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IncorrectPasswordException.class)
     public ResponseEntity<ApiResponse> handleIncorrectPassword(IncorrectPasswordException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(InvalidProductCategory.class)
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ApiResponse> handleInvalidToken(InvalidTokenException e) {
-        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(NullImageException.class)
