@@ -85,7 +85,10 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
-    @Ex
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse> handleBadArg(IllegalArgumentException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(new ApiResponse(message, false));
