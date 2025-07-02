@@ -1,6 +1,5 @@
 package org.bram.exceptions;
 
-import com.cloudinary.Api;
 import org.bram.dtos.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

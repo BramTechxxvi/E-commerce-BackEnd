@@ -28,17 +28,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
-        try {
-            RegisterResponse response = authenticationService.register(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
-        } catch (DetailsAlreadyInUseException e) {
-            RegisterResponse response = new RegisterResponse();
-            response.setSuccess(false);
-            response.setMessage(e.getMessage());
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        RegisterResponse response = authenticationService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
