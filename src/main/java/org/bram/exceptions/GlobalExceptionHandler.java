@@ -1,5 +1,6 @@
 package org.bram.exceptions;
 
+import com.cloudinary.Api;
 import org.bram.dtos.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleProductNotFound(ProductNotFoundException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(SamePasswordException.class)
+    public ResponseEntity<ApiResponse> handleSamePassword(SamePasswordException e) {
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(SameEmailException.class)
+    public ResponseEntity<ApiResponse> handleSameEmail(SameEmailException e) {
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleUserNotFound(UserNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+
 
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(new ApiResponse(message, false));
