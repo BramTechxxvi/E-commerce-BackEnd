@@ -80,7 +80,12 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserNotLoggedInException.class)
+    public ResponseEntity<ApiResponse> handleNotLoggedIn(UserNotLoggedInException e) {
+        return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
 
+    @Ex
 
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(new ApiResponse(message, false));
