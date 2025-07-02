@@ -21,8 +21,30 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ImageUploadException.class)
     public ResponseEntity<ApiResponse> handleImageUpload(ImageUploadException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IncorrectOldPasswordException.class)
+    public ResponseEntity<ApiResponse> handleWrongOldPassword(IncorrectOldPasswordException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IncorrectOldEmailException.class)
+    public ResponseEntity<ApiResponse> handleIncorrectOldEmail(IncorrectOldEmailException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public ResponseEntity<ApiResponse> handleIncorrectPassword(IncorrectPasswordException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidProductCategory.class)
+    public ResponseEntity<ApiResponse> handleInvalidProductCategory(InvalidProductCategory e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
 
 
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
