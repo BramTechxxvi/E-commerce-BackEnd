@@ -49,6 +49,11 @@ public class GlobalExceptionHandler {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ApiResponse> handleInvalidToken(InvalidTokenException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(new ApiResponse(message, false));
