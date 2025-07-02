@@ -3,6 +3,7 @@ package org.bram.controllers;
 import jakarta.validation.Valid;
 import org.bram.dtos.request.ChangeEmailRequest;
 import org.bram.dtos.request.ChangePasswordRequest;
+import org.bram.dtos.request.UpdateCustomerProfileRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.exceptions.*;
 import org.bram.services.CustomerServicesImpl;
@@ -32,7 +33,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch(UserNotFoundException | UserNotLoggedInException | SameEmailException | IncorrectOldEmailException e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(e.getMessage(), false));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
         }
     }
 
@@ -43,9 +44,18 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch (UserNotFoundException |UserNotLoggedInException | SamePasswordException | IncorrectPasswordException e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(e.getMessage(), false));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
         }
     }
 
-    @
+    @PutMapping("/updateProfile")
+    public ResponseEntity<ApiResponse> updateProfile(@RequestBody UpdateCustomerProfileRequest request) {
+        try {
+            ApiResponse response = customerServices.updateProfile(request);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        } catch (UserNotFoundException |UserNotLoggedInException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), false));
+        }
+    }
 }
