@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,23 +81,13 @@ class AdminServicesImplTest {
         adminLoginRequest.setPassword("password111");
         adminLoginResponse = authenticationService.login(adminLoginRequest);
 
-        sellerLoginRequest.setEmail("grace@ayoola.com");
-        sellerLoginRequest.setPassword("password111");
-        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
-        assertTrue(sellerLoginResponse.isSuccess());
-
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
-        var auth = new UsernamePasswordAuthenticationToken(
-                sellerLoginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
         apiResponse = adminServices.banUser(seller.getId());
-        ChangeEmailRequest request = new ChangeEmailRequest();
-        request.setOldEmail("grace@ayoola.com");
-        request.setNewEmail("grace@ayoola.org");
 
-        Exception error = assertThrows(AccessDeniedException.class,()-> apiResponse = sellerServices.changeEmail(request));
+        sellerLoginRequest.setEmail("grace@ayoola.com");
+        sellerLoginRequest.setPassword("password111");
+        Exception error = assertThrows(AccessDeniedException.class,()-> sellerLoginResponse = authenticationService.login(sellerLoginRequest));
         assertEquals("Your account has been banned", error.getMessage());
     }
 
@@ -129,27 +117,17 @@ class AdminServicesImplTest {
         adminLoginRequest.setPassword("password111");
         adminLoginResponse = authenticationService.login(adminLoginRequest);
 
-        sellerLoginRequest.setEmail("grace@ayoola.com");
-        sellerLoginRequest.setPassword("password111");
-        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
-        assertTrue(sellerLoginResponse.isSuccess());
-
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
-        var auth = new UsernamePasswordAuthenticationToken(
-                sellerLoginRequest.getEmail(), null, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         apiResponse = adminServices.banUser(seller.getId());
         assertEquals("User banned successfully", apiResponse.getMessage());
         apiResponse = adminServices.unBanUser(seller.getId());
 
-        ChangeEmailRequest request = new ChangeEmailRequest();
-        request.setOldEmail("grace@ayoola.com");
-        request.setNewEmail("grace@ayoola.org");
-
-        apiResponse = sellerServices.changeEmail(request);
-        assertEquals("Email changed successfully", apiResponse.getMessage());
+        sellerLoginRequest.setEmail("grace@ayoola.com");
+        sellerLoginRequest.setPassword("password111");
+        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
+        assertTrue(sellerLoginResponse.isSuccess());
     }
 
     private void registerSeller() {
