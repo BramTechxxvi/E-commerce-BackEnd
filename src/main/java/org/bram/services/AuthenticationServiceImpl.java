@@ -102,6 +102,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .orElseThrow(()-> new UserNotFoundException("Seller not found"));
                 seller.setLoggedIn(true);
                 sellerRepository.save(seller); break;
+
+            case ADMIN: adminRepository.findByEmail(email).ifPresent(admin -> {
+                admin.setLoggedIn(true);
+                adminRepository.save(admin);
+            });
         }
 
         String fullName = user.getFirstName() +" " + user.getLastName();
