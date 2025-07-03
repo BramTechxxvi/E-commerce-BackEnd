@@ -45,7 +45,9 @@ class AdminServicesImplTest {
     void setUp() {
         adminRepository.deleteAll();
         userRepository.deleteAll();
+        sellerRepository.deleteAll();
         registerRequest = new RegisterRequest();
+        registerResponse = new RegisterResponse();
         adminLoginRequest = new LoginRequest();
         adminLoginResponse = new LoginResponse();
         sellerLoginRequest = new LoginRequest();
@@ -57,6 +59,7 @@ class AdminServicesImplTest {
     public void adminCanBanAUser__banUserTest() {
         registerSeller();
         registerAdmin();
+        assertTrue(registerResponse.isSuccess());
         adminLoginRequest.setEmail("wisdom@gmail.com");
         adminLoginRequest.setPassword("password111");
         adminLoginResponse = authenticationService.login(adminLoginRequest);
@@ -64,6 +67,11 @@ class AdminServicesImplTest {
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
         apiResponse = adminServices.banUser(seller.getId());
+    }
+
+    @Test
+    public void adminCanBanUserWhileUserIsLoggedIn__banUserTest() {
+
     }
 
     private void registerSeller() {

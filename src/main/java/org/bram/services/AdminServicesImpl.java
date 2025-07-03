@@ -1,6 +1,5 @@
 package org.bram.services;
 
-import org.bram.configuration.TokenBlacklist;
 import org.bram.data.models.User;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.SellerRepository;
@@ -16,14 +15,12 @@ public class AdminServicesImpl implements AdminServices{
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final SellerRepository sellerRepository;
-    private final TokenBlacklist tokenBlacklist;
 
     @Autowired
-    public AdminServicesImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository, TokenBlacklist tokenBlacklist) {
+    public AdminServicesImpl(UserRepository userRepository, CustomerRepository customerRepository, SellerRepository sellerRepository) {
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.sellerRepository = sellerRepository;
-        this.tokenBlacklist = tokenBlacklist;
     }
 
     @Override
