@@ -67,6 +67,6 @@ public class AdminServicesImpl implements AdminServices{
                 seller.setBanned(false);
                 sellerRepository.save(seller);
             });
-        }
+        } return new ApiResponse("User unbanned succesfully", true);
     }
 }
