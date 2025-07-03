@@ -136,6 +136,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 seller.setLoggedIn(false);
                 sellerRepository.save(seller);
             });
+            case ADMIN: adminRepository.findByEmail(email).ifPresent(admin -> {
+                admin.setLoggedIn(false);
+                adminRepository.save(admin);
+            });
         }
         tokenBlacklist.blackListToken(token);
         return new LogoutResponse("We hope to see you soon...", null, true);
