@@ -1,10 +1,13 @@
 package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
+import org.bram.data.models.Seller;
 import org.bram.data.repository.AdminRepository;
+import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
+import org.bram.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,8 @@ class AdminServicesImplTest {
     private LoginRequest sellerLoginRequest;
     private LoginResponse sellerLoginResponse;
     private ApiResponse apiResponse;
+    @Autowired
+    private SellerRepository sellerRepository;
 
 
     @BeforeEach
@@ -56,9 +61,9 @@ class AdminServicesImplTest {
         adminLoginRequest.setPassword("password111");
         adminLoginResponse = authenticationService.login(adminLoginRequest);
         assertTrue(adminLoginResponse.isSuccess());
-        apiResponse = adminServices.banUser()
-
-
+        Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
+                .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
+        apiResponse = adminServices.banUser(seller.getId());
     }
 
     private void registerSeller() {

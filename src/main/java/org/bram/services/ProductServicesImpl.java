@@ -52,6 +52,7 @@ public class ProductServicesImpl implements ProductServices {
 
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
+        if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         Product product = mapToProduct(request, seller, imageUrl);
 
@@ -73,7 +74,7 @@ public class ProductServicesImpl implements ProductServices {
         if(!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to remove products");
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
-
+        if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new ProductNotFoundException("Product not found"));
@@ -96,6 +97,7 @@ public class ProductServicesImpl implements ProductServices {
         Seller seller = sellerRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
+        if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if (!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
