@@ -69,6 +69,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Customer changeEmailMapper(Customer customer, ChangeEmailRequest request) {
+        if(customer.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
         if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
@@ -81,6 +82,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Customer changePasswordMapper(Customer customer, ChangePasswordRequest request) {
+        if(customer.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
