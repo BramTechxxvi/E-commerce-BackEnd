@@ -29,34 +29,33 @@ class AdminServicesImplTest {
     private AuthenticationServiceImpl authenticationService;
     private RegisterRequest registerRequest;
     private RegisterResponse registerResponse;
-    private LoginRequest loginRequest;
-    private LoginResponse loginResponse;
+    private LoginRequest adminLoginRequest;
+    private LoginResponse adminLoginResponse;
+    private LoginRequest sellerLoginRequest;
+    private LoginResponse sellerLoginResponse;
 
 
     @BeforeEach
     void setUp() {
         adminRepository.deleteAll();
         userRepository.deleteAll();
+        registerRequest = new RegisterRequest();
+        adminLoginRequest = new LoginRequest();
+        adminLoginResponse = new LoginResponse();
+        sellerLoginRequest = new LoginRequest();
+        sellerLoginResponse = new LoginResponse();
     }
 
     @Test
     public void adminCanBanAUser__banUserTest() {
-        registerCustomer();
         registerSeller();
         registerAdmin();
+        adminLoginRequest.setEmail("wisdom@gmail.com");
+        adminLoginRequest.setPassword("password111");
+        adminLoginResponse = authenticationService.login(adminLoginRequest);
+        assertTrue(adminLoginResponse.isSuccess());
 
 
-    }
-
-    private void registerCustomer() {
-        registerRequest.setFirstName("John");
-        registerRequest.setLastName("Doe");
-        registerRequest.setEmail("john@doe.com");
-        registerRequest.setPassword("password111");
-        registerRequest.setPhone("090373542523");
-        registerRequest.setUserRole("CUSTOMER");
-
-        registerResponse = authenticationService.register(registerRequest);
     }
 
     private void registerSeller() {
