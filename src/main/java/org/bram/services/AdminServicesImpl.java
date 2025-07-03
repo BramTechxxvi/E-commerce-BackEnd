@@ -59,7 +59,14 @@ public class AdminServicesImpl implements AdminServices{
         userRepository.save(user);
 
         switch (user.getUserRole()) {
-
+            case CUSTOMER: customerRepository.findById(id).ifPresent(customer -> {
+                customer.setBanned(false);
+                customerRepository.save(customer);
+            });
+            case SELLER: sellerRepository.findById(id).ifPresent(seller -> {
+                seller.setBanned(false);
+                sellerRepository.save(seller);
+            });
         }
     }
 }
