@@ -7,12 +7,15 @@ import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
+import org.bram.exceptions.AccessDeniedException;
 import org.bram.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,6 +42,8 @@ class AdminServicesImplTest {
     private ApiResponse apiResponse;
     @Autowired
     private SellerRepository sellerRepository;
+    @Autowired
+    private SellerServicesImpl sellerServices;
 
 
     @BeforeEach
@@ -67,9 +72,6 @@ class AdminServicesImplTest {
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
         apiResponse = adminServices.banUser(seller.getId());
-        sellerLoginRequest.setEmail("grace@ayoola.com");
-        sellerLoginRequest.setPassword("password111");
-        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
         assertFalse(sellerLoginResponse.isSuccess());
     }
 
@@ -80,6 +82,25 @@ class AdminServicesImplTest {
         adminLoginRequest.setEmail("wisdom@gmail.com");
         adminLoginRequest.setPassword("password111");
         adminLoginResponse = authenticationService.login(adminLoginRequest);
+
+        sellerLoginRequest.setEmail("grace@ayoola.com");
+        sellerLoginRequest.setPassword("password111");
+        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
+        Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
+                .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                sellerLoginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        apiResponse = adminServices.banUser(seller.getId());
+        ChangeEmailRequest request = new ChangeEmailRequest();
+        request.setOldEmail("grace@ayoola.com");
+        request.setNewEmail("grace@ayoola.org");
+
+        Exception error = assertThrows(AccessDeniedException.class,()-> apiResponse = sellerServices.changeEmail(request));
+        assertFalse(apiResponse.isSuccess());
+        assertEquals("Your account has been banned", error.getMessage());
     }
 
     private void registerSeller() {
