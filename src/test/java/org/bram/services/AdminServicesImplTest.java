@@ -40,9 +40,6 @@ class AdminServicesImplTest {
     private ApiResponse apiResponse;
     @Autowired
     private SellerRepository sellerRepository;
-    @Autowired
-    private SellerServicesImpl sellerServices;
-
 
     @BeforeEach
     void setUp() {
