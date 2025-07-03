@@ -3,11 +3,7 @@ package org.bram.services;
 
 public interface AdminServices {
 
-//
-//    removeProduct(productID: String): void
-// banUser
-// verifySeller
-//    
+    public ApiResponse banUser(String id);
 
 
 }
