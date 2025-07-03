@@ -29,7 +29,6 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("Customer not found"));
 
-        if(cus)
         Customer updatedCustomer = changeEmailMapper(customer, request);
         customerRepository.save(updatedCustomer);
 

@@ -27,7 +27,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Seller changePasswordMapper(Seller seller, ChangePasswordRequest request) {
-        if(seller.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
+        if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
@@ -40,7 +40,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Seller updateProfileMapper(Seller seller, UpdateSellerProfileRequest request) {
-        if(seller.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
+        if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
         if (validStoreName) seller.setStoreName(request.getStoreName().trim());
@@ -69,7 +69,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Customer changeEmailMapper(Customer customer, ChangeEmailRequest request) {
-        if(customer.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
+        if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
         if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
@@ -82,7 +82,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Customer changePasswordMapper(Customer customer, ChangePasswordRequest request) {
-        if(customer.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
+        if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
@@ -95,6 +95,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Customer updateProfileMapper(Customer customer, UpdateCustomerProfileRequest request) {
+        if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
         boolean validPhone = request.getPhoneNumber() != null && ! request.getPhoneNumber().trim().isBlank();
         if (validPhone) customer.setPhone(request.getPhoneNumber().trim());
