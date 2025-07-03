@@ -14,6 +14,7 @@ import static org.bram.utils.PasswordUtil.verifyPassword;
 public class ProfileUpdateMapper {
 
     public static Seller changeEmailMapper(Seller seller, ChangeEmailRequest request) {
+        if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
         if(isSameEmail) throw new SameEmailException("New email cannot be same as old email");
@@ -26,6 +27,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Seller changePasswordMapper(Seller seller, ChangePasswordRequest request) {
+        if(seller.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
         if(isSamePassword) throw new SamePasswordException("New password cannot be the same as old password");
@@ -38,6 +40,7 @@ public class ProfileUpdateMapper {
     }
 
     public static Seller updateProfileMapper(Seller seller, UpdateSellerProfileRequest request) {
+        if(seller.isBanned()) throw new AccessDeniedException("Your accunt has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
         if (validStoreName) seller.setStoreName(request.getStoreName().trim());

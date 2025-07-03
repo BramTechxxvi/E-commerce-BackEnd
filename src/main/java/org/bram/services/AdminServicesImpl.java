@@ -27,11 +27,10 @@ public class AdminServicesImpl implements AdminServices{
     }
 
     @Override
-    public ApiResponse banUser(String id, String token) {
+    public ApiResponse banUser(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
-        if (user.isLoggedIn() && token != null && !token.isBlank()) tokenBlacklist.blackListToken(token);
         user.setBanned(true);
         user.setLoggedIn(false);
         userRepository.save(user);

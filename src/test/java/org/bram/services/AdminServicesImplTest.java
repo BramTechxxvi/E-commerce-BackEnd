@@ -33,6 +33,7 @@ class AdminServicesImplTest {
     private LoginResponse adminLoginResponse;
     private LoginRequest sellerLoginRequest;
     private LoginResponse sellerLoginResponse;
+    private ApiResponse apiResponse;
 
 
     @BeforeEach
@@ -44,6 +45,7 @@ class AdminServicesImplTest {
         adminLoginResponse = new LoginResponse();
         sellerLoginRequest = new LoginRequest();
         sellerLoginResponse = new LoginResponse();
+        apiResponse = new ApiResponse();
     }
 
     @Test
@@ -54,6 +56,7 @@ class AdminServicesImplTest {
         adminLoginRequest.setPassword("password111");
         adminLoginResponse = authenticationService.login(adminLoginRequest);
         assertTrue(adminLoginResponse.isSuccess());
+        apiResponse = adminServices.banUser()
 
 
     }
