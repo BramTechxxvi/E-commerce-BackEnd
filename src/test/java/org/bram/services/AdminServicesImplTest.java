@@ -72,11 +72,11 @@ class AdminServicesImplTest {
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
         apiResponse = adminServices.banUser(seller.getId());
-        assertFalse(sellerLoginResponse.isSuccess());
+        assertTrue(apiResponse.isSuccess());
     }
 
     @Test
-    public void adminCanBanUserWhileUserIsLoggedIn__banUserTest() {
+    public void testIfUserCanLoginAfterBan__throwsException() {
         registerAdmin();
         registerSeller();
         adminLoginRequest.setEmail("wisdom@gmail.com");
@@ -86,9 +86,10 @@ class AdminServicesImplTest {
         sellerLoginRequest.setEmail("grace@ayoola.com");
         sellerLoginRequest.setPassword("password111");
         sellerLoginResponse = authenticationService.login(sellerLoginRequest);
+        assertTrue(sellerLoginResponse.isSuccess());
+
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
-
         var auth = new UsernamePasswordAuthenticationToken(
                 sellerLoginRequest.getEmail(), null, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -99,8 +100,56 @@ class AdminServicesImplTest {
         request.setNewEmail("grace@ayoola.org");
 
         Exception error = assertThrows(AccessDeniedException.class,()-> apiResponse = sellerServices.changeEmail(request));
-        assertFalse(apiResponse.isSuccess());
         assertEquals("Your account has been banned", error.getMessage());
+    }
+
+    @Test
+    public void adminCanUnBanUser__unBanTest() {
+        registerSeller();
+        registerAdmin();
+        assertTrue(registerResponse.isSuccess());
+        adminLoginRequest.setEmail("wisdom@gmail.com");
+        adminLoginRequest.setPassword("password111");
+        adminLoginResponse = authenticationService.login(adminLoginRequest);
+        assertTrue(adminLoginResponse.isSuccess());
+        Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
+                .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
+        apiResponse = adminServices.banUser(seller.getId());
+        assertTrue(apiResponse.isSuccess());
+
+        apiResponse = adminServices.unBanUser(seller.getId());
+        assertTrue(apiResponse.isSuccess());
+    }
+
+    @Test
+    public void userCanLogin__unBanTest() {
+        registerAdmin();
+        registerSeller();
+        adminLoginRequest.setEmail("wisdom@gmail.com");
+        adminLoginRequest.setPassword("password111");
+        adminLoginResponse = authenticationService.login(adminLoginRequest);
+
+        sellerLoginRequest.setEmail("grace@ayoola.com");
+        sellerLoginRequest.setPassword("password111");
+        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
+        assertTrue(sellerLoginResponse.isSuccess());
+
+        Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
+                .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
+        var auth = new UsernamePasswordAuthenticationToken(
+                sellerLoginRequest.getEmail(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        apiResponse = adminServices.banUser(seller.getId());
+        assertEquals("User banned successfully", apiResponse.getMessage());
+        apiResponse = adminServices.unBanUser(seller.getId());
+
+        ChangeEmailRequest request = new ChangeEmailRequest();
+        request.setOldEmail("grace@ayoola.com");
+        request.setNewEmail("grace@ayoola.org");
+
+        apiResponse = sellerServices.changeEmail(request);
+        assertEquals("Email changed successfully", apiResponse.getMessage());
     }
 
     private void registerSeller() {
