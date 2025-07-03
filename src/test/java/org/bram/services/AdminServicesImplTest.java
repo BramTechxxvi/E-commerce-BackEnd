@@ -67,11 +67,19 @@ class AdminServicesImplTest {
         Seller seller = sellerRepository.findByEmail("grace@ayoola.com")
                 .orElseThrow(()-> new UserNotFoundException("UserNotFound"));
         apiResponse = adminServices.banUser(seller.getId());
+        sellerLoginRequest.setEmail("grace@ayoola.com");
+        sellerLoginRequest.setPassword("password111");
+        sellerLoginResponse = authenticationService.login(sellerLoginRequest);
+        assertFalse(sellerLoginResponse.isSuccess());
     }
 
     @Test
     public void adminCanBanUserWhileUserIsLoggedIn__banUserTest() {
-
+        registerAdmin();
+        registerSeller();
+        adminLoginRequest.setEmail("wisdom@gmail.com");
+        adminLoginRequest.setPassword("password111");
+        adminLoginResponse = authenticationService.login(adminLoginRequest);
     }
 
     private void registerSeller() {
