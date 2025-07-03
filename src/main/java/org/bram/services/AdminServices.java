@@ -5,7 +5,7 @@ import org.bram.dtos.response.ApiResponse;
 
 public interface AdminServices {
 
-    ApiResponse banUser(String id);
+    ApiResponse banUser(String id, String token);
 
     ApiResponse unBanUser(String id);
 

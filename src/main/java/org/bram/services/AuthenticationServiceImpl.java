@@ -82,6 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
 
+        if (user.isBanned()) throw new AccessDeniedException("Your account has been banned");
         var userRole = user.getUserRole();
         boolean isCorrectPassword = verifyPassword(password, user.getPassword());
         if (!isCorrectPassword) throw new IncorrectPasswordException("Incorrect password");
