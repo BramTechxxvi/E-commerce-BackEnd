@@ -1,9 +1,12 @@
 package org.bram.services;
 
 
+import org.bram.dtos.response.ApiResponse;
+
 public interface AdminServices {
 
-    public ApiResponse banUser(String id);
+    ApiResponse banUser(String id);
 
+    ApiResponse unBanUser(String id);
 
 }
