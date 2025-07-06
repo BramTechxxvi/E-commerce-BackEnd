@@ -94,6 +94,11 @@ public class GlobalExceptionHandler {
         return buildResponse("Something went wrong: " +e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(QuantityUnAvailableException.class)
+    public ResponseEntity<ApiResponse> handleQuantityException(QuantityUnAvailableException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     private ResponseEntity<ApiResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(new ApiResponse(message, false));
     }
