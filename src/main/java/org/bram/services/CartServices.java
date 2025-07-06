@@ -1,8 +1,10 @@
 package org.bram.services;
 
+import org.bram.dtos.response.ApiResponse;
+
 public interface CartServices {
 
-    //    addItem(item: Item): void
+    ApiResponse addItem(AddItemRequest request);
 //
 //    removeItem(productID: String): void
 //
