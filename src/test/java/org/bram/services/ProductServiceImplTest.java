@@ -155,9 +155,10 @@ class ProductServiceImplTest {
 
         addAProduct();
         var allProducts = productServices.getAllProducts();
+        assertFalse(allProducts.isEmpty());
         boolean containsHeadphone = allProducts.stream()
                 .anyMatch(product -> "Headphones".equals(product.getProductName()));
-        assertEquals(product)
+        assertTrue(containsHeadphone);
     }
 
     private void registerASellerAndLogin() {
