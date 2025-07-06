@@ -121,7 +121,7 @@ public class ProductServicesImpl implements ProductServices {
     }
 
     @Override
-    public void getAllProducts() {
-
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 }

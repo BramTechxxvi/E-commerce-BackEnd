@@ -1,8 +1,11 @@
 package org.bram.services;
 
+import org.bram.data.models.Product;
 import org.bram.dtos.request.AddProductRequest;
 import org.bram.dtos.request.UpdateProductRequest;
 import org.bram.dtos.response.ApiResponse;
+
+import java.util.List;
 
 public interface ProductServices {
 
@@ -12,6 +15,6 @@ public interface ProductServices {
 
     ApiResponse updateProduct(String productId, UpdateProductRequest request);
 
-    void getAllProducts();
+    List<Product> getAllProducts();
 
 }
