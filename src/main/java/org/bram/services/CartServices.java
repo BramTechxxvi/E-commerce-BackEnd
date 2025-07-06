@@ -1,6 +1,6 @@
 package org.bram.services;
 
-public interface ShoppingCartServices {
+public interface CartServices {
 
     //    addItem(item: Item): void
 //
