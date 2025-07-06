@@ -5,7 +5,7 @@ import org.bram.dtos.request.*;
 
 public interface CartServices {
 
-    ApiResponse addItem(AddItemToCartRequest request);
+    ApiResponse addItemToCart(AddItemToCartRequest request);
 
     ApiResponse removeItem(RemoveItemRequest request);
 

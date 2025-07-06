@@ -1,29 +1,53 @@
 package org.bram.services;
 
 import lombok.RequiredArgsConstructor;
+import org.bram.data.models.Customer;
+import org.bram.data.models.Product;
 import org.bram.data.repository.CartRepository;
+import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.ProductRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
+import org.bram.exceptions.AccessDeniedException;
+import org.bram.exceptions.ProductNotFoundException;
+import org.bram.exceptions.UserNotFoundException;
+import org.bram.exceptions.UserNotLoggedInException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CartServicesImpl implements CartServices{
 
+    private final CustomerRepository customerRepository;
     private CartRepository cartRepository;
     private UserRepository userRepository;
     private ProductRepository productRepository;
 
-    @Autowired
-    public CartServicesImpl(CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
-    }
-
     @Override
-    public ApiResponse addItem(AddItemToCartRequest request) {
+    public ApiResponse addItemToCart(AddItemToCartRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("CUSTOMER"));
+        if(!isAuthorizedUser) throw new AccessDeniedException("Only customers can add item to cart");
+
+        Customer customer = customerRepository.findByEmail(email.toLowerCase())
+                .orElseThrow(()-> new UserNotFoundException("User not found"));
+        if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
+        if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
+
+        Product savedProduct = productRepository.findById(request.getProductId())
+                        .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+
+        if(savedProduct.getProductQuantity() < request.getQuantity()) {
+            throw new QuantityUnAvailableException("Not enough product quantity available");
+        }
+
+
+        request.setProductId();
+
         return new ApiResponse("Item added", true);
     }
 
@@ -31,22 +55,7 @@ public class CartServicesImpl implements CartServices{
     public ApiResponse removeItem(RemoveItemRequest request) {
         return new ApiResponse("Item removed successfully", false);
     }
-
-
-
-//        @Override
-//        public ApiResponse addToCart(AddToCartRequest request) {
-//            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//            boolean isCustomer = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-//                    .anyMatch(granted -> granted.getAuthority().equals("CUSTOMER"));
-//            if (!isCustomer) throw new AccessDeniedException("Only customers can add items to cart");
-//
-//            User user = userRepository.findByEmail(email)
-//                    .orElseThrow(() -> new UserNotFoundException("User not found"));
-//
-//            if (user.isBanned()) throw new AccessDeniedException("Your account has been banned");
-//            if (!user.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
-//
+/
 //            Product product = productRepository.findById(request.getProductId())
 //                    .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 //

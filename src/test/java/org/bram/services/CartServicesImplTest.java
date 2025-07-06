@@ -76,7 +76,7 @@ class CartServicesImplTest {
     }
 
     @Test
-    public void addAnItemToCart__addItemTest() {
+    public void addAnItemToCart__addItemToCartTest() {
         registerASellerAndLogin();
         assertEquals("Registered successfully", sellerRegisterResponse.getMessage());
         assertTrue(sellerLoginResponse.isSuccess());
@@ -95,13 +95,13 @@ class CartServicesImplTest {
         assertEquals("Registered successfully", customerRegisterResponse.getMessage());
         assertTrue(customerLoginResponse.isSuccess());
 
-        var authority = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
-        var authen = new UsernamePasswordAuthenticationToken("GRACE@adams.com", null, authority);
-        SecurityContextHolder.getContext().setAuthentication(authen);
+//        var authority = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
+//        var authen = new UsernamePasswordAuthenticationToken("GRACE@adams.com", null, authority);
+//        SecurityContextHolder.getContext().setAuthentication(authen);
 
         addItemRequest.setProductId(savedProduct.getProductId());
         addItemRequest.setQuantity(2);
-        apiResponse = cartServices.addItem(addItemRequest);
+        apiResponse = cartServices.addItemToCart(addItemRequest);
         assertEquals("Added", apiResponse.getMessage());
 
 
