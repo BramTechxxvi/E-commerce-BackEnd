@@ -146,6 +146,20 @@ class ProductServiceImplTest {
         assertEquals("Product updated successfully", apiResponse.getMessage());
     }
 
+    @Test
+    public void getAlProductsTest() {
+        registerASellerAndLogin();
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority("SELLER"));
+        var auth = new UsernamePasswordAuthenticationToken("seyi@adams.com", null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        addAProduct();
+        var allProducts = productServices.getAllProducts();
+        boolean containsHeadphone = allProducts.stream()
+                .anyMatch(product -> "Headphones".equals(product.getProductName()));
+        assertEquals(product)
+    }
+
     private void registerASellerAndLogin() {
         registerRequest.setFirstName("Seyi");
         registerRequest.setLastName("Adams");
