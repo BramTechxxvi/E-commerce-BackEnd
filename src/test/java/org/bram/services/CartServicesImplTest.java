@@ -1,11 +1,15 @@
 package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
+import org.bram.data.models.Product;
 import org.bram.data.repository.CartRepository;
+import org.bram.data.repository.ProductRepository;
 import org.bram.data.repository.SellerRepository;
 import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
+import org.bram.exceptions.ProductNotFoundException;
+import org.bram.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,7 @@ class CartServicesImplTest {
     private LoginRequest sellerLoginRequest;
     private LoginResponse sellerLoginResponse;
     private LoginRequest customerLoginRequest;
+    private LoginResponse customerLoginResponse;
     private AddProductRequest addProductRequest;
     @Autowired
     private UserRepository userRepository;
@@ -49,6 +54,8 @@ class CartServicesImplTest {
     private SellerRepository sellerRepository;
     @Autowired
     private ProductServicesImpl productServices;
+    @Autowired
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
@@ -62,7 +69,10 @@ class CartServicesImplTest {
     sellerRegisterResponse = new RegisterResponse();
     sellerLoginRequest = new LoginRequest();
     sellerLoginResponse = new LoginResponse();
-
+    customerRegisterRequest = new RegisterRequest();
+    customerRegisterResponse = new RegisterResponse();
+    customerLoginRequest = new LoginRequest();
+    customerLoginResponse = new LoginResponse();
     }
 
     @Test
@@ -73,8 +83,18 @@ class CartServicesImplTest {
         var authorities = Collections.singletonList(new SimpleGrantedAuthority("SELLER"));
         var auth = new UsernamePasswordAuthenticationToken("Seyi@adams.com", null, authorities);
         SecurityContextHolder.getContext().setAuthentication(auth);
+
+        var seller = sellerRepository.findByEmail("seyi@ADAMS.COM".toLowerCase())
+                        .orElseThrow(()-> new UserNotFoundException("User not found"));
         addAProduct();
         assertEquals("Product added successfully", apiResponse.getMessage());
+        Product savedProduct = productRepository.findByProductNameAndSeller("Headphones", seller)
+                        .orElseThrow(()-> new ProductNotFoundException("Product not found"));
+        addItemRequest.setProductId(savedProduct.getProductId());
+
+        registerACustomerAndLogin();
+        assertEquals("Registered successfully", customerRegisterResponse.getMessage());
+        assertTrue(customerLoginResponse.isSuccess());
 
 
     }
@@ -111,5 +131,19 @@ class CartServicesImplTest {
         addProductRequest.setImage(imageFile);
 
         apiResponse = productServices.addProduct(addProductRequest);
+    }
+
+    private void registerACustomerAndLogin() {
+        customerRegisterRequest.setFirstName("Grace");
+        customerRegisterRequest.setLastName("Adams");
+        customerRegisterRequest.setEmail("grace@adams.com");
+        customerRegisterRequest.setPassword("password111");
+        customerRegisterRequest.setPhone("08137352352");
+        customerRegisterRequest.setUserRole("CUSTOMER");
+        customerRegisterResponse = authenticationService.register(customerRegisterRequest);
+
+        customerLoginRequest.setEmail("seyi@adams.com");
+        customerLoginRequest.setPassword("password111");
+        customerLoginResponse = authenticationService.login(customerLoginRequest);
     }
 }
