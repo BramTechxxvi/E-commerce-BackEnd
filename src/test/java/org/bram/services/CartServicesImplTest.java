@@ -2,7 +2,10 @@ package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.CartRepository;
+import org.bram.dtos.request.AddItemRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -14,10 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(CloudinaryTestConfig.class)
 class CartServicesImplTest {
 
+    @Autowired
     private CartRepository cartRepository;
+    @Autowired
     private CartServicesImpl cartServices;
+    private AddItemRequest addItemRequest;
 
-    @BeforeEach() {
+    @BeforeEach
+    void setUp() {
+    cartRepository.deleteAll();
+    addItemRequest = new AddItemRequest();
 
     }
 
