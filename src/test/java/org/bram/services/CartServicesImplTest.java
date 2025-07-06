@@ -37,7 +37,7 @@ class CartServicesImplTest {
     private CartServicesImpl cartServices;
     @Autowired
     private AuthenticationServiceImpl authenticationService;
-    private AddItemRequest addItemRequest;
+    private AddItemToCartRequest addItemRequest;
     private ApiResponse apiResponse;
     private RegisterRequest sellerRegisterRequest;
     private RegisterResponse sellerRegisterResponse;
@@ -62,7 +62,7 @@ class CartServicesImplTest {
     cartRepository.deleteAll();
     userRepository.deleteAll();
     sellerRepository.deleteAll();
-    addItemRequest = new AddItemRequest();
+    addItemRequest = new AddItemToCartRequest();
     addProductRequest = new AddProductRequest();
     apiResponse = new ApiResponse();
     sellerRegisterRequest = new RegisterRequest();
@@ -90,11 +90,20 @@ class CartServicesImplTest {
         assertEquals("Product added successfully", apiResponse.getMessage());
         Product savedProduct = productRepository.findByProductNameAndSeller("Headphones", seller)
                         .orElseThrow(()-> new ProductNotFoundException("Product not found"));
-        addItemRequest.setProductId(savedProduct.getProductId());
 
         registerACustomerAndLogin();
         assertEquals("Registered successfully", customerRegisterResponse.getMessage());
         assertTrue(customerLoginResponse.isSuccess());
+
+        var authority = Collections.singletonList(new SimpleGrantedAuthority("CUSTOMER"));
+        var authen = new UsernamePasswordAuthenticationToken("GRACE@adams.com", null, authority);
+        SecurityContextHolder.getContext().setAuthentication(authen);
+
+        addItemRequest.setProductId(savedProduct.getProductId());
+        addItemRequest.setQuantity(2);
+        apiResponse = cartServices.addItem(addItemRequest);
+        assertEquals("Added", apiResponse.getMessage());
+
 
 
     }

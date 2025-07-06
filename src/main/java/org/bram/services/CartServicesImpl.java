@@ -23,7 +23,7 @@ public class CartServicesImpl implements CartServices{
     }
 
     @Override
-    public ApiResponse addItem(AddItemRequest request) {
+    public ApiResponse addItem(AddItemToCartRequest request) {
         return new ApiResponse("Item added", true);
     }
 
