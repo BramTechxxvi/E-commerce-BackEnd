@@ -3,6 +3,7 @@ package org.bram.services;
 import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.CartRepository;
 import org.bram.dtos.request.AddItemRequest;
+import org.bram.dtos.response.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ class CartServicesImplTest {
     @Autowired
     private CartServicesImpl cartServices;
     private AddItemRequest addItemRequest;
+    private ApiResponse apiResponse;
 
     @BeforeEach
     void setUp() {
     cartRepository.deleteAll();
     addItemRequest = new AddItemRequest();
+    apiResponse = new ApiResponse();
 
     }
 
