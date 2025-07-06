@@ -2,6 +2,7 @@ package org.bram.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import lombok.RequiredArgsConstructor;
 import org.bram.data.models.Product;
 import org.bram.data.models.Seller;
 import org.bram.data.repository.ProductRepository;
@@ -22,17 +23,13 @@ import static org.bram.utils.ProductMapper.mapToProduct;
 import static org.bram.utils.ProductMapper.updateProductMapper;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServicesImpl implements ProductServices {
 
     private final ProductRepository productRepository;
     private final Cloudinary cloudinary;
     private final SellerRepository sellerRepository;
 
-    public ProductServicesImpl(ProductRepository productRepository, Cloudinary cloudinary, SellerRepository sellerRepository) {
-        this.productRepository = productRepository;
-        this.cloudinary = cloudinary;
-        this.sellerRepository = sellerRepository;
-    }
 
     @Override
     public ApiResponse addProduct(AddProductRequest request) {
@@ -51,7 +48,7 @@ public class ProductServicesImpl implements ProductServices {
                         .equals("SELLER"));
         if (!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to add products");
 
-        Seller seller = sellerRepository.findByEmail(email)
+        Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
         if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
@@ -73,7 +70,7 @@ public class ProductServicesImpl implements ProductServices {
                         .equals("SELLER"));
 
         if(!isAuthorizedUser) throw new AccessDeniedException("You are not allowed to remove products");
-        Seller seller = sellerRepository.findByEmail(email)
+        Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
         if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("User not logged in");
@@ -95,7 +92,7 @@ public class ProductServicesImpl implements ProductServices {
                 .stream().anyMatch(authority -> authority.getAuthority().equals("SELLER"));
 
         if (!isAuthorizedUser) throw new AccessDeniedException("You're not allowed to make any changes");
-        Seller seller = sellerRepository.findByEmail(email)
+        Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
         if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");

@@ -8,6 +8,7 @@ import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import static org.bram.utils.ProfileUpdateMapper.*;
 
 @Service
@@ -23,7 +24,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
     @Override
     public ApiResponse changeEmail(ChangeEmailRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Seller seller = sellerRepository.findByEmail(email)
+        Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
         Seller updatedSeller = changeEmailMapper(seller, request);
@@ -35,7 +36,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
     @Override
     public ApiResponse changePassword(ChangePasswordRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Seller seller = sellerRepository.findByEmail(email)
+        Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
         Seller updatedSeller = changePasswordMapper(seller, request);
@@ -47,7 +48,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
     @Override
     public ApiResponse updateProfile(UpdateSellerProfileRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Seller seller = sellerRepository.findByEmail(email)
+        Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
         Seller updatedSeller = updateProfileMapper(seller, request);
