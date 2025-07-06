@@ -119,4 +119,9 @@ public class ProductServicesImpl implements ProductServices {
 
         return new ApiResponse("Product updated successfully", true);
     }
+
+    @Override
+    public void getAllProducts() {
+
+    }
 }

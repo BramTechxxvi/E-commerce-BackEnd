@@ -12,4 +12,6 @@ public interface ProductServices {
 
     ApiResponse updateProduct(String productId, UpdateProductRequest request);
 
+    void getAllProducts();
+
 }

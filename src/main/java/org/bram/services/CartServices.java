@@ -8,5 +8,5 @@ public interface CartServices {
 //
 //    getTotal(): double
 //
-//    clear(): void
+//    clearCart(): void
 }
