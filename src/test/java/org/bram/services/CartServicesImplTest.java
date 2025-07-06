@@ -3,6 +3,7 @@ package org.bram.services;
 import org.bram.TestConfig.CloudinaryTestConfig;
 import org.bram.data.repository.CartRepository;
 import org.bram.dtos.request.AddItemRequest;
+import org.bram.dtos.request.RegisterRequest;
 import org.bram.dtos.response.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class CartServicesImplTest {
     private CartServicesImpl cartServices;
     private AddItemRequest addItemRequest;
     private ApiResponse apiResponse;
+    private RegisterRequest sellerRegisterRequest;
+    private RegisterRequest customerRegisterRequest;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +38,7 @@ class CartServicesImplTest {
 
     @Test
     public void addAnItemToCart__addItemTest() {
-        addItemRequest.a
+
     }
 
     private
