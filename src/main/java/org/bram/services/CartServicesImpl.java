@@ -10,6 +10,6 @@ public class CartServicesImpl implements CartServices{
 
     @Override
     public ApiResponse addItem(AddItemRequest request) {
-        return null;
+        return new ApiResponse("Item added", true);
     }
 }
