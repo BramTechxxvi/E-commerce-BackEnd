@@ -7,7 +7,7 @@ public interface CartServices {
 
     ApiResponse addItemToCart(AddItemToCartRequest request);
 
-    ApiResponse removeItem(RemoveItemRequest request);
+    ApiResponse removeFromCart(RemoveItemRequest request);
 
 //    getTotal(): double
 //

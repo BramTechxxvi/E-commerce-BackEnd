@@ -1,30 +1,34 @@
 package org.bram.services;
 
-import lombok.RequiredArgsConstructor;
 import org.bram.data.models.Customer;
+import org.bram.data.models.Item;
 import org.bram.data.models.Product;
+import org.bram.data.models.ShoppingCart;
 import org.bram.data.repository.CartRepository;
 import org.bram.data.repository.CustomerRepository;
 import org.bram.data.repository.ProductRepository;
-import org.bram.data.repository.UserRepository;
 import org.bram.dtos.request.*;
 import org.bram.dtos.response.*;
-import org.bram.exceptions.AccessDeniedException;
-import org.bram.exceptions.ProductNotFoundException;
-import org.bram.exceptions.UserNotFoundException;
-import org.bram.exceptions.UserNotLoggedInException;
+import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
-@RequiredArgsConstructor
 public class CartServicesImpl implements CartServices{
 
     private final CustomerRepository customerRepository;
-    private CartRepository cartRepository;
-    private UserRepository userRepository;
-    private ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+
+    @Autowired
+    public CartServicesImpl(CustomerRepository customerRepository, CartRepository cartRepository, ProductRepository productRepository) {
+        this.customerRepository = customerRepository;
+        this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
+    }
 
     @Override
     public ApiResponse addItemToCart(AddItemToCartRequest request) {
@@ -40,57 +44,38 @@ public class CartServicesImpl implements CartServices{
 
         Product savedProduct = productRepository.findById(request.getProductId())
                         .orElseThrow(()-> new ProductNotFoundException("Product not found"));
-
         if(savedProduct.getProductQuantity() < request.getQuantity()) {
             throw new QuantityUnAvailableException("Not enough product quantity available");
         }
+        ShoppingCart cart = customer.getCart();
+        if(cart == null) {
+            cart = new ShoppingCart();
+            cart.setItems(new ArrayList<>());
+        }
+        boolean productAlreadyInCart = false;
+        for (Item item : cart.getItems()) {
+            if(item.getProduct().getProductId().equals(savedProduct.getProductId())) {
+                item.setQuantity(item.getQuantity() + request.getQuantity());
+                productAlreadyInCart = true; break;
+            }}
+        if(!productAlreadyInCart) {
+            Item newItem = new Item();
+            newItem.setProduct(savedProduct);
+            newItem.setQuantity(request.getQuantity());
+            cart.getItems().add(newItem);
+        }
+        cart.setUserId(customer.getId());
+        cartRepository.save(cart);
+        customer.setCart(cart);
+        customerRepository.save(customer);
 
-
-        request.setProductId();
-
-        return new ApiResponse("Item added", true);
+        return new ApiResponse("Item added to cart successfully", true);
     }
 
     @Override
-    public ApiResponse removeItem(RemoveItemRequest request) {
+    public ApiResponse removeFromCart(RemoveItemRequest request) {
         return new ApiResponse("Item removed successfully", false);
     }
-/
-//            Product product = productRepository.findById(request.getProductId())
-//                    .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-//
-//            if (product.getProductQuantity() < request.getQuantity()) {
-//                throw new IllegalArgumentException("Not enough product quantity available");
-//            }
-//
-//            ShoppingCart cart = user.getCart();
-//            if (cart == null) {
-//                cart = new ShoppingCart();
-//                cart.setItems(new ArrayList<>());
-//            }
-//
-//            // Check if product already in cart
-//            boolean productAlreadyInCart = false;
-//            for (Item item : cart.getItems()) {
-//                if (item.getProduct().getProductId().equals(product.getProductId())) {
-//                    item.setQuantity(item.getQuantity() + request.getQuantity());
-//                    productAlreadyInCart = true;
-//                    break;
-//                }
-//            }
-//
-//            if (!productAlreadyInCart) {
-//                Item newItem = new Item();
-//                newItem.setProduct(product);
-//                newItem.setQuantity(request.getQuantity());
-//                cart.getItems().add(newItem);
-//            }
-//
-//            user.setCart(cart);
-//            userRepository.save(user);
-//
-//            return new ApiResponse("Item added to cart successfully", true);
-//        }
 //
 //        @Override
 //        public ApiResponse removeFromCart(String productId) {
