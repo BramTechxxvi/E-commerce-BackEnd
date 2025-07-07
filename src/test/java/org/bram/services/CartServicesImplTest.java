@@ -121,14 +121,14 @@ class CartServicesImplTest {
 
     private void addAProduct() {
         byte[] imageBytes;
-        try(var inputStream = getClass().getClassLoader().getResourceAsStream("image.jpg")) {
+        try(var inputStream = getClass().getClassLoader().getResourceAsStream("org/bram/files/image.jpg")) {
             if (inputStream == null) throw new NullPointerException("Image not found");
             imageBytes = inputStream.readAllBytes();
         } catch (IOException e) {
             throw new RuntimeException("Could not read image file");
         }
         MockMultipartFile imageFile = new MockMultipartFile(
-                "image", "image.jpg", "image/jpeg", imageBytes);
+                "image", "org/bram/files/image.jpg", "image/jpeg", imageBytes);
         addProductRequest.setProductName("Headphones");
         addProductRequest.setDescription("Immerse yourself in crystal-clear audio with our premium headphones");
         addProductRequest.setPrice(100.00);
