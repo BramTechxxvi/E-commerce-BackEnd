@@ -74,6 +74,10 @@ public class CartServicesImpl implements CartServices{
 
     @Override
     public ApiResponse removeFromCart(RemoveItemRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAuthorizedUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("CUSTOMER"));
+
         return new ApiResponse("Item removed successfully", false);
     }
 //

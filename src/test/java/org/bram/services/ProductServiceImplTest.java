@@ -20,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -132,7 +134,7 @@ class ProductServiceImplTest {
         updateRequest.setCategory("Electronics");
 
         byte[] imageBytes;
-        try(var inputStream = getClass().getClassLoader().getResourceAsStream("image.jpg")) {
+        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream("image.jpg")) {
             if (inputStream == null) throw new NullPointerException("Image not found");
             imageBytes = inputStream.readAllBytes();
         } catch (IOException e) {
