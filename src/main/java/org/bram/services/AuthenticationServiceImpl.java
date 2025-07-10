@@ -64,18 +64,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String password = loginRequest.getPassword().trim();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (user.isBanned()) throw new AccessDeniedException("Your account has been banned");
-        var userRole = user.getUserRole();
-        boolean isCorrectPassword = verifyPassword(password, user.getPassword());
-        if (!isCorrectPassword) throw new IncorrectPasswordException("Incorrect password");
+        if (!verifyPassword(password, user.getPassword())) throw new IncorrectPasswordException("Incorrect password");
 
-        String token = jwtService.generateToken(email, userRole);
+        String token = jwtService.generateToken(email, user.getUserRole());
         user.setLoggedIn(true);
         userRepository.save(user);
 
-        switch (userRole) {
+        switch (user.getUserRole()) {
             case CUSTOMER:
                 Customer customer= customerRepository.findByEmail(email)
                         .orElseThrow(()-> new UserNotFoundException("Customer not found"));
