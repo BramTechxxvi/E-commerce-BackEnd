@@ -1,15 +1,9 @@
 package org.bram.services;
 
 import org.bram.TestConfig.CloudinaryTestConfig;
-import org.bram.data.repository.AdminRepository;
-import org.bram.data.repository.CustomerRepository;
-import org.bram.data.repository.SellerRepository;
-import org.bram.data.repository.UserRepository;
-import org.bram.dtos.request.LoginRequest;
-import org.bram.dtos.request.RegisterRequest;
-import org.bram.dtos.response.LoginResponse;
-import org.bram.dtos.response.LogoutResponse;
-import org.bram.dtos.response.RegisterResponse;
+import org.bram.data.repository.*;
+import org.bram.dtos.request.*;
+import org.bram.dtos.response.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

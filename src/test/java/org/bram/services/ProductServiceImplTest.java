@@ -195,4 +195,14 @@ class ProductServiceImplTest {
 
         apiResponse = productServices.addProduct(addProductRequest);
     }
+
+    private void tttt() {
+        byte[] imageBytes;
+        try(var inputStream = getClass().getClassLoader().getResourceAsStream("org/bram/files/image.jpg")) {
+            if (inputStream == null) throw new NullPointerException("Image not found");
+            imageBytes = inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read image file");
+        }
+    }
 }

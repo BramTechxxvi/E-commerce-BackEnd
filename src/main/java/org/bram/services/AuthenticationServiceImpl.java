@@ -2,15 +2,9 @@ package org.bram.services;
 
 import org.bram.configuration.TokenBlacklist;
 import org.bram.data.models.*;
-import org.bram.data.repository.AdminRepository;
-import org.bram.data.repository.CustomerRepository;
-import org.bram.data.repository.SellerRepository;
-import org.bram.data.repository.UserRepository;
-import org.bram.dtos.request.LoginRequest;
-import org.bram.dtos.request.RegisterRequest;
-import org.bram.dtos.response.LoginResponse;
-import org.bram.dtos.response.LogoutResponse;
-import org.bram.dtos.response.RegisterResponse;
+import org.bram.data.repository.*;
+import org.bram.dtos.request.*;
+import org.bram.dtos.response.*;
 import org.bram.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,17 +38,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         verifyNewEmail(registerRequest.getEmail().trim().toLowerCase());
         verifyNewPhone(registerRequest.getPhone().trim());
 
-        UserRole userRole;
-        try {
-            userRole = UserRole.valueOf(registerRequest.getUserRole().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidRoleException("Invalid role specified" + registerRequest.getUserRole());
-        }
-
         User user = mapToUser(registerRequest);
         userRepository.save(user);
 
-        switch(userRole) {
+        switch(user.getUserRole()) {
             case CUSTOMER:
                 Customer customer = mapToCustomer(user);
                 customerRepository.save(customer); break;
@@ -68,10 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 adminRepository.save(admin); break;
         }
 
-        RegisterResponse response = new RegisterResponse();
-        response.setSuccess(true);
-        response.setMessage("Registered successfully");
-        return response;
+        return new RegisterResponse("Registered successfully", true);
     }
 
     @Override
@@ -112,12 +96,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String fullName = user.getFirstName() +" " + user.getLastName();
 
-        LoginResponse response = new LoginResponse();
-        response.setSuccess(true);
-        response.setToken(token);
-        response.setMessage("Welcome back " + fullName);
-
-        return response;
+        return new LoginResponse("Welcome back " + fullName, token, true);
     }
 
     @Override
