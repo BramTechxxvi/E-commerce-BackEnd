@@ -13,7 +13,7 @@ import static org.bram.utils.PasswordUtil.verifyPassword;
 
 public class ProfileUpdateMapper {
 
-    public static Seller changeEmailMapper(Seller seller, ChangeEmailRequest request) {
+    public static Seller mapToEmailChange(Seller seller, ChangeEmailRequest request) {
         if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
@@ -26,7 +26,7 @@ public class ProfileUpdateMapper {
         return seller;
     }
 
-    public static Seller changePasswordMapper(Seller seller, ChangePasswordRequest request) {
+    public static Seller mapToPasswordChange(Seller seller, ChangePasswordRequest request) {
         if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
@@ -39,7 +39,7 @@ public class ProfileUpdateMapper {
         return seller;
     }
 
-    public static Seller updateProfileMapper(Seller seller, UpdateSellerProfileRequest request) {
+    public static Seller mapToUpdate(Seller seller, UpdateSellerProfileRequest request) {
         if(seller.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!seller.isLoggedIn()) throw new UserNotLoggedInException("Seller not logged in");
         boolean validStoreName = request.getStoreName() != null && ! request.getStoreName().trim().isBlank();
@@ -68,7 +68,7 @@ public class ProfileUpdateMapper {
         return seller;
     }
 
-    public static Customer changeEmailMapper(Customer customer, ChangeEmailRequest request) {
+    public static Customer mapToEmailChange(Customer customer, ChangeEmailRequest request) {
         if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer is not logged in");
         boolean isSameEmail = request.getOldEmail().equals(request.getNewEmail());
@@ -81,7 +81,7 @@ public class ProfileUpdateMapper {
         return customer;
     }
 
-    public static Customer changePasswordMapper(Customer customer, ChangePasswordRequest request) {
+    public static Customer mapToPasswordChange(Customer customer, ChangePasswordRequest request) {
         if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
         boolean isSamePassword = request.getOldPassword().equals(request.getNewPassword());
@@ -94,7 +94,7 @@ public class ProfileUpdateMapper {
         return customer;
     }
 
-    public static Customer updateProfileMapper(Customer customer, UpdateCustomerProfileRequest request) {
+    public static Customer mapToUpdate(Customer customer, UpdateCustomerProfileRequest request) {
         if(customer.isBanned()) throw new AccessDeniedException("Your account has been banned");
         if(!customer.isLoggedIn()) throw new UserNotLoggedInException("Customer not logged in");
         boolean validPhone = request.getPhoneNumber() != null && ! request.getPhoneNumber().trim().isBlank();

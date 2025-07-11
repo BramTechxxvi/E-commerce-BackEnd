@@ -10,6 +10,7 @@ import org.bram.dtos.response.*;
 import org.bram.exceptions.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,12 +101,7 @@ public class ProductServicesImpl implements ProductServices {
         if (!product.getSeller().getId().equals(seller.getId()))
             throw new AccessDeniedException("You're not allowed to make any changes");
         if (request.getImage() != null && !request.getImage().isEmpty()) {
-            try {
-                Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getImage().getBytes(), ObjectUtils.emptyMap());
-                product.setImageUrl(uploadResult.get("secure_url").toString());
-            } catch (IOException E) {
-                throw new ImageUploadException("Failed to upload image");
-            }
+          product.setImageUrl(uploadImageToCloudinary(request.getImage());
         }
         Product updatedProduct = updateProductMapper(product, request);
         productRepository.save(updatedProduct);
@@ -118,5 +114,14 @@ public class ProductServicesImpl implements ProductServices {
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    private String uploadImageToCloudinary(byte[] imageBytes) {
+        try {
+            Map<?,?> uploadResult = cloudinary.uploader().upload(imageBytes, ObjectUtils.emptyMap());
+            return uploadResult.get("secure_url").toString();
+        } catch (IOException e) {
+            throw new ImageUploadException("Failed to upload image");
+        }
     }
 }

@@ -27,7 +27,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
-        Seller updatedSeller = changeEmailMapper(seller, request);
+        Seller updatedSeller = mapToEmailChange(seller, request);
         sellerRepository.save(updatedSeller);
 
         return new ApiResponse("Email changed successfully", true);
@@ -39,7 +39,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Seller not found"));
 
-        Seller updatedSeller = changePasswordMapper(seller, request);
+        Seller updatedSeller = mapToPasswordChange(seller, request);
         sellerRepository.save(updatedSeller);
 
         return new ApiResponse("Password changed successfully", true);
@@ -51,7 +51,7 @@ public class SellerServicesImpl implements UserServices, SellerServices {
         Seller seller = sellerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
-        Seller updatedSeller = updateProfileMapper(seller, request);
+        Seller updatedSeller = mapToUpdate(seller, request);
         sellerRepository.save(updatedSeller);
 
         return new ApiResponse("Profile updated successfully", true);

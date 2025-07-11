@@ -29,7 +29,7 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
         Customer customer = customerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Customer not found"));
 
-        Customer updatedCustomer = changeEmailMapper(customer, request);
+        Customer updatedCustomer = mapToEmailChange(customer, request);
         customerRepository.save(updatedCustomer);
 
         return new ApiResponse("Email changed successfully", true);
@@ -41,7 +41,7 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
         Customer customer = customerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(()-> new UserNotFoundException("Customer not found"));
 
-        Customer updatedCustomer = changePasswordMapper(customer, request);
+        Customer updatedCustomer = mapToPasswordChange(customer, request);
         customerRepository.save(updatedCustomer);
         return new ApiResponse("Password changed successfully", true);
     }
@@ -52,7 +52,7 @@ public class CustomerServicesImpl implements UserServices, CustomerServices {
         Customer customer = customerRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException("Seller not found"));
 
-        Customer updatedCustomer = updateProfileMapper(customer, request);
+        Customer updatedCustomer = mapToUpdate(customer, request);
         customerRepository.save(updatedCustomer);
         return new ApiResponse("Profile updated successfully", true);
     }
