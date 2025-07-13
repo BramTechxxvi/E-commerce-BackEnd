@@ -115,13 +115,4 @@ public class ProductServicesImpl implements ProductServices {
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
-
-    private String uploadImageToCloudinary(byte[] imageBytes) {
-        try {
-            Map<?,?> uploadResult = cloudinary.uploader().upload(imageBytes, ObjectUtils.emptyMap());
-            return uploadResult.get("secure_url").toString();
-        } catch (IOException e) {
-            throw new ImageUploadException("Failed to upload image");
-        }
-    }
 }

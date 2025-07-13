@@ -2,11 +2,16 @@ package org.bram.configuration;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import org.bram.exceptions.ImageUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Configuration
 @Profile("!test")
@@ -18,6 +23,7 @@ public class CloudinaryConfig {
     private String apiKey;
     @Value("${cloudinary.api-secret}")
     private String apiSecret;
+    private Cloudinary cloudinary;
 
     @Bean
     @Primary
@@ -27,5 +33,16 @@ public class CloudinaryConfig {
                 "api_key", apiKey,
                 "api_secret", apiSecret
         ));
+    }
+
+    public String uploadImage(MultipartFile imageFile) throws IOException {
+        String imageUrl;
+        try {
+            Map<?,?> uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.emptyMap());
+            imageUrl = uploadResult.get("secure_url").toString();
+        } catch (IOException e) {
+            throw new ImageUploadException("Failed to upload image");
+        }
+        return imageUrl;
     }
 }
