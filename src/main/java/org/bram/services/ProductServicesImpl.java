@@ -3,6 +3,7 @@ package org.bram.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
+import org.bram.configuration.CloudinaryConfig;
 import org.bram.data.models.*;
 import org.bram.data.repository.*;
 import org.bram.dtos.request.*;
@@ -10,8 +11,7 @@ import org.bram.dtos.response.*;
 import org.bram.exceptions.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import org.bram.configuration.CloudinaryConfig.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +101,7 @@ public class ProductServicesImpl implements ProductServices {
         if (!product.getSeller().getId().equals(seller.getId()))
             throw new AccessDeniedException("You're not allowed to make any changes");
         if (request.getImage() != null && !request.getImage().isEmpty()) {
-          product.setImageUrl(uploadImageToCloudinary(request.getImage());
+          product.setImageUrl(CloudinaryConfig.uploadImage(request.getImage()));
         }
         Product updatedProduct = updateProductMapper(product, request);
         productRepository.save(updatedProduct);
