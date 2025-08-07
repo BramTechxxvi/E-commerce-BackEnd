@@ -93,7 +93,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         String fullName = user.getFirstName() +" " + user.getLastName();
-
         return new LoginResponse("Welcome back " + fullName, token, true);
     }
 
