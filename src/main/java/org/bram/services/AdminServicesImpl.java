@@ -1,9 +1,7 @@
 package org.bram.services;
 
 import org.bram.data.models.User;
-import org.bram.data.repository.CustomerRepository;
-import org.bram.data.repository.SellerRepository;
-import org.bram.data.repository.UserRepository;
+import org.bram.data.repository.*;
 import org.bram.dtos.response.ApiResponse;
 import org.bram.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
