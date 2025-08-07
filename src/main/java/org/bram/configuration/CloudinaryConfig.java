@@ -2,16 +2,12 @@ package org.bram.configuration;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.bram.exceptions.ImageUploadException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.annotation.web.oauth2.client.OAuth2ClientSecurityMarker;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
